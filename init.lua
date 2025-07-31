@@ -35,7 +35,7 @@ vim.opt.statusline = "%{expand('%:p')} %m %="
 	.. "%#StatusLineWarn#W:%{v:lua.diag_count('Warn')} "
 	.. "%#StatusLineHint#H:%{v:lua.diag_count('Hint')} "
 	.. "%#StatusLineInfo#I:%{v:lua.diag_count('Info')} "
-	.. "%#StatusLine#%l:%c"
+	.. "%#StatusLine#[%l:%c]"
 
 -- Load Lazy.nvim plugin manager configuration
 require("config.lazy")
