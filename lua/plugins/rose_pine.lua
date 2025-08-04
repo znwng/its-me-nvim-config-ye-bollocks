@@ -9,8 +9,7 @@ return {
 			variant = "moon", -- options: 'main' (default), 'moon', 'dawn'
 			disable_background = true,
 			styles = {
-				comments = "italic",
-				keywords = "italic",
+				italic = true,
 			},
 		})
 
