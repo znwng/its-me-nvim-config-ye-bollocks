@@ -32,12 +32,12 @@ vim.api.nvim_set_hl(0, "Pmenu", { bg = "none" })
 vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
 
 -- Statusline highlights
-vim.api.nvim_set_hl(0, "StatusLine", { bg = "#181825", fg = "#ffffff" })
-vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "NONE", fg = "#808080" })
-vim.api.nvim_set_hl(0, "StatusLineError", { bg = "NONE", fg = "#ff5555" })
-vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "NONE", fg = "#ffff43" })
-vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "NONE", fg = "#55ffe3" })
-vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "NONE", fg = "#54ff3c" })
+vim.api.nvim_set_hl(0, "StatusLine", { bg = "#232136", fg = "#e0def4" }) -- base bg, text fg
+vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "NONE", fg = "#6e6a86" }) -- muted
+vim.api.nvim_set_hl(0, "StatusLineError", { bg = "NONE", fg = "#eb6f92" }) -- love
+vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "NONE", fg = "#f6c177" }) -- gold
+vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "NONE", fg = "#9ccfd8" }) -- foam
+vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "NONE", fg = "#31748f" }) -- iris
 
 -- Diagnostic count
 function _G.diag_count(severity)
