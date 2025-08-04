@@ -1,6 +1,5 @@
 -- UI
 vim.opt.termguicolors = true
-vim.opt.guicursor = ""
 vim.opt.colorcolumn = "100"
 vim.opt.signcolumn = "yes"
 vim.opt.ignorecase = true
