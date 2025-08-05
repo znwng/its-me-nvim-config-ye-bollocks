@@ -183,8 +183,17 @@ return {
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				pattern = "*",
 				callback = function()
+					-- 1. Remove trailing whitespace
 					vim.cmd([[%s/\s\+$//e]])
+
+					-- 2. Format first (since it overrides anyway)
 					vim.lsp.buf.format({ async = false })
+
+					-- 3. THEN force newline at EOF
+					local last_line = vim.fn.getline("$")
+					if last_line ~= "" then
+						vim.fn.append("$", "")
+					end
 				end,
 			})
 
@@ -194,3 +203,4 @@ return {
 		end,
 	},
 }
+

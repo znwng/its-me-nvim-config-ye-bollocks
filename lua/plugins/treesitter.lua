@@ -32,13 +32,9 @@ return {
 					"python",
 					"c",
 					"cpp",
-					"java",
 					"lua",
 					"markdown",
 					"markdown_inline",
-					"arduino",
-					"javascript",
-					"typescript",
 				},
 
 				sync_install = false,
@@ -103,3 +99,4 @@ return {
 		end,
 	},
 }
+
