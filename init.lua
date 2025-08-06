@@ -94,23 +94,3 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 	end,
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-	pattern = "*",
-	callback = function()
-		-- 1. Format with LSP (if attached and supports formatting)
-		local clients = vim.lsp.get_active_clients({ bufnr = 0 })
-		for _, client in ipairs(clients) do
-			if client.supports_method("textDocument/formatting") then
-				vim.lsp.buf.format({ async = false })
-				break
-			end
-		end
-
-		-- 2. Ensure newline at EOF
-		local last_line = vim.api.nvim_buf_get_lines(0, -2, -1, false)[1]
-		if last_line ~= "" then
-			vim.api.nvim_buf_set_lines(0, -1, -1, false, { "" })
-		end
-	end,
-})
-
