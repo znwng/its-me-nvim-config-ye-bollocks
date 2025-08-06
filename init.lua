@@ -93,12 +93,3 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 		end
 	end,
 })
-
--- Auto-format on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-	pattern = "*",
-	callback = function()
-		vim.lsp.buf.format({ async = false })
-	end,
-})
-
