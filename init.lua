@@ -14,9 +14,9 @@ vim.o.mouse = "a"
 
 -- Tab and indentation behavior
 
-vim.opt.expandtab = true
+vim.opt.expandtab = false
 vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
+vim.opt.softtabstop = 0
 vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
 vim.opt.autoindent = true
