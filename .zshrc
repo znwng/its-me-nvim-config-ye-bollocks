@@ -18,3 +18,4 @@ source $ZSH/oh-my-zsh.sh
 alias updt='sudo apt update && sudo apt full-upgrade -y'
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
+

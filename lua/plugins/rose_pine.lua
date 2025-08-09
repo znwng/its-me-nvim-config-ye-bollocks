@@ -9,7 +9,8 @@ return {
 			variant = "moon", -- options: 'main' (default), 'moon', 'dawn'
 			disable_background = true,
 			styles = {
-				italic = true,
+				italic = false,
+				bold = false,
 			},
 		})
 

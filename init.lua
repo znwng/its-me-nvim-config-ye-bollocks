@@ -45,12 +45,33 @@ function _G.diag_count(severity)
 	return #diags
 end
 
+-- Function: format file size in human-readable units
+function _G.human_file_size()
+	local file = vim.fn.expand("%:p")
+	if file == "" or vim.fn.filereadable(file) == 0 then
+		return "~"
+	end
+	local size = vim.fn.getfsize(file)
+	if size < 0 then
+		return "~"
+	elseif size < 1024 then
+		return size .. "B"
+	elseif size < 1024 * 1024 then
+		return string.format("%.1fKB", size / 1024)
+	elseif size < 1024 * 1024 * 1024 then
+		return string.format("%.1fMB", size / (1024 * 1024))
+	else
+		return string.format("%.1fGB", size / (1024 * 1024 * 1024))
+	end
+end
+
 -- Custom statusline layout
 vim.opt.statusline = "%{expand('%:p')} %m %="
 	.. "%#StatusLineError#E:%{v:lua.diag_count('Error')} "
 	.. "%#StatusLineWarn#W:%{v:lua.diag_count('Warn')} "
 	.. "%#StatusLineHint#H:%{v:lua.diag_count('Hint')} "
 	.. "%#StatusLineInfo#I:%{v:lua.diag_count('Info')} "
+	.. "%#StatusLine#[%{v:lua.human_file_size()}] "
 	.. "%#StatusLine#[%l:%c]"
 
 -- Load plugins from 'config.lazy' module
@@ -97,6 +118,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
+-- Ensure last line is empty before save
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*",
 	callback = function()
