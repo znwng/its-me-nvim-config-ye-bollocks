@@ -16,6 +16,7 @@ plugins=(git zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 alias updt='sudo apt update && sudo apt full-upgrade -y'
+alias mb="cat ~/.config/micro/bindings | less"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 
