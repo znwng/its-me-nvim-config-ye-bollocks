@@ -1,3 +1,5 @@
+vim.cmd("colorscheme habamax")
+
 vim.opt.termguicolors = true
 vim.opt.updatetime = 250
 vim.opt.colorcolumn = "100"
@@ -28,12 +30,14 @@ for _, group in ipairs({ "Normal", "NormalNC", "Pmenu", "FloatBorder" }) do
 end
 
 -- Statusline highlights
-vim.api.nvim_set_hl(0, "StatusLine", { bg = "#232136", fg = "#e0def4" })
-vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "NONE", fg = "#6e6a86" })
-vim.api.nvim_set_hl(0, "StatusLineError", { bg = "NONE", fg = "#eb6f92" })
-vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "NONE", fg = "#f6c177" })
-vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "NONE", fg = "#9ccfd8" })
-vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "NONE", fg = "#31748f" })
+vim.api.nvim_set_hl(0, "StatusLine", { bg = "#252828", fg = "#9cadad" })
+vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#252828", fg = "#9cadad" })
+vim.api.nvim_set_hl(0, "StatusLineError", { bg = "none", fg = "#fe0100" })
+vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "none", fg = "#e89500" })
+vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "none", fg = "#d3d3d3" })
+vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "none", fg = "#84acad" })
+vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#252828" })
+
 
 function _G.diag_count(severity)
     local sev = vim.diagnostic.severity[severity:upper()]
