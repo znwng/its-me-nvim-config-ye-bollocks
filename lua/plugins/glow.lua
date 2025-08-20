@@ -1,15 +1,25 @@
+--[[
+Keybinds:
+:Glow     -> Open Markdown preview in a floating window
+:Glow!    -> Close the preview
+]]
+
 return {
-	-- Other plugins...
-	{
-		"ellisonleao/glow.nvim",
-		config = function()
-			require("glow").setup({
-				-- Optional configurations for glow
-				border = true, -- Add a border around the preview
-				width = 100, -- Set width of the preview
-				height = 20, -- Set height of the preview
-			})
-		end,
-	},
+    {
+        -- Plugin: glow.nvim — Markdown preview in Neovim using Glow
+        "ellisonleao/glow.nvim",
+
+        -- Load only when needed (lazy load on command)
+        cmd = "Glow",
+
+        config = function()
+            require("glow").setup({
+                style = "dark",     -- Glow style: "dark" | "light"
+                width_ratio = 0.8,  -- Max width ratio of the preview window (0–1)
+                height_ratio = 0.8, -- Max height ratio of the preview window (0–1)
+                border = "rounded", -- Border style: "none" | "single" | "double" | "rounded" | "shadow"
+            })
+        end,
+    },
 }
 

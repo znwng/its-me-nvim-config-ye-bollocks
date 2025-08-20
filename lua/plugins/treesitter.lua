@@ -1,6 +1,7 @@
 --[[
 Keybindings for Treesitter text objects:
 
+Text Objects:
 af -> Select entire function
 if -> Select inside function
 ac -> Select entire class
@@ -11,92 +12,105 @@ Usage examples:
 - yif  -> Yank (copy) the inside of a function
 - daf  -> Delete an entire function
 - cic  -> Change inside class
-- ]m   -> Jump to next function
-- [m   -> Jump to previous function
+
+Movement:
+]m   -> Jump to next function
+[m   -> Jump to previous function
 ]]
 
 return {
-	{
-		-- Plugin: nvim-treesitter (Better syntax highlighting & parsing)
-		"nvim-treesitter/nvim-treesitter",
+    {
+        -- Plugin: nvim-treesitter (Better syntax highlighting & parsing)
+        "nvim-treesitter/nvim-treesitter",
 
-		run = ":TSUpdate",
+        -- Keep Treesitter parsers up to date
+        build = ":TSUpdate",
 
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
-		},
+        -- Add-on for text objects (functions, classes, etc.)
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter-textobjects",
+        },
 
-		config = function()
-			require("nvim-treesitter.configs").setup({
-				ensure_installed = {
-					"python",
-					"c",
-					"cpp",
-					"lua",
-					"markdown",
-					"markdown_inline",
-				},
+        config = function()
+            require("nvim-treesitter.configs").setup({
+                -- Parsers to install
+                ensure_installed = {
+                    "python",
+                    "c",
+                    "cpp",
+                    "lua",
+                    "markdown",
+                    "markdown_inline",
+                },
 
-				sync_install = false,
+                -- Install parsers asynchronously
+                sync_install = false,
 
-				highlight = {
-					enable = true,
-					disable = {},
-				},
+                -- Enable syntax highlighting
+                highlight = {
+                    enable = true,
+                    disable = {},
+                },
 
-				indent = {
-					enable = true,
-				},
+                -- Enable smart indentation
+                indent = {
+                    enable = true,
+                },
 
-				textobjects = {
-					select = {
-						enable = true,
-						lookahead = true,
-						keymaps = {
-							["af"] = "@function.outer",
-							["if"] = "@function.inner",
-							["ac"] = "@class.outer",
-							["ic"] = "@class.inner",
-						},
-					},
+                -- Extra functionality (text objects & movement)
+                textobjects = {
+                    select = {
+                        enable = true,
+                        lookahead = true, -- Automatically jump to next textobj
+                        keymaps = {
+                            ["af"] = "@function.outer",
+                            ["if"] = "@function.inner",
+                            ["ac"] = "@class.outer",
+                            ["ic"] = "@class.inner",
+                        },
+                    },
 
-					move = {
-						enable = true,
-						set_jumps = true, -- Add to jumplist
-						goto_next_start = {
-							["]m"] = "@function.outer",
-						},
-						goto_previous_start = {
-							["[m"] = "@function.outer",
-						},
-					},
-				},
-			})
+                    move = {
+                        enable = true,
+                        set_jumps = true, -- Add movements to jumplist
+                        goto_next_start = {
+                            ["]m"] = "@function.outer",
+                        },
+                        goto_previous_start = {
+                            ["[m"] = "@function.outer",
+                        },
+                    },
+                },
+            })
 
-			vim.api.nvim_exec(
-				[[
+            -- Global indentation settings (4 spaces, no tabs)
+            vim.api.nvim_exec(
+                [[
         augroup global_indent
           autocmd!
           autocmd FileType * setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
         augroup END
         ]],
-				false
-			)
-		end,
-	},
+                false
+            )
+        end,
+    },
 
-	{
-		"MeanderingProgrammer/render-markdown.nvim",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
-		config = function()
-			require("render-markdown").setup({
-				latex = { enabled = false },
-				html = { enabled = false },
-			})
-		end,
-	},
+    {
+        -- Plugin: render-markdown (Prettifies Markdown in Neovim)
+        "MeanderingProgrammer/render-markdown.nvim",
+
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons",
+        },
+
+        config = function()
+            require("render-markdown").setup({
+                latex = { enabled = false }, -- disable LaTeX rendering
+                html = { enabled = false },  -- disable inline HTML rendering
+            })
+        end,
+    },
 }
 

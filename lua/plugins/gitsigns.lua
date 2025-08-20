@@ -6,11 +6,12 @@ Keybinds:
 <leader>hR  -> Reset entire buffer
 <leader>hp  -> Preview hunk
 <leader>hi  -> Preview hunk inline
-<leader>hb  -> Git blame for the current line
+<leader>hb  -> Git blame for the current line (full info)
 <leader>hd  -> Show Git diff (against index)
-<leader>hD  -> Show Git diff (against last commit)
+<leader>hD  -> Show Git diff (against last commit, HEAD~)
 <leader>hQ  -> Add all hunks to quickfix list
 <leader>hq  -> Add file's hunks to quickfix list
+<leader>tb  -> Toggle inline Git blame
 <leader>td  -> Toggle deleted lines
 <leader>tw  -> Toggle word diffs
 ih          -> Git hunk text object (for operator & visual mode)
@@ -18,84 +19,87 @@ ih          -> Git hunk text object (for operator & visual mode)
 ]]
 
 return {
-	{
-		-- Plugin: gitsigns.nvim — Git integration for showing diffs & hunks
-		"lewis6991/gitsigns.nvim",
+    {
+        -- Plugin: gitsigns.nvim — Git integration for diffs, hunks, blame, etc.
+        "lewis6991/gitsigns.nvim",
 
-		config = function()
-			vim.g.mapleader = " "
+        config = function()
+            vim.g.mapleader = " "
 
-			require("gitsigns").setup({
-				on_attach = function(bufnr)
-					local gs = require("gitsigns")
+            require("gitsigns").setup({
+                -- Perf: don't attach to untracked files
+                attach_to_untracked = false,
 
-					local function map(mode, lhs, rhs, opts)
-						opts = opts or {}
-						opts.buffer = bufnr
-						vim.keymap.set(mode, lhs, rhs, opts)
-					end
+                on_attach = function(bufnr)
+                    local gs = require("gitsigns")
 
-					-- Enable inline blame by default
-					gs.toggle_current_line_blame()
+                    -- Utility function for buffer-local mappings
+                    local function map(mode, lhs, rhs, opts)
+                        opts = opts or {}
+                        opts.buffer = bufnr
+                        vim.keymap.set(mode, lhs, rhs, opts)
+                    end
 
-					-- Navigation between hunks
-					map("n", "]c", function()
-						if vim.wo.diff then
-							vim.cmd.normal({ "]c", bang = true })
-						else
-							gs.nav_hunk("next")
-						end
-					end)
-					map("n", "[c", function()
-						if vim.wo.diff then
-							vim.cmd.normal({ "[c", bang = true })
-						else
-							gs.nav_hunk("prev")
-						end
-					end)
+                    -- Navigation between hunks
+                    map("n", "]c", function()
+                        if vim.wo.diff then
+                            vim.cmd.normal({ "]c", bang = true })
+                        else
+                            gs.nav_hunk("next")
+                        end
+                    end)
 
-					-- Stage/reset individual hunks
-					map("n", "<leader>hs", gs.stage_hunk)
-					map("n", "<leader>hr", gs.reset_hunk)
-					map("v", "<leader>hs", function()
-						gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-					end)
-					map("v", "<leader>hr", function()
-						gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-					end)
+                    map("n", "[c", function()
+                        if vim.wo.diff then
+                            vim.cmd.normal({ "[c", bang = true })
+                        else
+                            gs.nav_hunk("prev")
+                        end
+                    end)
 
-					-- Stage/reset entire buffer
-					map("n", "<leader>hS", gs.stage_buffer)
-					map("n", "<leader>hR", gs.reset_buffer)
+                    -- Stage/reset individual hunks
+                    map("n", "<leader>hs", gs.stage_hunk)
+                    map("n", "<leader>hr", gs.reset_hunk)
+                    map("v", "<leader>hs", function()
+                        gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                    end)
+                    map("v", "<leader>hr", function()
+                        gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+                    end)
 
-					-- Preview
-					map("n", "<leader>hp", gs.preview_hunk)
-					map("n", "<leader>hi", gs.preview_hunk_inline)
+                    -- Stage/reset entire buffer
+                    map("n", "<leader>hS", gs.stage_buffer)
+                    map("n", "<leader>hR", gs.reset_buffer)
 
-					-- Blame & diff
-					map("n", "<leader>hb", function()
-						gs.blame_line({ full = true })
-					end)
-					map("n", "<leader>hd", gs.diffthis)
-					map("n", "<leader>hD", function()
-						gs.diffthis("~")
-					end)
+                    -- Preview hunks
+                    map("n", "<leader>hp", gs.preview_hunk)
+                    map("n", "<leader>hi", gs.preview_hunk_inline)
 
-					-- Quickfix
-					map("n", "<leader>hQ", function()
-						gs.setqflist("all")
-					end)
-					map("n", "<leader>hq", gs.setqflist)
+                    -- Blame & diff
+                    map("n", "<leader>hb", function()
+                        gs.blame_line({ full = true })
+                    end)
+                    map("n", "<leader>hd", gs.diffthis)
+                    map("n", "<leader>hD", function()
+                        gs.diffthis("HEAD~")
+                    end)
 
-					-- Toggles
-					map("n", "<leader>td", gs.toggle_deleted)
-					map("n", "<leader>tw", gs.toggle_word_diff)
+                    -- Quickfix
+                    map("n", "<leader>hQ", function()
+                        gs.setqflist("all")
+                    end)
+                    map("n", "<leader>hq", gs.setqflist)
 
-					-- Text object for Git hunk
-					map({ "o", "x" }, "ih", gs.select_hunk)
-				end,
-			})
-		end,
-	},
+                    -- Toggles
+                    map("n", "<leader>tb", gs.toggle_current_line_blame) -- toggle blame
+                    map("n", "<leader>td", gs.toggle_deleted)
+                    map("n", "<leader>tw", gs.toggle_word_diff)
+
+                    -- Text object for Git hunk
+                    map({ "o", "x" }, "ih", gs.select_hunk)
+                end,
+            })
+        end,
+    },
 }
 

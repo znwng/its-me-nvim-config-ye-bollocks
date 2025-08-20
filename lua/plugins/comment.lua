@@ -1,5 +1,5 @@
 --[[
-Keybindings for Comment.nvim:
+Keybinds / Behavior (Comment.nvim):
 
 gcc        -> Toggle comment for the current line
 gbc        -> Toggle block comment
@@ -13,29 +13,29 @@ gcA        -> Add comment at the end of the current line
 ]]
 
 return {
-	{
-		-- Plugin: Comment.nvim — Simple, fast commenting for Neovim
-		"numToStr/Comment.nvim",
+    {
+        -- Plugin: Comment.nvim — simple, fast commenting
+        "numToStr/Comment.nvim",
 
-		-- Immediately load the plugin (not lazy-loaded)
-		lazy = false,
+        -- Load immediately (not lazy)
+        lazy = false,
 
-		-- Plugin configuration using the built-in `opts` pattern
-		opts = {
-			toggler = {
-				line = "gcc", -- Keybinding to toggle line comment
-				block = "gbc", -- Keybinding to toggle block comment
-			},
-			opleader = {
-				line = "gc", -- Operator-pending mode for line comments (e.g., `gcj`)
-				block = "gb", -- Operator-pending mode for block comments
-			},
-			extra = {
-				above = "gcO", -- Add a comment line above the current line
-				below = "gco", -- Add a comment line below the current line
-				eol = "gcA", -- Add a comment at the end of the current line
-			},
-		},
-	},
+        -- Use opts table instead of manual setup()
+        opts = {
+            toggler = {
+                line = "gcc",  -- Toggle line comment
+                block = "gbc", -- Toggle block comment
+            },
+            opleader = {
+                line = "gc",  -- Motion-based line comment (e.g., gcj, gcap)
+                block = "gb", -- Motion-based block comment
+            },
+            extra = {
+                above = "gcO", -- Add comment line above
+                below = "gco", -- Add comment line below
+                eol = "gcA",   -- Add comment at end of line
+            },
+        },
+    },
 }
 
