@@ -14,26 +14,26 @@ gcA        -> Add comment at the end of the current line
 
 return {
     {
-        -- Plugin: Comment.nvim — simple, fast commenting
+        -- Plugin: Comment.nvim — lightweight and fast commenting utility
         "numToStr/Comment.nvim",
 
-        -- Load immediately (not lazy)
+        -- Load immediately on startup
         lazy = false,
 
-        -- Use opts table instead of manual setup()
+        -- Plugin configuration using the opts table
         opts = {
             toggler = {
-                line = "gcc",  -- Toggle line comment
-                block = "gbc", -- Toggle block comment
+                line = "gcc",  -- Keymap to toggle a single line comment
+                block = "gbc", -- Keymap to toggle a block comment
             },
             opleader = {
                 line = "gc",  -- Motion-based line comment (e.g., gcj, gcap)
                 block = "gb", -- Motion-based block comment
             },
             extra = {
-                above = "gcO", -- Add comment line above
-                below = "gco", -- Add comment line below
-                eol = "gcA",   -- Add comment at end of line
+                above = "gcO", -- Insert a comment line above the current line
+                below = "gco", -- Insert a comment line below the current line
+                eol = "gcA",   -- Insert a comment at the end of the current line
             },
         },
     },

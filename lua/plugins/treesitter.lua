@@ -20,20 +20,18 @@ Movement:
 
 return {
     {
-        -- Plugin: nvim-treesitter (Better syntax highlighting & parsing)
+        -- Plugin: nvim-treesitter — Syntax highlighting, indentation, and text objects
         "nvim-treesitter/nvim-treesitter",
-
-        -- Keep Treesitter parsers up to date
         build = ":TSUpdate",
 
-        -- Add-on for text objects (functions, classes, etc.)
+        -- Textobject support dependency
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },
 
         config = function()
             require("nvim-treesitter.configs").setup({
-                -- Parsers to install
+                -- Languages to install parsers for
                 ensure_installed = {
                     "python",
                     "c",
@@ -41,27 +39,29 @@ return {
                     "lua",
                     "markdown",
                     "markdown_inline",
+                    "rust",
+                    "javascript",
+                    "typescript",
                 },
 
-                -- Install parsers asynchronously
-                sync_install = false,
+                sync_install = false, -- Install parsers asynchronously
 
-                -- Enable syntax highlighting
+                -- Highlighting configuration
                 highlight = {
                     enable = true,
                     disable = {},
                 },
 
-                -- Enable smart indentation
+                -- Indentation based on Treesitter
                 indent = {
                     enable = true,
                 },
 
-                -- Extra functionality (text objects & movement)
+                -- Textobjects configuration
                 textobjects = {
                     select = {
                         enable = true,
-                        lookahead = true, -- Automatically jump to next textobj
+                        lookahead = true, -- Automatically jump forward to textobject
                         keymaps = {
                             ["af"] = "@function.outer",
                             ["if"] = "@function.inner",
@@ -69,10 +69,9 @@ return {
                             ["ic"] = "@class.inner",
                         },
                     },
-
                     move = {
                         enable = true,
-                        set_jumps = true, -- Add movements to jumplist
+                        set_jumps = true, -- Record jumps in jumplist
                         goto_next_start = {
                             ["]m"] = "@function.outer",
                         },
@@ -83,23 +82,19 @@ return {
                 },
             })
 
-            -- Global indentation settings (4 spaces, no tabs)
-            vim.api.nvim_exec(
-                [[
-        augroup global_indent
-          autocmd!
-          autocmd FileType * setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-        augroup END
-        ]],
-                false
-            )
+            -- Global indentation settings (4 spaces, expand tabs)
+            vim.api.nvim_exec([[
+                augroup global_indent
+                  autocmd!
+                  autocmd FileType * setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+                augroup END
+            ]], false)
         end,
     },
 
     {
-        -- Plugin: render-markdown (Prettifies Markdown in Neovim)
+        -- Plugin: render-markdown.nvim — Render Markdown directly in Neovim
         "MeanderingProgrammer/render-markdown.nvim",
-
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
             "nvim-tree/nvim-web-devicons",
@@ -107,8 +102,8 @@ return {
 
         config = function()
             require("render-markdown").setup({
-                latex = { enabled = false }, -- disable LaTeX rendering
-                html = { enabled = false },  -- disable inline HTML rendering
+                latex = { enabled = false }, -- Disable LaTeX rendering
+                html = { enabled = false },  -- Disable HTML rendering
             })
         end,
     },

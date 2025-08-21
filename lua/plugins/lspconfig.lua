@@ -5,16 +5,18 @@
 
 return {
     {
+        -- Plugin: nvim-lspconfig — Built-in LSP client configurations for Neovim
         "neovim/nvim-lspconfig",
+
+        -- Dependencies for automatic LSP installation and formatters
         dependencies = {
-            "williamboman/mason.nvim",           -- LSP/DAP/Linter/Formatter installer
-            "williamboman/mason-lspconfig.nvim", -- Auto bridge Mason ↔ LSPConfig
-            "nvimtools/none-ls.nvim",            -- Null-LS for formatters/linters
-            "jay-babu/mason-null-ls.nvim",       -- Mason ↔ Null-LS bridge
+            "williamboman/mason.nvim",           -- Package manager for LSP servers, linters, formatters
+            "williamboman/mason-lspconfig.nvim", -- Bridges Mason with nvim-lspconfig
+            "nvimtools/none-ls.nvim",            -- Null-LS support
+            "jay-babu/mason-null-ls.nvim",       -- Bridges Mason with Null-LS
         },
 
         config = function()
-            -- === Module Imports ===
             local mason = require("mason")
             local mason_lspconfig = require("mason-lspconfig")
             local mason_null_ls = require("mason-null-ls")
@@ -23,58 +25,38 @@ return {
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
 
-            -- === Define LSP servers to install ===
+            -- === LSP servers to ensure installation ===
             local servers = {
-                "pyright",
-                "clangd",
-                "gopls",
-                "jsonls",
-                "bashls",
-                "dockerls",
-                "yamlls",
-                "terraformls",
+                "pyright", "clangd", "gopls", "jsonls", "bashls",
+                "dockerls", "yamlls", "terraformls", "rust_analyzer", "ts_ls",
             }
 
-            -- === Define formatters/linters to install ===
+            -- === Formatters / Linters to ensure installation ===
             local formatters = {
-                "black",
-                "clang-format",
-                "prettier",
-                "stylua",
-                "gofmt",
-                "goimports",
-                "shfmt",
-                "yamlfmt",
-                "terraform_fmt",
+                "black", "clang-format", "prettier", "stylua", "gofmt",
+                "goimports", "shfmt", "yamlfmt", "terraform_fmt",
             }
 
-            -- === Mason Setup ===
-            mason.setup({
-                ui = { border = "rounded" },
-            })
+            -- Mason UI setup
+            mason.setup({ ui = { border = "rounded" } })
 
-            -- === LSP on_attach function (buffer-local keymaps etc.) ===
+            -- === LSP attach function for keymaps ===
             local on_attach = function(_, bufnr)
                 local opts = { noremap = true, silent = true, buffer = bufnr }
-                vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)        -- Go to definition
-                vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts) -- Signature help in insert
+                vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+                vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
             end
 
-            -- === Add cmp-nvim-lsp completion capabilities ===
             local capabilities = cmp_nvim_lsp.default_capabilities()
 
-            -- === Mason LSP Config Setup ===
+            -- === Setup LSP servers via Mason ===
             mason_lspconfig.setup({
                 ensure_installed = servers,
                 handlers = {
-                    -- Default handler
                     function(server_name)
-                        local opts = {
-                            on_attach = on_attach,
-                            capabilities = capabilities,
-                        }
+                        local opts = { on_attach = on_attach, capabilities = capabilities }
 
-                        -- Special handling for clangd
+                        -- Clangd configuration
                         if server_name == "clangd" then
                             opts.cmd = {
                                 "clangd",
@@ -84,43 +66,28 @@ return {
                                 "--header-insertion=never",
                                 "--completion-style=detailed",
                             }
-                            opts.root_dir = lspconfig.util.root_pattern(
-                                ".clangd",
-                                "compile_commands.json",
-                                ".git"
-                            )
+                            opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
+                        end
+
+                        -- gopls configuration
+                        if server_name == "gopls" then
+                            opts.settings = {
+                                gopls = {
+                                    analyses = { unusedparams = true, nilness = true, unusedwrite = true },
+                                    staticcheck = true,
+                                },
+                            }
                         end
 
                         lspconfig[server_name].setup(opts)
                     end,
-
-                    -- Special handler for Go (gopls)
-                    ["gopls"] = function()
-                        lspconfig.gopls.setup({
-                            on_attach = on_attach,
-                            capabilities = capabilities,
-                            settings = {
-                                gopls = {
-                                    analyses = {
-                                        unusedparams = true,
-                                        nilness = true,
-                                        unusedwrite = true,
-                                    },
-                                    staticcheck = true,
-                                },
-                            },
-                        })
-                    end,
                 },
             })
 
-            -- === Mason Null-LS Setup ===
-            mason_null_ls.setup({
-                ensure_installed = formatters,
-                automatic_installation = true,
-            })
+            -- === Null-LS setup for formatters and linters ===
+            mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
-            -- === Custom Ruff Linter Integration ===
+            -- Ruff for Python linting with custom diagnostic mapping
             local ruff = {
                 method = null_ls.methods.DIAGNOSTICS,
                 filetypes = { "python" },
@@ -130,9 +97,7 @@ return {
                     to_stdin = true,
                     from_stderr = false,
                     format = "json_raw",
-                    check_exit_code = function(code)
-                        return code <= 1
-                    end,
+                    check_exit_code = function(code) return code <= 1 end,
                     on_output = function(params)
                         local diagnostics = {}
                         local items = params.output or {}
@@ -159,7 +124,6 @@ return {
                 }),
             }
 
-            -- === Null-LS Setup ===
             null_ls.setup({
                 sources = {
                     builtins.formatting.black,
@@ -171,49 +135,46 @@ return {
                     builtins.formatting.shfmt,
                     builtins.formatting.yamlfmt,
                     builtins.formatting.terraform_fmt,
-                    ruff, -- custom python linter
+                    ruff,
                 },
             })
 
-            -- === MasonInstallAll helper command ===
+            -- === Helper command to install all Mason packages ===
             vim.api.nvim_create_user_command("MasonInstallAll", function()
                 vim.cmd("MasonInstall " .. table.concat(servers, " "))
                 vim.cmd("MasonInstall " .. table.concat(formatters, " "))
             end, {})
 
-            -- === Diagnostics Setup ===
+            -- === Diagnostics configuration ===
             vim.diagnostic.config({
                 update_in_insert = false,
-                virtual_text = false, -- only show after leaving insert mode
+                virtual_text = false,
                 signs = true,
                 underline = true,
                 severity_sort = true,
             })
 
-            -- Show diagnostics in Normal mode, hide in Insert
+            -- Toggle virtual text depending on mode
             vim.api.nvim_create_autocmd("ModeChanged", {
                 pattern = "*:n",
-                callback = function()
-                    vim.diagnostic.config({ virtual_text = true })
-                end,
+                callback = function() vim.diagnostic.config({ virtual_text = true }) end,
             })
-
             vim.api.nvim_create_autocmd("ModeChanged", {
                 pattern = "n:*",
-                callback = function()
-                    vim.diagnostic.config({ virtual_text = false })
-                end,
+                callback = function() vim.diagnostic.config({ virtual_text = false }) end,
             })
 
-            -- === Manual Formatting ===
+            -- === Manual formatting keymap ===
             vim.keymap.set("n", "<leader>fm", function()
-                vim.lsp.buf.format({ async = false })
-
-                -- Enforce newline at EOF
-                local last_line = vim.fn.getline("$")
-                if last_line ~= "" then
-                    vim.fn.append("$", "")
+                local bufnr = vim.api.nvim_get_current_buf()
+                local clients = vim.lsp.get_clients({ bufnr = bufnr })
+                if #clients > 0 then
+                    vim.lsp.buf.format({ async = false, bufnr = bufnr })
                 end
+
+                -- Ensure buffer ends with a newline
+                local last_line = vim.fn.getline("$")
+                if last_line ~= "" then vim.fn.append("$", "") end
             end, { noremap = true, silent = true })
         end,
     },

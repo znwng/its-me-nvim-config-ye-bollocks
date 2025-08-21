@@ -9,17 +9,20 @@ Keybindings for nvim-cmp:
 
 return {
     {
+        -- Plugin: nvim-cmp — Autocompletion framework for Neovim
         "hrsh7th/nvim-cmp",
+
+        -- Completion sources and snippet support
         dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-cmdline",
-            "saadparwaiz1/cmp_luasnip",
-            "L3MON4D3/LuaSnip",
-            "rafamadriz/friendly-snippets",
-            "onsails/lspkind.nvim",
-            "windwp/nvim-autopairs",
+            "hrsh7th/cmp-nvim-lsp",         -- LSP completion source
+            "hrsh7th/cmp-buffer",           -- Buffer words completion
+            "hrsh7th/cmp-path",             -- File path completion
+            "hrsh7th/cmp-cmdline",          -- Command-line completion
+            "saadparwaiz1/cmp_luasnip",     -- LuaSnip completion source
+            "L3MON4D3/LuaSnip",             -- Snippet engine
+            "rafamadriz/friendly-snippets", -- Predefined snippets collection
+            "onsails/lspkind.nvim",         -- Icons for completion items
+            "windwp/nvim-autopairs",        -- Auto-close pairs integration
         },
 
         config = function()
@@ -27,7 +30,7 @@ return {
             local luasnip = require("luasnip")
             local lspkind = require("lspkind")
 
-            -- Load VS Code-style snippets
+            -- Load VS Code-style snippets lazily
             require("luasnip.loaders.from_vscode").lazy_load()
 
             -- nvim-cmp setup
@@ -38,6 +41,7 @@ return {
                     end,
                 },
 
+                -- Key mappings for insert and snippet modes
                 mapping = cmp.mapping.preset.insert({
                     ["<C-Space>"] = cmp.mapping.complete(),
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
@@ -61,6 +65,7 @@ return {
                     end, { "i", "s" }),
                 }),
 
+                -- Completion sources order matters (priority)
                 sources = cmp.config.sources({
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
@@ -68,26 +73,28 @@ return {
                     { name = "path" },
                 }),
 
+                -- Formatting with icons and truncation
                 formatting = {
                     format = lspkind.cmp_format({
-                        mode = "symbol_text", -- show symbol + text
+                        mode = "symbol_text", -- show icon + text
                         maxwidth = 50,
                         ellipsis_char = "...",
                     }),
                 },
 
+                -- Popup window borders
                 window = {
                     completion = cmp.config.window.bordered(),
                     documentation = cmp.config.window.bordered(),
                 },
             })
 
-            -- Autopairs integration with cmp confirm
+            -- Autopairs integration: automatically insert pairs after completion
             local cmp_autopairs = require("nvim-autopairs.completion.cmp")
             require("nvim-autopairs").setup({})
             cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-            -- Highlight groups for transparency + borders
+            -- Customize highlight groups for transparency and borders
             vim.api.nvim_set_hl(0, "CmpBorder", { fg = "#7d5dff", bg = "NONE", blend = 15 })
             vim.api.nvim_set_hl(0, "CmpDocBorder", { fg = "#7d5dff", bg = "NONE", blend = 15 })
             vim.api.nvim_set_hl(0, "Pmenu", { bg = "NONE", blend = 15 })

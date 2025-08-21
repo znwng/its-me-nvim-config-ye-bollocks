@@ -8,21 +8,20 @@ Keybinds / Behavior:
 
 return {
     {
-        -- Plugin: barbecue.nvim — winbar breadcrumbs
+        -- Plugin: barbecue.nvim — displays a winbar with breadcrumbs
         "utilyre/barbecue.nvim",
         name = "barbecue",
         version = "*",
 
         -- Required dependencies
         dependencies = {
-            "SmiteshP/nvim-navic",         -- LSP context provider
-            "nvim-tree/nvim-web-devicons", -- icons (optional but recommended)
+            "SmiteshP/nvim-navic",         -- Provides LSP context symbols for breadcrumbs
+            "nvim-tree/nvim-web-devicons", -- Adds filetype icons (optional but recommended)
         },
 
         -- Plugin configuration
         opts = {
-            -- You can leave empty for defaults,
-            -- or customize later (theme, symbols, separators, etc.)
+            -- Default settings; can be customized later for theme, symbols, separators, etc.
         },
     },
 }

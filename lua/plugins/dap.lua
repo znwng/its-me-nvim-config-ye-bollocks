@@ -19,10 +19,10 @@ return {
 
         -- Dependencies for UI, Python support, and inline values
         dependencies = {
-            "rcarriga/nvim-dap-ui",            -- UI panels for debugging
+            "rcarriga/nvim-dap-ui",            -- Provides side panels for debugging
             "mfussenegger/nvim-dap-python",    -- Python debug adapter
-            "theHamsta/nvim-dap-virtual-text", -- Inline variable display
-            "nvim-neotest/nvim-nio",           -- Required by dap-ui
+            "theHamsta/nvim-dap-virtual-text", -- Inline variable display during debugging
+            "nvim-neotest/nvim-nio",           -- Required by dap-ui for notifications
         },
 
         config = function()
@@ -33,20 +33,20 @@ return {
             -- Python debugger setup (defaults to "python" in PATH)
             dap_python.setup("python")
 
-            -- DAP UI setup (side panels, scopes, stacks, etc.)
+            -- Configure DAP UI panels (scopes, stacks, breakpoints, etc.)
             dapui.setup()
 
-            -- Show inline variable values
+            -- Enable inline virtual text for variables
             require("nvim-dap-virtual-text").setup()
 
-            -- Adapter configuration for C / C++ (LLDB)
+            -- Adapter configuration for C / C++ using LLDB
             dap.adapters.lldb = {
                 type = "executable",
-                command = "/usr/lib/llvm-18/bin/lldb-dap", -- adjust path if needed
+                command = "/usr/lib/llvm-18/bin/lldb-dap", -- Adjust path if needed
                 name = "lldb",
             }
 
-            -- Debug config for C++
+            -- Debug configuration for C++
             dap.configurations.cpp = {
                 {
                     name = "Launch",
@@ -61,7 +61,7 @@ return {
                 },
             }
 
-            -- Reuse same setup for C
+            -- Reuse same configuration for C
             dap.configurations.c = dap.configurations.cpp
 
             -- Keymaps for common debug actions

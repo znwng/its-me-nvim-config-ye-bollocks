@@ -20,20 +20,21 @@ ih          -> Git hunk text object (for operator & visual mode)
 
 return {
     {
-        -- Plugin: gitsigns.nvim — Git integration for diffs, hunks, blame, etc.
+        -- Plugin: gitsigns.nvim — Git integration for diffing, staging, blame, and hunks
         "lewis6991/gitsigns.nvim",
 
         config = function()
+            -- Ensure leader key is set
             vim.g.mapleader = " "
 
             require("gitsigns").setup({
-                -- Perf: don't attach to untracked files
+                -- Performance: skip attaching to untracked files
                 attach_to_untracked = false,
 
                 on_attach = function(bufnr)
                     local gs = require("gitsigns")
 
-                    -- Utility function for buffer-local mappings
+                    -- Helper function to create buffer-local keymaps
                     local function map(mode, lhs, rhs, opts)
                         opts = opts or {}
                         opts.buffer = bufnr
@@ -84,18 +85,18 @@ return {
                         gs.diffthis("HEAD~")
                     end)
 
-                    -- Quickfix
+                    -- Add hunks to quickfix list
                     map("n", "<leader>hQ", function()
                         gs.setqflist("all")
                     end)
                     map("n", "<leader>hq", gs.setqflist)
 
-                    -- Toggles
-                    map("n", "<leader>tb", gs.toggle_current_line_blame) -- toggle blame
+                    -- Toggles for inline blame, deleted lines, and word diffs
+                    map("n", "<leader>tb", gs.toggle_current_line_blame)
                     map("n", "<leader>td", gs.toggle_deleted)
                     map("n", "<leader>tw", gs.toggle_word_diff)
 
-                    -- Text object for Git hunk
+                    -- Text object for Git hunk (operator & visual modes)
                     map({ "o", "x" }, "ih", gs.select_hunk)
                 end,
             })
