@@ -32,8 +32,28 @@ return {
         if cmp_ok then
             -- Load the autopairs completion module
             local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+            local handlers = require("nvim-autopairs.completion.handlers")
+
             -- Attach autopairs behavior to cmp's confirm_done event
-            cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+            cmp.event:on(
+                "confirm_done",
+                cmp_autopairs.on_confirm_done({
+                    filetypes = {
+                        -- disable extra parens for Python
+                        python = false,
+                        -- keep default behavior for other languages (example: Lua)
+                        lua = {
+                            ["("] = {
+                                kind = {
+                                    cmp.lsp.CompletionItemKind.Function,
+                                    cmp.lsp.CompletionItemKind.Method,
+                                },
+                                handler = handlers["*"],
+                            }
+                        }
+                    }
+                })
+            )
         end
     end,
 }
