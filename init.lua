@@ -1,35 +1,37 @@
-vim.cmd("colorscheme habamax")
+vim.cmd("colorscheme habamax")                             -- Set colorscheme
+vim.o.mouse = "a"                                          -- Enable mouse support
+vim.opt.termguicolors = true                               -- Enable true color support in terminal
+vim.opt.updatetime = 250                                   -- Faster update time (used for CursorHold, etc.)
+vim.opt.colorcolumn = "100"                                -- Show vertical line at column 100
+vim.opt.breakindent = true                                 -- Enable break indent (keeps indent on wrapped lines)
+vim.opt.signcolumn = "yes"                                 -- Always show sign column (used for git, diagnostics, etc.)
+vim.opt.number = true                                      -- Show absolute line numbers
+vim.opt.relativenumber = true                              -- Show relative line numbers
+vim.opt.scrolloff = 10                                     -- Keep 10 lines visible above/below cursor when scrolling
+vim.opt.expandtab = false                                  -- Use hard tabs instead of spaces
+vim.opt.tabstop = 4                                        -- Tab width is 4 spaces
+vim.opt.shiftwidth = 4                                     -- Indent size is 4 spaces
+vim.opt.smartindent = true                                 -- Smarter auto-indentation
+vim.opt.autoindent = true                                  -- Enable automatic indentation
+vim.opt.incsearch = true                                   -- Highlight search results as you type
+vim.opt.ignorecase = true                                  -- Ignore case in searches...
+vim.opt.smartcase = true                                   -- ...unless search contains uppercase letters
+vim.opt.hlsearch = true                                    -- Highlight all search matches
+vim.opt.swapfile = false                                   -- Disable swap files
+vim.opt.backup = false                                     -- Disable backup files
+vim.opt.undofile = true                                    -- Enable persistent undo
+vim.opt.undodir = { os.getenv("HOME") .. "/.vim/undodir" } -- Directory to save undo history
 
-vim.opt.termguicolors = true
-vim.opt.updatetime = 250
-vim.opt.colorcolumn = "100"
-vim.opt.breakindent = true
-vim.opt.signcolumn = "yes"
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.scrolloff = 10
-vim.opt.expandtab = false
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.smartindent = true
-vim.opt.autoindent = true
-vim.opt.incsearch = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.hlsearch = true
-vim.o.mouse = "a"
+vim.opt.cursorline = true
+vim.api.nvim_set_hl(0, "CursorLine", { underline = true, sp = "#4f4f4f", bg = "NONE" })
 
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undofile = true
-vim.opt.undodir = { os.getenv("HOME") .. "/.vim/undodir" }
 
--- Transparent backgrounds
+-- Transparent background for UI groups
 for _, group in ipairs({ "Normal", "NormalNC", "Pmenu", "FloatBorder" }) do
     vim.api.nvim_set_hl(0, group, { bg = "none" })
 end
 
--- Statusline highlights
+-- Statusline highlight groups
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "#252828", fg = "#9cadad" })
 vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#252828", fg = "#9cadad" })
 vim.api.nvim_set_hl(0, "StatusLineError", { bg = "none", fg = "#fe0100" })
@@ -39,12 +41,14 @@ vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "none", fg = "#84acad" })
 vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#252828" })
 
 
+-- Function: count diagnostics by severity
 function _G.diag_count(severity)
     local sev = vim.diagnostic.severity[severity:upper()]
     local diags = vim.diagnostic.get(0, { severity = sev })
     return #diags
 end
 
+-- Function: human-readable file size for statusline
 function _G.human_file_size()
     local file = vim.fn.expand("%:p")
     if file == "" or vim.fn.filereadable(file) == 0 then
@@ -63,19 +67,23 @@ function _G.human_file_size()
     end
 end
 
+-- Custom statusline
 vim.o.statusline = table.concat({
-    "%{expand('%:p')} %m %=",
-    "%#StatusLineError#E:%{v:lua.diag_count('Error')} ",
-    "%#StatusLineWarn#W:%{v:lua.diag_count('Warn')} ",
-    "%#StatusLineHint#H:%{v:lua.diag_count('Hint')} ",
-    "%#StatusLineInfo#I:%{v:lua.diag_count('Info')} ",
-    "%#StatusLine#[%{v:lua.human_file_size()}] ",
-    "%#StatusLine#[%l:%c]",
+    "%{expand('%:p')} %m %=",                            -- File path + modified flag
+    "%#StatusLineError#E:%{v:lua.diag_count('Error')} ", -- Error count
+    "%#StatusLineWarn#W:%{v:lua.diag_count('Warn')} ",   -- Warning count
+    "%#StatusLineHint#H:%{v:lua.diag_count('Hint')} ",   -- Hint count
+    "%#StatusLineInfo#I:%{v:lua.diag_count('Info')} ",   -- Info count
+    "%#StatusLine#[%{v:lua.human_file_size()}] ",        -- File size
+    "%#StatusLine#[%l:%c]",                              -- Line:Column
 })
 
+-- Load plugin manager (lazy.nvim)
 require("config.lazy")
 
--- autocmds
+-- Autocommands --
+
+-- Make popups/menus transparent on colorscheme change
 vim.api.nvim_create_autocmd("ColorScheme", {
     callback = function()
         for _, group in ipairs({ "CmpBorder", "CmpDocBorder", "CmpDoc", "Pmenu", "PmenuSel", "PmenuBorder" }) do
@@ -85,10 +93,12 @@ vim.api.nvim_create_autocmd("ColorScheme", {
     end,
 })
 
+-- Highlight text on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function() vim.highlight.on_yank({ timeout = 200 }) end,
 })
 
+-- Restore cursor to last position when reopening a file
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
         local mark = vim.api.nvim_buf_get_mark(0, '"')
@@ -99,6 +109,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end,
 })
 
+-- Auto-format file before saving (if LSP supports it)
 vim.api.nvim_create_autocmd("BufWritePre", {
     callback = function()
         if vim.lsp.buf.format then
@@ -107,6 +118,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end,
 })
 
+-- Ensure file ends with a newline
 vim.api.nvim_create_autocmd("BufWritePre", {
     callback = function()
         local last_line = vim.api.nvim_buf_get_lines(0, -2, -1, false)[1]
