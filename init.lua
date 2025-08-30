@@ -1,4 +1,5 @@
 vim.cmd("colorscheme habamax")                             -- Set colorscheme
+vim.cmd [[hi Comment gui=italic]]                          -- Italicize comments
 vim.o.mouse = "a"                                          -- Enable mouse support
 vim.opt.termguicolors = true                               -- Enable true color support in terminal
 vim.opt.updatetime = 250                                   -- Faster update time (used for CursorHold, etc.)
@@ -24,7 +25,6 @@ vim.opt.undodir = { os.getenv("HOME") .. "/.vim/undodir" } -- Directory to save 
 
 vim.opt.cursorline = true
 vim.api.nvim_set_hl(0, "CursorLine", { underline = true, sp = "#4f4f4f", bg = "NONE" })
-
 
 -- Transparent background for UI groups
 for _, group in ipairs({ "Normal", "NormalNC", "Pmenu", "FloatBorder" }) do
