@@ -23,9 +23,6 @@ vim.opt.backup = false                                     -- Disable backup fil
 vim.opt.undofile = true                                    -- Enable persistent undo
 vim.opt.undodir = { os.getenv("HOME") .. "/.vim/undodir" } -- Directory to save undo history
 
-vim.opt.cursorline = true
-vim.api.nvim_set_hl(0, "CursorLine", { underline = true, sp = "#4f4f4f", bg = "NONE" })
-
 -- Transparent background for UI groups
 for _, group in ipairs({ "Normal", "NormalNC", "Pmenu", "FloatBorder" }) do
     vim.api.nvim_set_hl(0, group, { bg = "none" })
