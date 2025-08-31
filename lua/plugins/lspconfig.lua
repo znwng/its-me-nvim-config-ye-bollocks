@@ -17,6 +17,7 @@ return {
         },
 
         config = function()
+            -- === Module imports ===
             local mason = require("mason")
             local mason_lspconfig = require("mason-lspconfig")
             local mason_null_ls = require("mason-null-ls")
@@ -28,7 +29,8 @@ return {
             -- === LSP servers to ensure installation ===
             local servers = {
                 "pyright", "clangd", "gopls", "jsonls", "bashls",
-                "dockerls", "yamlls", "terraformls", "rust_analyzer", "ts_ls",
+                "dockerls", "yamlls", "terraformls", "rust_analyzer",
+                "ts_ls", "lua_ls"
             }
 
             -- === Formatters / Linters to ensure installation ===
@@ -37,7 +39,7 @@ return {
                 "goimports", "shfmt", "yamlfmt", "terraform_fmt",
             }
 
-            -- Mason UI setup
+            -- === Mason UI setup ===
             mason.setup({ ui = { border = "rounded" } })
 
             -- === LSP attach function for keymaps ===
@@ -47,6 +49,7 @@ return {
                 vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
             end
 
+            -- === Capabilities for completion ===
             local capabilities = cmp_nvim_lsp.default_capabilities()
 
             -- === Setup LSP servers via Mason ===
@@ -56,7 +59,7 @@ return {
                     function(server_name)
                         local opts = { on_attach = on_attach, capabilities = capabilities }
 
-                        -- Clangd configuration
+                        -- clangd specific configuration
                         if server_name == "clangd" then
                             opts.cmd = {
                                 "clangd",
@@ -69,12 +72,30 @@ return {
                             opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
                         end
 
-                        -- gopls configuration
+                        -- gopls specific configuration
                         if server_name == "gopls" then
                             opts.settings = {
                                 gopls = {
                                     analyses = { unusedparams = true, nilness = true, unusedwrite = true },
                                     staticcheck = true,
+                                },
+                            }
+                        end
+
+                        -- lua_ls specific configuration
+                        if server_name == "lua_ls" then
+                            opts.settings = {
+                                Lua = {
+                                    runtime = {
+                                        version = "LuaJIT",
+                                        path = vim.split(package.path, ";"),
+                                    },
+                                    diagnostics = { globals = { "vim" } }, -- recognize vim global
+                                    workspace = {
+                                        library = vim.api.nvim_get_runtime_file("", true),
+                                        checkThirdParty = false,
+                                    },
+                                    telemetry = { enable = false },
                                 },
                             }
                         end
@@ -87,7 +108,7 @@ return {
             -- === Null-LS setup for formatters and linters ===
             mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
-            -- Ruff for Python linting with custom diagnostic mapping
+            -- Custom Ruff linter for Python
             local ruff = {
                 method = null_ls.methods.DIAGNOSTICS,
                 filetypes = { "python" },

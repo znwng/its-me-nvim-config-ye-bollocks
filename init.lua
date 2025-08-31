@@ -1,5 +1,3 @@
-vim.cmd("colorscheme habamax")                             -- Set colorscheme
-vim.cmd [[hi Comment gui=italic]]                          -- Italicize comments
 vim.o.mouse = "a"                                          -- Enable mouse support
 vim.opt.termguicolors = true                               -- Enable true color support in terminal
 vim.opt.updatetime = 250                                   -- Faster update time (used for CursorHold, etc.)
@@ -22,21 +20,6 @@ vim.opt.swapfile = false                                   -- Disable swap files
 vim.opt.backup = false                                     -- Disable backup files
 vim.opt.undofile = true                                    -- Enable persistent undo
 vim.opt.undodir = { os.getenv("HOME") .. "/.vim/undodir" } -- Directory to save undo history
-
--- Transparent background for UI groups
-for _, group in ipairs({ "Normal", "NormalNC", "Pmenu", "FloatBorder" }) do
-    vim.api.nvim_set_hl(0, group, { bg = "none" })
-end
-
--- Statusline highlight groups
-vim.api.nvim_set_hl(0, "StatusLine", { bg = "#252828", fg = "#9cadad" })
-vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#252828", fg = "#9cadad" })
-vim.api.nvim_set_hl(0, "StatusLineError", { bg = "none", fg = "#fe0100" })
-vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "none", fg = "#e89500" })
-vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "none", fg = "#d3d3d3" })
-vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "none", fg = "#84acad" })
-vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#252828" })
-
 
 -- Function: count diagnostics by severity
 function _G.diag_count(severity)
