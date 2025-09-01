@@ -1,23 +1,20 @@
 -- Keybinds:
 --   gd        : Go to definition
---   <C-k> (in Insert mode) : Show signature help
---   <leader>fm : Manually format buffer + enforce newline at EOF
+--   <C-k>    : Show signature help in insert mode
+--   <leader>fm : Format buffer + ensure newline at EOF
 
 return {
     {
-        -- Plugin: nvim-lspconfig — Built-in LSP client configurations for Neovim
         "neovim/nvim-lspconfig",
 
-        -- Dependencies for automatic LSP installation and formatters
         dependencies = {
-            "williamboman/mason.nvim",           -- Package manager for LSP servers, linters, formatters
-            "williamboman/mason-lspconfig.nvim", -- Bridges Mason with nvim-lspconfig
-            "nvimtools/none-ls.nvim",            -- Null-LS support
-            "jay-babu/mason-null-ls.nvim",       -- Bridges Mason with Null-LS
+            "williamboman/mason.nvim",
+            "williamboman/mason-lspconfig.nvim",
+            "nvimtools/none-ls.nvim",
+            "jay-babu/mason-null-ls.nvim",
         },
 
         config = function()
-            -- === Module imports ===
             local mason = require("mason")
             local mason_lspconfig = require("mason-lspconfig")
             local mason_null_ls = require("mason-null-ls")
@@ -26,30 +23,30 @@ return {
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
 
-            -- === LSP servers to ensure installation ===
+            -- === LSP servers ===
             local servers = {
                 "pyright", "clangd", "gopls", "jsonls", "bashls",
                 "dockerls", "yamlls", "terraformls", "rust_analyzer",
                 "ts_ls", "lua_ls", "jdtls",
             }
 
-            -- === Formatters / Linters to ensure installation ===
+            -- === Formatters / Linters ===
             local formatters = {
                 "black", "clang-format", "prettier", "stylua", "gofmt",
-                "goimports", "shfmt", "yamlfmt", "terraform_fmt", "google_java_format",
+                "goimports", "shfmt", "yamlfmt", "terraform_fmt",
             }
 
-            -- === Mason UI setup ===
+            -- === Mason setup ===
             mason.setup({ ui = { border = "rounded" } })
 
-            -- === LSP attach function for keymaps ===
+            -- === LSP attach function ===
             local on_attach = function(_, bufnr)
                 local opts = { noremap = true, silent = true, buffer = bufnr }
                 vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
                 vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
             end
 
-            -- === Capabilities for completion ===
+            -- === Completion capabilities ===
             local capabilities = cmp_nvim_lsp.default_capabilities()
 
             -- === Setup LSP servers via Mason ===
@@ -59,7 +56,6 @@ return {
                     function(server_name)
                         local opts = { on_attach = on_attach, capabilities = capabilities }
 
-                        -- clangd specific configuration
                         if server_name == "clangd" then
                             opts.cmd = {
                                 "clangd",
@@ -72,20 +68,43 @@ return {
                             opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
                         end
 
-                        -- jdtls specifc configuration
                         if server_name == "jdtls" then
-                            opts.cmd = { "jdtls" } -- Mason will install it, so ensure PATH includes Mason bin
+                            -- JVM flags for less lag
+                            local jdtls_cmd = {
+                                "java",
+                                "-Xms256m",
+                                "-Xmx1024m",
+                                "-XX:+UseG1GC",
+                                "-jar", vim.fn.stdpath("data") ..
+                            "/mason/bin/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
+                                "-configuration", vim.fn.stdpath("data") .. "/mason/bin/jdtls/config",
+                                "-data", vim.fn.stdpath("data") .. "/jdtls-workspace",
+                            }
+
+                            opts.cmd = jdtls_cmd
                             opts.root_dir = lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml",
                                 "build.gradle")
+                            opts.single_file_support = false
                             opts.settings = {
                                 java = {
                                     format = { enabled = true },
                                     signatureHelp = { enabled = true },
+                                    -- cache & performance options
+                                    completion = { favoriteStaticMembers = { "org.junit.Assert.*", "org.junit.Assume.*", "org.junit.jupiter.api.Assertions.*" } },
+                                    contentProvider = { preferred = "fernflower" },
                                 },
                             }
+
+                            -- Autoformat on save using LSP
+                            vim.api.nvim_create_autocmd("BufWritePre", {
+                                pattern = "*.java",
+                                callback = function()
+                                    vim.lsp.buf.format({ async = false })
+                                end,
+                            })
                         end
 
-                        -- gopls specific configuration
+
                         if server_name == "gopls" then
                             opts.settings = {
                                 gopls = {
@@ -95,15 +114,11 @@ return {
                             }
                         end
 
-                        -- lua_ls specific configuration
                         if server_name == "lua_ls" then
                             opts.settings = {
                                 Lua = {
-                                    runtime = {
-                                        version = "LuaJIT",
-                                        path = vim.split(package.path, ";"),
-                                    },
-                                    diagnostics = { globals = { "vim" } }, -- recognize vim global
+                                    runtime = { version = "LuaJIT", path = vim.split(package.path, ";") },
+                                    diagnostics = { globals = { "vim" } },
                                     workspace = {
                                         library = vim.api.nvim_get_runtime_file("", true),
                                         checkThirdParty = false,
@@ -118,7 +133,7 @@ return {
                 },
             })
 
-            -- === Null-LS setup for formatters and linters ===
+            -- === Null-LS setup ===
             mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
             -- Custom Ruff linter for Python
@@ -158,6 +173,22 @@ return {
                 }),
             }
 
+            -- Eclipse Java Formatter for Null-LS
+            local eclipse_formatter = {
+                method = null_ls.methods.FORMATTING,
+                filetypes = { "java" },
+                generator = null_ls.generator({
+                    command = "java",
+                    args = { "-jar", vim.fn.expand("~/.local/bin/ecj.jar") },
+                    to_stdin = true,
+                    on_output = function(params)
+                        return params.output
+                    end,
+                }),
+            }
+
+
+
             null_ls.setup({
                 sources = {
                     builtins.formatting.black,
@@ -169,18 +200,18 @@ return {
                     builtins.formatting.shfmt,
                     builtins.formatting.yamlfmt,
                     builtins.formatting.terraform_fmt,
-                    builtins.formatting.google_java_format,
+                    eclipse_formatter,
                     ruff,
                 },
             })
 
-            -- === Helper command to install all Mason packages ===
+            -- === Mason install helper ===
             vim.api.nvim_create_user_command("MasonInstallAll", function()
                 vim.cmd("MasonInstall " .. table.concat(servers, " "))
                 vim.cmd("MasonInstall " .. table.concat(formatters, " "))
             end, {})
 
-            -- === Diagnostics configuration ===
+            -- === Diagnostics config ===
             vim.diagnostic.config({
                 update_in_insert = false,
                 virtual_text = false,
@@ -189,7 +220,6 @@ return {
                 severity_sort = true,
             })
 
-            -- Toggle virtual text depending on mode
             vim.api.nvim_create_autocmd("ModeChanged", {
                 pattern = "*:n",
                 callback = function() vim.diagnostic.config({ virtual_text = true }) end,
@@ -202,12 +232,12 @@ return {
             -- === Manual formatting keymap ===
             vim.keymap.set("n", "<leader>fm", function()
                 local bufnr = vim.api.nvim_get_current_buf()
-                local clients = vim.lsp.get_clients({ bufnr = bufnr })
-                if #clients > 0 then
-                    vim.lsp.buf.format({ async = false, bufnr = bufnr })
+                for _, client in pairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+                    if client.supports_method("textDocument/formatting") then
+                        vim.lsp.buf.format({ async = false, bufnr = bufnr })
+                        break
+                    end
                 end
-
-                -- Ensure buffer ends with a newline
                 local last_line = vim.fn.getline("$")
                 if last_line ~= "" then vim.fn.append("$", "") end
             end, { noremap = true, silent = true })
