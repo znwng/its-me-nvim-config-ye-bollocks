@@ -40,6 +40,7 @@ return {
                     "markdown",
                     "markdown_inline",
                     "rust",
+                    "java",
                     "javascript",
                     "typescript",
                 },

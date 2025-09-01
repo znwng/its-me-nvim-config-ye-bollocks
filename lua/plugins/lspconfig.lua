@@ -30,13 +30,13 @@ return {
             local servers = {
                 "pyright", "clangd", "gopls", "jsonls", "bashls",
                 "dockerls", "yamlls", "terraformls", "rust_analyzer",
-                "ts_ls", "lua_ls"
+                "ts_ls", "lua_ls", "jdtls",
             }
 
             -- === Formatters / Linters to ensure installation ===
             local formatters = {
                 "black", "clang-format", "prettier", "stylua", "gofmt",
-                "goimports", "shfmt", "yamlfmt", "terraform_fmt",
+                "goimports", "shfmt", "yamlfmt", "terraform_fmt", "google_java_format",
             }
 
             -- === Mason UI setup ===
@@ -70,6 +70,19 @@ return {
                                 "--completion-style=detailed",
                             }
                             opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
+                        end
+
+                        -- jdtls specifc configuration
+                        if server_name == "jdtls" then
+                            opts.cmd = { "jdtls" } -- Mason will install it, so ensure PATH includes Mason bin
+                            opts.root_dir = lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml",
+                                "build.gradle")
+                            opts.settings = {
+                                java = {
+                                    format = { enabled = true },
+                                    signatureHelp = { enabled = true },
+                                },
+                            }
                         end
 
                         -- gopls specific configuration
@@ -156,6 +169,7 @@ return {
                     builtins.formatting.shfmt,
                     builtins.formatting.yamlfmt,
                     builtins.formatting.terraform_fmt,
+                    builtins.formatting.google_java_format,
                     ruff,
                 },
             })
