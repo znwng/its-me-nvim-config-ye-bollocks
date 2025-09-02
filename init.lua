@@ -47,9 +47,25 @@ function _G.human_file_size()
     end
 end
 
+-- Function: get current git branch or [~]
+function _G.git_branch()
+    local gitdir = vim.fn.finddir(".git", vim.fn.expand("%:p:h") .. ";")
+    if gitdir == "" then
+        return "[~]"
+    end
+    local branch = vim.fn.system("git -C " .. vim.fn.expand("%:p:h") .. " rev-parse --abbrev-ref HEAD 2>/dev/null")
+    branch = vim.fn.trim(branch)
+    if branch == "" then
+        return "[~]"
+    end
+    return "[" .. branch .. "]"
+end
+
 -- Custom statusline
 vim.o.statusline = table.concat({
-    "%{expand('%:p')} %m %=",                            -- File path + modified flag
+    "%{expand('%:p')} ",                                 -- File path
+    "%{v:lua.git_branch()} ",                            -- Git branch or [~]
+    "%m %=",                                             -- Modified flag
     "%#StatusLineError#E:%{v:lua.diag_count('Error')} ", -- Error count
     "%#StatusLineWarn#W:%{v:lua.diag_count('Warn')} ",   -- Warning count
     "%#StatusLineHint#H:%{v:lua.diag_count('Hint')} ",   -- Hint count
