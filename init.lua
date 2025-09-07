@@ -1,25 +1,26 @@
-vim.o.mouse = "a"                                          -- Enable mouse support
-vim.opt.termguicolors = true                               -- Enable true color support in terminal
-vim.opt.updatetime = 250                                   -- Faster update time (used for CursorHold, etc.)
-vim.opt.colorcolumn = "100"                                -- Show vertical line at column 100
-vim.opt.breakindent = true                                 -- Enable break indent (keeps indent on wrapped lines)
-vim.opt.signcolumn = "yes"                                 -- Always show sign column (used for git, diagnostics, etc.)
-vim.opt.number = true                                      -- Show absolute line numbers
-vim.opt.relativenumber = true                              -- Show relative line numbers
-vim.opt.scrolloff = 10                                     -- Keep 10 lines visible above/below cursor when scrolling
-vim.opt.expandtab = false                                  -- Use hard tabs instead of spaces
-vim.opt.tabstop = 4                                        -- Tab width is 4 spaces
-vim.opt.shiftwidth = 4                                     -- Indent size is 4 spaces
-vim.opt.smartindent = true                                 -- Smarter auto-indentation
-vim.opt.autoindent = true                                  -- Enable automatic indentation
-vim.opt.incsearch = true                                   -- Highlight search results as you type
-vim.opt.ignorecase = true                                  -- Ignore case in searches...
-vim.opt.smartcase = true                                   -- ...unless search contains uppercase letters
-vim.opt.hlsearch = true                                    -- Highlight all search matches
-vim.opt.swapfile = false                                   -- Disable swap files
-vim.opt.backup = false                                     -- Disable backup files
-vim.opt.undofile = true                                    -- Enable persistent undo
-vim.opt.undodir = { os.getenv("HOME") .. "/.vim/undodir" } -- Directory to save undo history
+vim.o.mouse            = "a"                                      -- Enable mouse support
+vim.opt.termguicolors  = true                                     -- Enable true color support in terminal
+vim.opt.updatetime     = 250                                      -- Faster update time (used for CursorHold, etc.)
+vim.opt.colorcolumn    = "100"                                    -- Show vertical line at column 100
+vim.opt.breakindent    = true                                     -- Enable break indent (keeps indent on wrapped lines)
+vim.opt.signcolumn     =
+"yes"                                                             -- Always show sign column (used for git, diagnostics, etc.)
+vim.opt.number         = true                                     -- Show absolute line numbers
+vim.opt.relativenumber = true                                     -- Show relative line numbers
+vim.opt.scrolloff      = 10                                       -- Keep 10 lines visible above/below cursor when scrolling
+vim.opt.expandtab      = false                                    -- Use hard tabs instead of spaces
+vim.opt.tabstop        = 4                                        -- Tab width is 4 spaces
+vim.opt.shiftwidth     = 4                                        -- Indent size is 4 spaces
+vim.opt.smartindent    = true                                     -- Smarter auto-indentation
+vim.opt.autoindent     = true                                     -- Enable automatic indentation
+vim.opt.incsearch      = true                                     -- Highlight search results as you type
+vim.opt.ignorecase     = true                                     -- Ignore case in searches...
+vim.opt.smartcase      = true                                     -- ...unless search contains uppercase letters
+vim.opt.hlsearch       = true                                     -- Highlight all search matches
+vim.opt.swapfile       = false                                    -- Disable swap files
+vim.opt.backup         = false                                    -- Disable backup files
+vim.opt.undofile       = true                                     -- Enable persistent undo
+vim.opt.undodir        = { os.getenv("HOME") .. "/.vim/undodir" } -- Directory to save undo history
 
 -- Function: count diagnostics by severity
 function _G.diag_count(severity)
