@@ -46,6 +46,9 @@ return {
                 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#f9e2af" })
                 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#89b4fa" })
                 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#6c7086" })
+
+                -- Column Line
+                vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1e1e2e" })
             end
 
             -- Set highlights now
