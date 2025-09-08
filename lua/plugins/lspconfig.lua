@@ -23,33 +23,33 @@ return {
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
 
-            -- === LSP servers ===
+            --  LSP servers
             local servers = {
                 "pyright", "clangd", "gopls", "jsonls", "bashls",
                 "dockerls", "yamlls", "terraformls", "rust_analyzer",
                 "ts_ls", "lua_ls", "jdtls",
             }
 
-            -- === Formatters / Linters ===
+            --  Formatters / Linters
             local formatters = {
                 "black", "clang-format", "prettier", "stylua", "gofmt",
                 "goimports", "shfmt", "yamlfmt", "terraform_fmt",
             }
 
-            -- === Mason setup ===
-            mason.setup({ ui = { border = "rounded" } })
+            --  Mason setup
+            mason.setup()
 
-            -- === LSP attach function ===
+            --  LSP attach function
             local on_attach = function(_, bufnr)
                 local opts = { noremap = true, silent = true, buffer = bufnr }
                 vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
                 vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
             end
 
-            -- === Completion capabilities ===
+            --  Completion capabilities
             local capabilities = cmp_nvim_lsp.default_capabilities()
 
-            -- === Setup LSP servers via Mason ===
+            --  Setup LSP servers via Mason
             mason_lspconfig.setup({
                 ensure_installed = servers,
                 handlers = {
@@ -69,7 +69,6 @@ return {
                         end
 
                         if server_name == "jdtls" then
-                            -- JVM flags for less lag
                             local jdtls_cmd = {
                                 "java",
                                 "-Xms256m",
@@ -89,13 +88,11 @@ return {
                                 java = {
                                     format = { enabled = true },
                                     signatureHelp = { enabled = true },
-                                    -- cache & performance options
                                     completion = { favoriteStaticMembers = { "org.junit.Assert.*", "org.junit.Assume.*", "org.junit.jupiter.api.Assertions.*" } },
                                     contentProvider = { preferred = "fernflower" },
                                 },
                             }
 
-                            -- Autoformat on save using LSP
                             vim.api.nvim_create_autocmd("BufWritePre", {
                                 pattern = "*.java",
                                 callback = function()
@@ -103,7 +100,6 @@ return {
                                 end,
                             })
                         end
-
 
                         if server_name == "gopls" then
                             opts.settings = {
@@ -133,10 +129,9 @@ return {
                 },
             })
 
-            -- === Null-LS setup ===
+            --  Null-LS setup
             mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
-            -- Custom Ruff linter for Python
             local ruff = {
                 method = null_ls.methods.DIAGNOSTICS,
                 filetypes = { "python" },
@@ -173,7 +168,6 @@ return {
                 }),
             }
 
-            -- Eclipse Java Formatter for Null-LS
             local eclipse_formatter = {
                 method = null_ls.methods.FORMATTING,
                 filetypes = { "java" },
@@ -186,8 +180,6 @@ return {
                     end,
                 }),
             }
-
-
 
             null_ls.setup({
                 sources = {
@@ -205,13 +197,12 @@ return {
                 },
             })
 
-            -- === Mason install helper ===
             vim.api.nvim_create_user_command("MasonInstallAll", function()
                 vim.cmd("MasonInstall " .. table.concat(servers, " "))
                 vim.cmd("MasonInstall " .. table.concat(formatters, " "))
             end, {})
 
-            -- === Diagnostics config ===
+            --  Diagnostics config
             vim.diagnostic.config({
                 update_in_insert = false,
                 virtual_text = false,
@@ -220,16 +211,7 @@ return {
                 severity_sort = true,
             })
 
-            vim.api.nvim_create_autocmd("ModeChanged", {
-                pattern = "*:n",
-                callback = function() vim.diagnostic.config({ virtual_text = true }) end,
-            })
-            vim.api.nvim_create_autocmd("ModeChanged", {
-                pattern = "n:*",
-                callback = function() vim.diagnostic.config({ virtual_text = false }) end,
-            })
-
-            -- === Manual formatting keymap ===
+            --  Manual formatting keymap
             vim.keymap.set("n", "<leader>fm", function()
                 local bufnr = vim.api.nvim_get_current_buf()
                 for _, client in pairs(vim.lsp.get_clients({ bufnr = bufnr })) do

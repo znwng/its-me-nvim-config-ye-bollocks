@@ -40,6 +40,6 @@ require("lazy").setup({
     install = { colorscheme = {} },               -- don’t force colorscheme; handle in plugins/colors.lua
     checker = { enabled = true, notify = false }, -- background update checks
     change_detection = { notify = true },         -- notify if config changes
-    ui = { border = "rounded" },
+    ui = { border = "none", winblend = 0 },
 })
 
