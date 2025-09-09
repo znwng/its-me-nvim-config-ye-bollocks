@@ -132,6 +132,17 @@ return {
             --  Null-LS setup
             mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
+            local typstfmt = {
+                method = null_ls.methods.FORMATTING,
+                filetypes = { "typst" },
+                generator = null_ls.formatter({
+                    command = "typstfmt",
+                    args = { "$FILENAME" },
+                    to_temp_file = true,
+                }),
+            }
+
+
             local ruff = {
                 method = null_ls.methods.DIAGNOSTICS,
                 filetypes = { "python" },
@@ -194,6 +205,7 @@ return {
                     builtins.formatting.terraform_fmt,
                     eclipse_formatter,
                     ruff,
+                    typstfmt,
                 },
             })
 
