@@ -64,15 +64,15 @@ end
 
 -- Custom statusline
 vim.o.statusline = table.concat({
-    "%{expand('%:p')} ",                                 -- File path
-    "%{v:lua.git_branch()} ",                            -- Git branch or [~]
-    "%m %=",                                             -- Modified flag
-    "%#StatusLineError#E:%{v:lua.diag_count('Error')} ", -- Error count
-    "%#StatusLineWarn#W:%{v:lua.diag_count('Warn')} ",   -- Warning count
-    "%#StatusLineHint#H:%{v:lua.diag_count('Hint')} ",   -- Hint count
-    "%#StatusLineInfo#I:%{v:lua.diag_count('Info')} ",   -- Info count
-    "%#StatusLine#[%{v:lua.human_file_size()}] ",        -- File size
-    "%#StatusLine#[%l:%c]",                              -- Line:Column
+    "%{expand('%:p')} ",                               -- File path
+    "%{v:lua.git_branch()} ",                          -- Git branch or [~]
+    "%m %=",                                           -- Modified flag
+    "%#StatusLineError#%{v:lua.diag_count('Error')} ", -- Error count
+    "%#StatusLineWarn#%{v:lua.diag_count('Warn')} ",   -- Warning count
+    "%#StatusLineHint#%{v:lua.diag_count('Hint')} ",   -- Hint count
+    "%#StatusLineInfo#%{v:lua.diag_count('Info')} ",   -- Info count
+    "%#StatusLine#[%{v:lua.human_file_size()}] ",      -- File size
+    "%#StatusLine#[%l:%c]",                            -- Line:Column
 })
 
 -- Load plugin manager (lazy.nvim)
