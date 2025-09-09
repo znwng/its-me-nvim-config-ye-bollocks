@@ -27,28 +27,25 @@ return {
             local function set_statusline_hl()
                 -- Statusline
                 vim.api.nvim_set_hl(0, "StatusLine", { bg = "none", fg = "#838ba7" })
-                vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none", fg = "#6c7086" })
-                vim.api.nvim_set_hl(0, "StatusLineError", { bg = "none", fg = "#f38ba8" })
-                vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "none", fg = "#f9e2af" })
-                vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "none", fg = "#6c7086" })
+                vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none", fg = "#51576d" })
+                vim.api.nvim_set_hl(0, "StatusLineError", { bg = "none", fg = "#e78284" })
+                vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "none", fg = "#e5c890" })
+                vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "none", fg = "#51576d" })
                 vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "none", fg = "#89b4fa" })
                 vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1e1e2e" })
 
                 -- Diagnostics in the buffer (text underlines)
                 vim.api.nvim_set_hl(0, "DiagnosticUnderlineError",
-                    { underline = true, undercurl = false, fg = "#f38ba8" })
-                vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true, undercurl = false, fg = "#f9e2af" })
+                    { underline = true, undercurl = false, fg = "#e78284" })
+                vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true, undercurl = false, fg = "#e5c890" })
                 vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true, undercurl = false, fg = "#89b4fa" })
-                vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true, undercurl = false, fg = "#6c7086" })
+                vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true, undercurl = false, fg = "#51576d" })
 
                 -- Optional: virtual text colors
-                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#f38ba8" })
-                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#f9e2af" })
+                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#e78284" })
+                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#e5c890" })
                 vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#89b4fa" })
-                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#6c7086" })
-
-                -- Column Line
-                -- vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1e1e2e" })
+                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#51576d" })
             end
 
             -- Set highlights now
