@@ -43,6 +43,7 @@ return {
                     "java",
                     "javascript",
                     "typescript",
+                    "typst",
                 },
 
                 sync_install = false, -- Install parsers asynchronously

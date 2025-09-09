@@ -78,8 +78,6 @@ vim.o.statusline = table.concat({
 -- Load plugin manager (lazy.nvim)
 require("config.lazy")
 
--- Autocommands --
-
 -- Make popups/menus transparent on colorscheme change
 vim.api.nvim_create_autocmd("ColorScheme", {
     callback = function()

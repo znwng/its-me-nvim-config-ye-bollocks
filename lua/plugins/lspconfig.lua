@@ -27,7 +27,7 @@ return {
             local servers = {
                 "pyright", "clangd", "gopls", "jsonls", "bashls",
                 "dockerls", "yamlls", "terraformls", "rust_analyzer",
-                "ts_ls", "lua_ls", "jdtls",
+                "ts_ls", "lua_ls", "jdtls", "tinymist",
             }
 
             --  Formatters / Linters
