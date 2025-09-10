@@ -1,63 +1,55 @@
 return {
     {
-        "catppuccin/nvim",
-        name = "catppuccin",
+        "rose-pine/neovim",
+        name = "rose-pine",
         config = function()
-            -- Setup Catppuccin
-            require("catppuccin").setup({
-                flavour = "frappe",            -- latte, frappe, macchiato, mocha
-                transparent_background = true, -- transparent editor background
-                term_colors = true,
-                styles = {
-                    comments = { "italic" }, -- only comments italic
-                },
-                integrations = {
-                    lsp_trouble = true,
-                    treesitter = true,
-                    native_lsp = {
-                        enabled = true,
-                    },
-                },
+            -- Setup Rose Pine
+            require("rose-pine").setup({
+                variant = "moon",
+                bold_vert_split = false,
+                dim_nc_background = true,
+                disable_background = true,
+                disable_float_background = false,
+                disable_italics = true,
             })
 
             -- Apply colorscheme
-            vim.cmd("colorscheme catppuccin")
+            vim.cmd("colorscheme rose-pine")
 
-            -- Function to set statusline highlights
+            -- Statusline highlights using Rose Pine Moon palette
             local function set_statusline_hl()
-                -- Statusline
-                vim.api.nvim_set_hl(0, "StatusLine", { bg = "none", fg = "#838ba7" })
-                vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none", fg = "#51576d" })
-                vim.api.nvim_set_hl(0, "StatusLineError", { bg = "none", fg = "#e78284" })
-                vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "none", fg = "#e5c890" })
-                vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "none", fg = "#51576d" })
-                vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "none", fg = "#89b4fa" })
-                vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1e1e2e" })
+                vim.api.nvim_set_hl(0, "StatusLine", { bg = "#1f1d2e", fg = "#e0def4" })
+                vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#1f1d2e", fg = "#6e6a86" })
+                vim.api.nvim_set_hl(0, "StatusLineError", { bg = "#1f1d2e", fg = "#eb6f92" })
+                vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "#1f1d2e", fg = "#f6c177" })
+                vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "#1f1d2e", fg = "#f5c2e7" })
+                vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "#1f1d2e", fg = "#9ccfd8" })
+                vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#1f1d2e" })
 
-                -- Diagnostics in the buffer (text underlines)
+                -- Diagnostics underlines
                 vim.api.nvim_set_hl(0, "DiagnosticUnderlineError",
-                    { underline = true, undercurl = false, fg = "#e78284" })
-                vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true, undercurl = false, fg = "#e5c890" })
-                vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true, undercurl = false, fg = "#89b4fa" })
-                vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true, undercurl = false, fg = "#51576d" })
+                    { underline = true, undercurl = false, fg = "#eb6f92" })
+                vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true, undercurl = false, fg = "#f6c177" })
+                vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true, undercurl = false, fg = "#9ccfd8" })
+                vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true, undercurl = false, fg = "#f5c2e7" })
 
-                -- Optional: virtual text colors
-                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#e78284" })
-                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#e5c890" })
-                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#89b4fa" })
-                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#51576d" })
+                -- Virtual text colors
+                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#eb6f92" })
+                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#f6c177" })
+                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#9ccfd8" })
+                vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#f5c2e7" })
             end
 
-            -- Set highlights now
+            -- Apply highlights
             set_statusline_hl()
 
-            -- Ensure highlights persist on colorscheme reload
+            -- Persist highlights on colorscheme reload
             vim.api.nvim_create_autocmd("ColorScheme", {
-                pattern = "catppuccin",
+                pattern = "rose-pine",
                 callback = set_statusline_hl,
             })
 
-            -- Configure diagnostics to use underline (straight)
+            -- Configure diagnostics
             vim.diagnostic.config({
                 underline = true,
                 virtual_text = false,

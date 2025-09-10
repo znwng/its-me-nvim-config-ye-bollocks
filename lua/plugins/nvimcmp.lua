@@ -81,12 +81,6 @@ return {
                         ellipsis_char = "...",
                     }),
                 },
-
-                -- Popup window borders
-                window = {
-                    completion = cmp.config.window.bordered(),
-                    documentation = cmp.config.window.bordered(),
-                },
             })
 
             -- Autopairs integration: automatically insert pairs after completion
