@@ -217,7 +217,7 @@ return {
             --  Diagnostics config
             vim.diagnostic.config({
                 update_in_insert = false,
-                virtual_text = false,
+                virtual_text = true,
                 signs = true,
                 underline = true,
                 severity_sort = true,
