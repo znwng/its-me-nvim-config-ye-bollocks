@@ -1,53 +1,52 @@
 --[[
-Plugin: Telescope.nvim
-Description: Fuzzy finder for files, buffers, grep, and more.
+Telescope.nvim (fuzzy finder)
 
-Keybindings:
-  <leader>ff -> Find files (includes hidden files)
-  <leader>fg -> Live grep
-  <leader>fb -> List open buffers
-  <leader>fh -> Help tags
+Keymaps:
+<leader>ff -> Find files (shows hidden files too)
+<leader>fg -> Live grep
+<leader>fb -> Open buffers list
+<leader>fh -> Help tags
 
 Buffer navigation:
-  <Tab>     -> Next buffer
-  <S-Tab>   -> Previous buffer
+<Tab>     -> Next buffer
+<S-Tab>   -> Previous buffer
 ]]
 
 return {
     {
-        -- Plugin: telescope.nvim — Highly extendable fuzzy finder for Neovim
+        -- Telescope: fuzzy finder (files, grep, buffers, etc.)
         "nvim-telescope/telescope.nvim",
         tag = "0.1.8",
 
-        -- Required dependencies
+        -- Needed dependencies
         dependencies = {
-            "nvim-lua/plenary.nvim", -- Utilities for Telescope
+            "nvim-lua/plenary.nvim", -- Telescope utilities
             "catppuccin/nvim",       -- Theme integration
         },
 
         config = function()
-            -- Telescope setup with defaults and picker options
+            -- Telescope defaults
             require("telescope").setup({
                 defaults = {
-                    prompt_prefix = " ", -- Minimal prompt prefix
-                    selection_caret = " ", -- Arrow for selected item
-                    sorting_strategy = "ascending", -- Results start at the top
+                    prompt_prefix = " ", -- Clean prompt
+                    selection_caret = " ", -- Arrow for current item
+                    sorting_strategy = "ascending", -- Results at top
                     layout_config = { prompt_position = "top" },
                     winblend = 10, -- Slight transparency
                     border = true,
-                    color_devicons = true, -- Show colored icons
+                    color_devicons = true, -- Colored file icons
                 },
                 pickers = {
-                    find_files = { hidden = true }, -- Include dotfiles
+                    find_files = { hidden = true }, -- Show dotfiles
                 },
             })
 
-            -- Catppuccin theme integration for Telescope
+            -- Theme integration (Catppuccin)
             require("catppuccin").setup({
                 integrations = { telescope = true },
             })
 
-            -- Transparent backgrounds for Telescope windows
+            -- Transparent background for Telescope popups
             local group = vim.api.nvim_create_augroup("TelescopeBackground", { clear = true })
             vim.api.nvim_create_autocmd("ColorScheme", {
                 group = group,
@@ -59,7 +58,7 @@ return {
                 end,
             })
 
-            -- Keymaps for Telescope actions
+            -- Keymaps for Telescope
             local keymap = vim.keymap.set
             local opts = { noremap = true, silent = true }
 
@@ -68,7 +67,7 @@ return {
             keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
             keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
 
-            -- Simple buffer navigation keymaps
+            -- Buffer navigation
             keymap("n", "<Tab>", "<cmd>bnext<CR>", opts)
             keymap("n", "<S-Tab>", "<cmd>bprevious<CR>", opts)
         end,

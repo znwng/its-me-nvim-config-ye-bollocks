@@ -1,39 +1,40 @@
 --[[
-Keybinds / Behavior (Comment.nvim):
+Comment.nvim (comment lines or blocks quickly)
 
-gcc        -> Toggle comment for the current line
+Keymaps:
+gcc        -> Toggle comment on current line
 gbc        -> Toggle block comment
 
-gc<motion> -> Comment lines using motion (e.g., gcj to comment current + next line)
-gb<motion> -> Block comment using motion
+gc<motion> -> Comment by motion (e.g. gcj = this + next line)
+gb<motion> -> Block comment by motion
 
-gcO        -> Add comment above the current line
-gco        -> Add comment below the current line
-gcA        -> Add comment at the end of the current line
+gcO        -> Add comment line above
+gco        -> Add comment line below
+gcA        -> Add comment at end of line
 ]]
 
 return {
     {
-        -- Plugin: Comment.nvim — lightweight and fast commenting utility
+        -- Comment plugin (lightweight, fast)
         "numToStr/Comment.nvim",
 
-        -- Load immediately on startup
+        -- Load right away
         lazy = false,
 
-        -- Plugin configuration using the opts table
+        -- Setup keymaps
         opts = {
             toggler = {
-                line = "gcc",  -- Keymap to toggle a single line comment
-                block = "gbc", -- Keymap to toggle a block comment
+                line = "gcc",  -- Toggle single line
+                block = "gbc", -- Toggle block
             },
             opleader = {
-                line = "gc",  -- Motion-based line comment (e.g., gcj, gcap)
-                block = "gb", -- Motion-based block comment
+                line = "gc",  -- Use motions with gc (e.g. gcj, gcap)
+                block = "gb", -- Use motions with gb
             },
             extra = {
-                above = "gcO", -- Insert a comment line above the current line
-                below = "gco", -- Insert a comment line below the current line
-                eol = "gcA",   -- Insert a comment at the end of the current line
+                above = "gcO", -- Add comment above
+                below = "gco", -- Add comment below
+                eol = "gcA",   -- Add comment at end of line
             },
         },
     },

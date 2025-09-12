@@ -3,46 +3,40 @@ Keybinds / Behavior:
 - <CR> (Enter): smart pairing inside brackets/quotes
 - <BS> (Backspace): deletes matching pair when appropriate
 - Other brackets/quotes auto-close as you type
-(No explicit keymaps are required; plugin hooks into Insert mode.)
+(No explicit keymaps needed; plugin hooks into Insert mode)
 ]]
 
--- nvim-autopairs: automatically inserts and manages closing brackets, quotes, etc.
+-- Plugin: nvim-autopairs — automatically closes brackets, quotes, etc.
 return {
     "windwp/nvim-autopairs",
 
-    -- Load the plugin lazily when entering Insert mode to save startup time
+    -- Load lazily on Insert mode for faster startup
     event = "InsertEnter",
 
     config = function()
-        -- Attempt to safely require the plugin
+        -- Safely require the plugin
         local ok, npairs = pcall(require, "nvim-autopairs")
         if not ok then return end
 
-        -- Configure the plugin
+        -- Setup autopairs
         npairs.setup({
-            -- Use Treesitter to intelligently handle pairing and avoid incorrect inserts
-            check_ts = true,
-
-            -- Disable autopairs for certain filetypes where it may interfere
-            disable_filetype = { "TelescopePrompt", "vim" },
+            check_ts = true,                                 -- Use Treesitter to avoid wrong pair inserts
+            disable_filetype = { "TelescopePrompt", "vim" }, -- Disable in specific filetypes
         })
 
-        -- Optional: integrate autopairs with nvim-cmp completion
+        -- Optional: integrate with nvim-cmp completion
         local cmp_ok, cmp = pcall(require, "cmp")
         if cmp_ok then
-            -- Load the autopairs completion module
             local cmp_autopairs = require("nvim-autopairs.completion.cmp")
             local handlers = require("nvim-autopairs.completion.handlers")
 
-            -- Attach autopairs behavior to cmp's confirm_done event
+            -- Attach autopairs to completion confirm event
             cmp.event:on(
                 "confirm_done",
                 cmp_autopairs.on_confirm_done({
                     filetypes = {
-                        -- disable extra parens for Python
-                        python = false,
-                        -- keep default behavior for other languages (example: Lua)
-                        lua = {
+                        python = false, -- disable extra parens for Python
+                        lua = {         -- customize for Lua functions/methods
                             ["("] = {
                                 kind = {
                                     cmp.lsp.CompletionItemKind.Function,

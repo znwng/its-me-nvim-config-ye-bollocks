@@ -1,5 +1,5 @@
 --[[
-Keybindings for Treesitter text objects:
+Treesitter text objects and movement:
 
 Text Objects:
 af -> Select entire function
@@ -8,10 +8,10 @@ ac -> Select entire class
 ic -> Select inside class
 
 Usage examples:
-- vaf  -> Visually select an entire function
-- yif  -> Yank (copy) the inside of a function
-- daf  -> Delete an entire function
-- cic  -> Change inside class
+vaf  -> Visually select a function
+yif  -> Yank (copy) inside of function
+daf  -> Delete a function
+cic  -> Change inside class
 
 Movement:
 ]m   -> Jump to next function
@@ -20,50 +20,38 @@ Movement:
 
 return {
     {
-        -- Plugin: nvim-treesitter — Syntax highlighting, indentation, and text objects
+        -- Treesitter: syntax highlighting, indentation, and text objects
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
 
-        -- Textobject support dependency
+        -- Textobject support
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },
 
         config = function()
             require("nvim-treesitter.configs").setup({
-                -- Languages to install parsers for
+                -- Install parsers for these languages
                 ensure_installed = {
-                    "python",
-                    "c",
-                    "cpp",
-                    "lua",
-                    "markdown",
-                    "markdown_inline",
-                    "rust",
-                    "java",
-                    "javascript",
-                    "typescript",
-                    "typst",
+                    "python", "c", "cpp", "lua",
+                    "markdown", "markdown_inline",
+                    "rust", "java", "javascript",
+                    "typescript", "typst",
                 },
 
-                sync_install = false, -- Install parsers asynchronously
+                sync_install = false, -- Install asynchronously
 
-                -- Highlighting configuration
-                highlight = {
-                    enable = true,
-                    disable = {},
-                },
+                -- Syntax highlighting
+                highlight = { enable = true, disable = {} },
 
                 -- Indentation based on Treesitter
-                indent = {
-                    enable = true,
-                },
+                indent = { enable = true },
 
                 -- Textobjects configuration
                 textobjects = {
                     select = {
                         enable = true,
-                        lookahead = true, -- Automatically jump forward to textobject
+                        lookahead = true, -- Jump forward automatically
                         keymaps = {
                             ["af"] = "@function.outer",
                             ["if"] = "@function.inner",
@@ -74,17 +62,13 @@ return {
                     move = {
                         enable = true,
                         set_jumps = true, -- Record jumps in jumplist
-                        goto_next_start = {
-                            ["]m"] = "@function.outer",
-                        },
-                        goto_previous_start = {
-                            ["[m"] = "@function.outer",
-                        },
+                        goto_next_start = { ["]m"] = "@function.outer" },
+                        goto_previous_start = { ["[m"] = "@function.outer" },
                     },
                 },
             })
 
-            -- Global indentation settings (4 spaces, expand tabs)
+            -- Set global indentation: 4 spaces, expand tabs
             vim.api.nvim_exec([[
                 augroup global_indent
                   autocmd!
@@ -95,7 +79,7 @@ return {
     },
 
     {
-        -- Plugin: render-markdown.nvim — Render Markdown directly in Neovim
+        -- Render Markdown directly in Neovim
         "MeanderingProgrammer/render-markdown.nvim",
         dependencies = {
             "nvim-treesitter/nvim-treesitter",

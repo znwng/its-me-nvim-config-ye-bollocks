@@ -1,28 +1,29 @@
 --[[
-Keybindings for nvim-cmp:
+nvim-cmp (Autocompletion)
 
-<C-Space> -> Trigger completion menu
-<CR>      -> Confirm completion selection
-<Tab>     -> Next item / expand/jump snippet
-<S-Tab>   -> Previous item / jump backwards in snippet
+Keybindings:
+<C-Space> -> Open completion menu
+<CR>      -> Confirm selected item
+<Tab>     -> Next item / expand or jump in snippet
+<S-Tab>   -> Previous item / jump back in snippet
 ]]
 
 return {
     {
-        -- Plugin: nvim-cmp — Autocompletion framework for Neovim
+        -- Main completion engine
         "hrsh7th/nvim-cmp",
 
-        -- Completion sources and snippet support
+        -- Extra sources + snippet + UI helpers
         dependencies = {
-            "hrsh7th/cmp-nvim-lsp",         -- LSP completion source
-            "hrsh7th/cmp-buffer",           -- Buffer words completion
-            "hrsh7th/cmp-path",             -- File path completion
+            "hrsh7th/cmp-nvim-lsp",         -- LSP suggestions
+            "hrsh7th/cmp-buffer",           -- Words from current buffer
+            "hrsh7th/cmp-path",             -- File paths
             "hrsh7th/cmp-cmdline",          -- Command-line completion
-            "saadparwaiz1/cmp_luasnip",     -- LuaSnip completion source
+            "saadparwaiz1/cmp_luasnip",     -- Snippets source
             "L3MON4D3/LuaSnip",             -- Snippet engine
-            "rafamadriz/friendly-snippets", -- Predefined snippets collection
-            "onsails/lspkind.nvim",         -- Icons for completion items
-            "windwp/nvim-autopairs",        -- Auto-close pairs integration
+            "rafamadriz/friendly-snippets", -- Ready-to-use snippets
+            "onsails/lspkind.nvim",         -- Icons in menu
+            "windwp/nvim-autopairs",        -- Auto-close brackets/quotes
         },
 
         config = function()
@@ -30,10 +31,10 @@ return {
             local luasnip = require("luasnip")
             local lspkind = require("lspkind")
 
-            -- Load VS Code-style snippets lazily
+            -- Load predefined snippets (VS Code style)
             require("luasnip.loaders.from_vscode").lazy_load()
 
-            -- nvim-cmp setup
+            -- Setup nvim-cmp
             cmp.setup({
                 snippet = {
                     expand = function(args)
@@ -41,7 +42,7 @@ return {
                     end,
                 },
 
-                -- Key mappings for insert and snippet modes
+                -- Key mappings for completion/snippets
                 mapping = cmp.mapping.preset.insert({
                     ["<C-Space>"] = cmp.mapping.complete(),
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
@@ -65,7 +66,7 @@ return {
                     end, { "i", "s" }),
                 }),
 
-                -- Completion sources order matters (priority)
+                -- Sources for suggestions (priority order)
                 sources = cmp.config.sources({
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
@@ -73,22 +74,22 @@ return {
                     { name = "path" },
                 }),
 
-                -- Formatting with icons and truncation
+                -- Show icons + text, limit width
                 formatting = {
                     format = lspkind.cmp_format({
-                        mode = "symbol_text", -- show icon + text
+                        mode = "symbol_text",
                         maxwidth = 50,
                         ellipsis_char = "...",
                     }),
                 },
             })
 
-            -- Autopairs integration: automatically insert pairs after completion
+            -- Autopairs: auto-insert closing bracket/quote after confirming
             local cmp_autopairs = require("nvim-autopairs.completion.cmp")
             require("nvim-autopairs").setup({})
             cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-            -- Customize highlight groups for transparency and borders
+            -- Styling: transparent menu with purple borders
             vim.api.nvim_set_hl(0, "CmpBorder", { fg = "#7d5dff", bg = "NONE", blend = 15 })
             vim.api.nvim_set_hl(0, "CmpDocBorder", { fg = "#7d5dff", bg = "NONE", blend = 15 })
             vim.api.nvim_set_hl(0, "Pmenu", { bg = "NONE", blend = 15 })

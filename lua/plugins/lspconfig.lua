@@ -1,17 +1,20 @@
--- Keybinds:
---   gd        : Go to definition
---   <C-k>    : Show signature help in insert mode
---   <leader>fm : Format buffer + ensure newline at EOF
+--[[
+Keybinds:
+gd        -> Go to definition
+<C-k>     -> Show signature help in insert mode
+<leader>fm -> Format buffer + ensure newline at EOF
+]]
 
 return {
     {
+        -- Neovim LSP configurations
         "neovim/nvim-lspconfig",
 
         dependencies = {
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
-            "nvimtools/none-ls.nvim",
-            "jay-babu/mason-null-ls.nvim",
+            "williamboman/mason.nvim",           -- Manage external LSP servers
+            "williamboman/mason-lspconfig.nvim", -- Bridge Mason with LSPConfig
+            "nvimtools/none-ls.nvim",            -- Setup null-ls
+            "jay-babu/mason-null-ls.nvim",       -- Mason support for null-ls
         },
 
         config = function()
@@ -23,39 +26,40 @@ return {
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
 
-            --  LSP servers
+            -- List of LSP servers to ensure installed
             local servers = {
                 "pyright", "clangd", "gopls", "jsonls", "bashls",
                 "dockerls", "yamlls", "terraformls", "rust_analyzer",
                 "ts_ls", "lua_ls", "jdtls", "tinymist",
             }
 
-            --  Formatters / Linters
+            -- List of formatters / linters
             local formatters = {
                 "black", "clang-format", "prettier", "stylua", "gofmt",
                 "goimports", "shfmt", "yamlfmt", "terraform_fmt",
             }
 
-            --  Mason setup
+            -- Mason setup
             mason.setup()
 
-            --  LSP attach function
+            -- Function to run when LSP attaches to a buffer
             local on_attach = function(_, bufnr)
                 local opts = { noremap = true, silent = true, buffer = bufnr }
                 vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
                 vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
             end
 
-            --  Completion capabilities
+            -- Capabilities for LSP completion
             local capabilities = cmp_nvim_lsp.default_capabilities()
 
-            --  Setup LSP servers via Mason
+            -- Setup LSP servers using Mason
             mason_lspconfig.setup({
                 ensure_installed = servers,
                 handlers = {
                     function(server_name)
                         local opts = { on_attach = on_attach, capabilities = capabilities }
 
+                        -- Special options for clangd
                         if server_name == "clangd" then
                             opts.cmd = {
                                 "clangd",
@@ -68,6 +72,7 @@ return {
                             opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
                         end
 
+                        -- Special options for Java (jdtls)
                         if server_name == "jdtls" then
                             local jdtls_cmd = {
                                 "java",
@@ -79,7 +84,6 @@ return {
                                 "-configuration", vim.fn.stdpath("data") .. "/mason/bin/jdtls/config",
                                 "-data", vim.fn.stdpath("data") .. "/jdtls-workspace",
                             }
-
                             opts.cmd = jdtls_cmd
                             opts.root_dir = lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml",
                                 "build.gradle")
@@ -88,11 +92,16 @@ return {
                                 java = {
                                     format = { enabled = true },
                                     signatureHelp = { enabled = true },
-                                    completion = { favoriteStaticMembers = { "org.junit.Assert.*", "org.junit.Assume.*", "org.junit.jupiter.api.Assertions.*" } },
+                                    completion = {
+                                        favoriteStaticMembers = {
+                                            "org.junit.Assert.*",
+                                            "org.junit.Assume.*",
+                                            "org.junit.jupiter.api.Assertions.*"
+                                        }
+                                    },
                                     contentProvider = { preferred = "fernflower" },
                                 },
                             }
-
                             vim.api.nvim_create_autocmd("BufWritePre", {
                                 pattern = "*.java",
                                 callback = function()
@@ -101,6 +110,7 @@ return {
                             })
                         end
 
+                        -- Special options for gopls
                         if server_name == "gopls" then
                             opts.settings = {
                                 gopls = {
@@ -110,6 +120,7 @@ return {
                             }
                         end
 
+                        -- Special options for Lua (lua_ls)
                         if server_name == "lua_ls" then
                             opts.settings = {
                                 Lua = {
@@ -124,14 +135,16 @@ return {
                             }
                         end
 
+                        -- Apply LSP config
                         lspconfig[server_name].setup(opts)
                     end,
                 },
             })
 
-            --  Null-LS setup
+            -- Setup null-ls formatters and linters
             mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
+            -- Custom null-ls sources
             local typstfmt = {
                 method = null_ls.methods.FORMATTING,
                 filetypes = { "typst" },
@@ -141,7 +154,6 @@ return {
                     to_temp_file = true,
                 }),
             }
-
 
             local ruff = {
                 method = null_ls.methods.DIAGNOSTICS,
@@ -209,12 +221,13 @@ return {
                 },
             })
 
+            -- Command to install all LSP servers + formatters
             vim.api.nvim_create_user_command("MasonInstallAll", function()
                 vim.cmd("MasonInstall " .. table.concat(servers, " "))
                 vim.cmd("MasonInstall " .. table.concat(formatters, " "))
             end, {})
 
-            --  Diagnostics config
+            -- Configure diagnostics display
             vim.diagnostic.config({
                 update_in_insert = false,
                 virtual_text = true,
@@ -223,7 +236,7 @@ return {
                 severity_sort = true,
             })
 
-            --  Manual formatting keymap
+            -- Manual format keymap (<leader>fm)
             vim.keymap.set("n", "<leader>fm", function()
                 local bufnr = vim.api.nvim_get_current_buf()
                 for _, client in pairs(vim.lsp.get_clients({ bufnr = bufnr })) do
@@ -232,6 +245,7 @@ return {
                         break
                     end
                 end
+                -- Ensure newline at EOF
                 local last_line = vim.fn.getline("$")
                 if last_line ~= "" then vim.fn.append("$", "") end
             end, { noremap = true, silent = true })
