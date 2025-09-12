@@ -2,7 +2,7 @@
 vim.o.mouse            = "a"                                      -- Enable mouse
 vim.opt.termguicolors  = true                                     -- Enable true color
 vim.opt.updatetime     = 250                                      -- Faster update time
-vim.opt.colorcolumn    = "100"                                    -- Vertical line at column 100
+vim.opt.colorcolumn    = "80"                                     -- Vertical line at column 80
 vim.opt.breakindent    = true                                     -- Keep indent on wrapped lines
 vim.opt.signcolumn     = "yes"                                    -- Always show sign column
 vim.opt.number         = true                                     -- Show line numbers
