@@ -1,3 +1,12 @@
+-- Open netrw in current directory if no file is passed
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        if vim.fn.argc() == 0 then
+            vim.cmd("Explore .")
+        end
+    end
+})
+
 -- General editor settings
 vim.o.mouse            = "a"                                      -- Enable mouse
 vim.opt.termguicolors  = true                                     -- Enable true color
