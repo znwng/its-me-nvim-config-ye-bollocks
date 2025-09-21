@@ -14,29 +14,29 @@ gcA        -> Add comment at end of line
 ]]
 
 return {
-    {
-        -- Comment plugin (lightweight, fast)
-        "numToStr/Comment.nvim",
+	{
+		-- Comment plugin (lightweight, fast)
+		"numToStr/Comment.nvim",
 
-        -- Load right away
-        lazy = false,
+		-- Load right away
+		lazy = false,
 
-        -- Setup keymaps
-        opts = {
-            toggler = {
-                line = "gcc",  -- Toggle single line
-                block = "gbc", -- Toggle block
-            },
-            opleader = {
-                line = "gc",  -- Use motions with gc (e.g. gcj, gcap)
-                block = "gb", -- Use motions with gb
-            },
-            extra = {
-                above = "gcO", -- Add comment above
-                below = "gco", -- Add comment below
-                eol = "gcA",   -- Add comment at end of line
-            },
-        },
-    },
+		-- Setup keymaps
+		opts = {
+			toggler = {
+				line = "gcc", -- Toggle single line
+				block = "gbc", -- Toggle block
+			},
+			opleader = {
+				line = "gc", -- Use motions with gc (e.g. gcj, gcap)
+				block = "gb", -- Use motions with gb
+			},
+			extra = {
+				above = "gcO", -- Add comment above
+				below = "gco", -- Add comment below
+				eol = "gcA", -- Add comment at end of line
+			},
+		},
+	},
 }
 
