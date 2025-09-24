@@ -41,11 +41,11 @@ return {
 
 			require("gitsigns").setup({
 				attach_to_untracked = false, -- Skip untracked files
-				current_line_blame = true, -- Show inline blame by default
+				current_line_blame = false, -- Show inline blame by default
 				current_line_blame_opts = {
 					virt_text = true,
 					virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
-					delay = 500, -- Delay before showing blame (ms)
+					delay = 250, -- Delay before showing blame (ms)
 					ignore_whitespace = false,
 				},
 				current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
