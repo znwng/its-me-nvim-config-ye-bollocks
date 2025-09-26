@@ -1,55 +1,71 @@
 return {
 	{
-		-- Rose Pine theme
 		"rose-pine/neovim",
 		name = "rose-pine",
-
 		config = function()
-			-- Theme options
+			-- Theme setup
 			require("rose-pine").setup({
-				variant = "moon", -- "main", "moon", or "dawn"
-				bold_vert_split = false, -- No bold vertical split lines
-				dim_nc_background = true, -- Dim background of inactive windows
-				disable_background = true, -- Transparent main background
-				disable_float_background = false, -- Keep background for floating windows
-				disable_italics = true, -- No italics in UI
-				disable_bold = true, -- No bolds
+				variant = "moon", -- "main", "moon", "dawn"
+				bold_vert_split = false,
+				dim_nc_background = true,
+				disable_background = true,
+				disable_float_background = false,
+				disable_italics = true,
+				disable_bold = true,
 			})
 
-			-- Apply theme
-			vim.cmd("colorscheme rose-pine")
+			-- Apply theme safely
+			vim.cmd.colorscheme("rose-pine")
 
-			-- Custom highlights (statusline + diagnostics)
-			local function set_statusline_hl()
-				-- Statusline (active/inactive + diagnostic levels)
-				vim.api.nvim_set_hl(0, "StatusLine", { bg = "#363636", fg = "#e0def4" })
-				vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#363636", fg = "#6e6a86" })
-				vim.api.nvim_set_hl(0, "StatusLineError", { bg = "#363636", fg = "#eb6f92" })
-				vim.api.nvim_set_hl(0, "StatusLineWarn", { bg = "#363636", fg = "#f6c177" })
-				vim.api.nvim_set_hl(0, "StatusLineHint", { bg = "#363636", fg = "#f5c2e7" })
-				vim.api.nvim_set_hl(0, "StatusLineInfo", { bg = "#363636", fg = "#9ccfd8" })
-				vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#363636" })
+			-- Custom highlights
+			local function set_custom_highlights()
+				local colors = {
+					bg = "#363636",
+					fg = "#e0def4",
+					inactive_fg = "#6e6a86",
+					error = "#eb6f92",
+					warn = "#f6c177",
+					hint = "#f5c2e7",
+					info = "#9ccfd8",
+				}
 
-				-- Underlines for diagnostics
-				vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = true, fg = "#eb6f92" })
-				vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true, fg = "#f6c177" })
-				vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true, fg = "#9ccfd8" })
-				vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true, fg = "#f5c2e7" })
+				-- Statusline
+				local statusline_hl = {
+					StatusLine = { bg = colors.bg, fg = colors.fg },
+					StatusLineNC = { bg = colors.bg, fg = colors.inactive_fg },
+					StatusLineError = { bg = colors.bg, fg = colors.error },
+					StatusLineWarn = { bg = colors.bg, fg = colors.warn },
+					StatusLineHint = { bg = colors.bg, fg = colors.hint },
+					StatusLineInfo = { bg = colors.bg, fg = colors.info },
+					ColorColumn = { bg = colors.bg },
+				}
 
-				-- Diagnostic virtual text
-				vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = "#eb6f92" })
-				vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = "#f6c177" })
-				vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#9ccfd8" })
-				vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#f5c2e7" })
+				-- Diagnostics
+				local diagnostic_hl = {
+					DiagnosticUnderlineError = { underline = true, fg = colors.error },
+					DiagnosticUnderlineWarn = { underline = true, fg = colors.warn },
+					DiagnosticUnderlineInfo = { underline = true, fg = colors.info },
+					DiagnosticUnderlineHint = { underline = true, fg = colors.hint },
+
+					DiagnosticVirtualTextError = { fg = colors.error },
+					DiagnosticVirtualTextWarn = { fg = colors.warn },
+					DiagnosticVirtualTextInfo = { fg = colors.info },
+					DiagnosticVirtualTextHint = { fg = colors.hint },
+				}
+
+				-- Apply all highlights
+				for group, opts in pairs(vim.tbl_extend("force", statusline_hl, diagnostic_hl)) do
+					vim.api.nvim_set_hl(0, group, opts)
+				end
 			end
 
-			-- Apply highlights now
-			set_statusline_hl()
+			-- Apply now
+			set_custom_highlights()
 
-			-- Re-apply highlights if theme reloads
+			-- Reapply when theme reloads
 			vim.api.nvim_create_autocmd("ColorScheme", {
 				pattern = "rose-pine",
-				callback = set_statusline_hl,
+				callback = set_custom_highlights,
 			})
 		end,
 	},
