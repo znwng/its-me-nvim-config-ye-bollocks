@@ -13,6 +13,7 @@ return {
 				disable_background = true, -- Transparent main background
 				disable_float_background = false, -- Keep background for floating windows
 				disable_italics = true, -- No italics in UI
+				disable_bold = true, -- No bolds
 			})
 
 			-- Apply theme
