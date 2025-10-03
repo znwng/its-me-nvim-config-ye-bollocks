@@ -20,7 +20,7 @@ return {
 			-- Custom highlights
 			local function set_custom_highlights()
 				local colors = {
-					bg = "#363636",
+					bg = "#303131",
 					fg = "#e0def4",
 					inactive_fg = "#6e6a86",
 					error = "#eb6f92",
