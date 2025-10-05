@@ -1,13 +1,10 @@
---[[
-Keybinds:
-gd        -> Go to definition
-<C-k>     -> Show signature help in insert mode
-<leader>fm -> Format buffer + ensure newline at EOF
-]]
+-- Keybinds:
+-- gd        -> Go to definition
+-- <C-k>     -> Show signature help in insert mode
+-- <leader>fm -> Format buffer + ensure newline at EOF
 
 return {
 	{
-		-- Neovim LSP configurations
 		"neovim/nvim-lspconfig",
 
 		dependencies = {
@@ -26,7 +23,7 @@ return {
 			local null_ls = require("null-ls")
 			local builtins = null_ls.builtins
 
-			-- List of LSP servers to ensure installed
+			-- LSP SERVERS & FORMATTERS
 			local servers = {
 				"pyright",
 				"clangd",
@@ -40,10 +37,8 @@ return {
 				"ts_ls",
 				"lua_ls",
 				"jdtls",
-				"tinymist",
 			}
 
-			-- List of formatters / linters
 			local formatters = {
 				"black",
 				"clang-format",
@@ -56,27 +51,26 @@ return {
 				"terraform_fmt",
 			}
 
-			-- Mason setup
+			-- MASON SETUP
 			mason.setup()
 
-			-- Function to run when LSP attaches to a buffer
+			-- LSP ATTACH FUNCTION
 			local on_attach = function(_, bufnr)
 				local opts = { noremap = true, silent = true, buffer = bufnr }
 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 				vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
 			end
 
-			-- Capabilities for LSP completion
 			local capabilities = cmp_nvim_lsp.default_capabilities()
 
-			-- Setup LSP servers using Mason
+			-- SETUP LSP SERVERS
 			mason_lspconfig.setup({
 				ensure_installed = servers,
 				handlers = {
 					function(server_name)
 						local opts = { on_attach = on_attach, capabilities = capabilities }
 
-						-- Special options for clangd
+						-- clangd special config
 						if server_name == "clangd" then
 							opts.cmd = {
 								"clangd",
@@ -89,24 +83,37 @@ return {
 							opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
 						end
 
-						-- Special options for Java (jdtls)
+						-- jdtls special config (optimized)
 						if server_name == "jdtls" then
-							local jdtls_cmd = {
+							local mason_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
+							local launcher_jar =
+								vim.fn.glob(mason_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
+							local config_dir = mason_path .. "/config_linux" -- change to config_mac/config_win if needed
+
+							-- per-project workspace
+							local project_name = vim.fn.fnamemodify(vim.loop.cwd(), ":p:h:t")
+							local workspace_dir = vim.fn.stdpath("data") .. "/jdtls-workspace/" .. project_name
+							vim.fn.mkdir(workspace_dir, "p")
+
+							opts.cmd = {
 								"java",
-								"-Xms256m",
-								"-Xmx1024m",
+								"-Xms512m",
+								"-Xmx2g",
 								"-XX:+UseG1GC",
+								"-XX:+UseStringDeduplication",
 								"-jar",
-								vim.fn.stdpath("data") .. "/mason/bin/jdtls/plugins/org.eclipse.equinox.launcher_*.jar",
+								launcher_jar,
 								"-configuration",
-								vim.fn.stdpath("data") .. "/mason/bin/jdtls/config",
+								config_dir,
 								"-data",
-								vim.fn.stdpath("data") .. "/jdtls-workspace",
+								workspace_dir,
 							}
-							opts.cmd = jdtls_cmd
+
 							opts.root_dir =
 								lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle")
-							opts.single_file_support = false
+							opts.single_file_support = true
+
+							-- Exclude build folders for faster indexing
 							opts.settings = {
 								java = {
 									format = { enabled = true },
@@ -119,17 +126,22 @@ return {
 										},
 									},
 									contentProvider = { preferred = "fernflower" },
+									configuration = {
+										excludedPaths = { "**/target/**", "**/.gradle/**" },
+									},
 								},
 							}
+
+							-- Auto-format on save
 							vim.api.nvim_create_autocmd("BufWritePre", {
 								pattern = "*.java",
 								callback = function()
-									vim.lsp.buf.format({ async = false })
+									vim.lsp.buf.format({ async = true }) -- async formatting for smooth editing
 								end,
 							})
 						end
 
-						-- Special options for gopls
+						-- gopls special config
 						if server_name == "gopls" then
 							opts.settings = {
 								gopls = {
@@ -139,7 +151,7 @@ return {
 							}
 						end
 
-						-- Special options for Lua (lua_ls)
+						-- lua_ls special config
 						if server_name == "lua_ls" then
 							opts.settings = {
 								Lua = {
@@ -154,16 +166,15 @@ return {
 							}
 						end
 
-						-- Apply LSP config
+						-- Apply LSP configuration
 						lspconfig[server_name].setup(opts)
 					end,
 				},
 			})
 
-			-- Setup null-ls formatters and linters
+			-- NULL-LS SETUP
 			mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
-			-- Custom null-ls sources
 			local typstfmt = {
 				method = null_ls.methods.FORMATTING,
 				filetypes = { "typst" },
@@ -242,13 +253,13 @@ return {
 				},
 			})
 
-			-- Command to install all LSP servers + formatters
+			-- MASON INSTALL ALL COMMAND
 			vim.api.nvim_create_user_command("MasonInstallAll", function()
 				vim.cmd("MasonInstall " .. table.concat(servers, " "))
 				vim.cmd("MasonInstall " .. table.concat(formatters, " "))
 			end, {})
 
-			-- Configure diagnostics display
+			-- DIAGNOSTICS CONFIG
 			vim.diagnostic.config({
 				update_in_insert = false,
 				virtual_text = true,
@@ -257,7 +268,7 @@ return {
 				severity_sort = true,
 			})
 
-			-- Manual format keymap (<leader>fm)
+			-- MANUAL FORMAT KEYMAP (<leader>fm)
 			vim.keymap.set("n", "<leader>fm", function()
 				local bufnr = vim.api.nvim_get_current_buf()
 				for _, client in pairs(vim.lsp.get_clients({ bufnr = bufnr })) do
