@@ -83,15 +83,14 @@ return {
 							opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
 						end
 
-						-- jdtls special config (optimized)
+						-- jdtls special config
 						if server_name == "jdtls" then
 							local mason_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
 							local launcher_jar =
-								vim.fn.glob(mason_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
-							local config_dir = mason_path .. "/config_linux" -- change to config_mac/config_win if needed
+								vim.fn.glob(mason_path .. "/plugins/org.eclipse.equinox.launcher_*.jar", true, true)[1]
+							local config_dir = mason_path .. "/config_linux"
 
-							-- per-project workspace
-							local project_name = vim.fn.fnamemodify(vim.loop.cwd(), ":p:h:t")
+							local project_name = vim.fn.fnamemodify(vim.loop.cwd(), ":t")
 							local workspace_dir = vim.fn.stdpath("data") .. "/jdtls-workspace/" .. project_name
 							vim.fn.mkdir(workspace_dir, "p")
 
@@ -113,7 +112,7 @@ return {
 								lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle")
 							opts.single_file_support = true
 
-							-- Exclude build folders for faster indexing
+							-- Exclude build folders
 							opts.settings = {
 								java = {
 									format = { enabled = true },
@@ -136,12 +135,12 @@ return {
 							vim.api.nvim_create_autocmd("BufWritePre", {
 								pattern = "*.java",
 								callback = function()
-									vim.lsp.buf.format({ async = true }) -- async formatting for smooth editing
+									vim.lsp.buf.format({ async = true })
 								end,
 							})
 						end
 
-						-- gopls special config
+						-- gopls config
 						if server_name == "gopls" then
 							opts.settings = {
 								gopls = {
@@ -151,7 +150,7 @@ return {
 							}
 						end
 
-						-- lua_ls special config
+						-- lua_ls config
 						if server_name == "lua_ls" then
 							opts.settings = {
 								Lua = {
@@ -166,7 +165,7 @@ return {
 							}
 						end
 
-						-- Apply LSP configuration
+						-- Apply LSP setup
 						lspconfig[server_name].setup(opts)
 					end,
 				},
@@ -175,13 +174,14 @@ return {
 			-- NULL-LS SETUP
 			mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
-			local typstfmt = {
+			-- Google Java Format for Java
+			local google_java_formatter = {
 				method = null_ls.methods.FORMATTING,
-				filetypes = { "typst" },
+				filetypes = { "java" },
 				generator = null_ls.formatter({
-					command = "typstfmt",
-					args = { "$FILENAME" },
-					to_temp_file = true,
+					command = "google-java-format",
+					args = { "-" },
+					to_stdin = true,
 				}),
 			}
 
@@ -223,19 +223,6 @@ return {
 				}),
 			}
 
-			local eclipse_formatter = {
-				method = null_ls.methods.FORMATTING,
-				filetypes = { "java" },
-				generator = null_ls.generator({
-					command = "java",
-					args = { "-jar", vim.fn.expand("~/.local/bin/ecj.jar") },
-					to_stdin = true,
-					on_output = function(params)
-						return params.output
-					end,
-				}),
-			}
-
 			null_ls.setup({
 				sources = {
 					builtins.formatting.black,
@@ -247,13 +234,12 @@ return {
 					builtins.formatting.shfmt,
 					builtins.formatting.yamlfmt,
 					builtins.formatting.terraform_fmt,
-					eclipse_formatter,
+					google_java_formatter, -- <-- use this instead of ECJ
 					ruff,
-					typstfmt,
 				},
 			})
 
-			-- MASON INSTALL ALL COMMAND
+			-- Mason install all helper
 			vim.api.nvim_create_user_command("MasonInstallAll", function()
 				vim.cmd("MasonInstall " .. table.concat(servers, " "))
 				vim.cmd("MasonInstall " .. table.concat(formatters, " "))
@@ -277,7 +263,6 @@ return {
 						break
 					end
 				end
-				-- Ensure newline at EOF
 				local last_line = vim.fn.getline("$")
 				if last_line ~= "" then
 					vim.fn.append("$", "")
