@@ -36,7 +36,7 @@ return {
 				"rust_analyzer",
 				"ts_ls",
 				"lua_ls",
-				"jdtls",
+				"tinymist",
 			}
 
 			local formatters = {
@@ -83,63 +83,6 @@ return {
 							opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
 						end
 
-						-- jdtls special config
-						if server_name == "jdtls" then
-							local mason_path = vim.fn.stdpath("data") .. "/mason/packages/jdtls"
-							local launcher_jar =
-								vim.fn.glob(mason_path .. "/plugins/org.eclipse.equinox.launcher_*.jar", true, true)[1]
-							local config_dir = mason_path .. "/config_linux"
-
-							local project_name = vim.fn.fnamemodify(vim.loop.cwd(), ":t")
-							local workspace_dir = vim.fn.stdpath("data") .. "/jdtls-workspace/" .. project_name
-							vim.fn.mkdir(workspace_dir, "p")
-
-							opts.cmd = {
-								"java",
-								"-Xms512m",
-								"-Xmx2g",
-								"-XX:+UseG1GC",
-								"-XX:+UseStringDeduplication",
-								"-jar",
-								launcher_jar,
-								"-configuration",
-								config_dir,
-								"-data",
-								workspace_dir,
-							}
-
-							opts.root_dir =
-								lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle")
-							opts.single_file_support = true
-
-							-- Exclude build folders
-							opts.settings = {
-								java = {
-									format = { enabled = true },
-									signatureHelp = { enabled = true },
-									completion = {
-										favoriteStaticMembers = {
-											"org.junit.Assert.*",
-											"org.junit.Assume.*",
-											"org.junit.jupiter.api.Assertions.*",
-										},
-									},
-									contentProvider = { preferred = "fernflower" },
-									configuration = {
-										excludedPaths = { "**/target/**", "**/.gradle/**" },
-									},
-								},
-							}
-
-							-- Auto-format on save
-							vim.api.nvim_create_autocmd("BufWritePre", {
-								pattern = "*.java",
-								callback = function()
-									vim.lsp.buf.format({ async = true })
-								end,
-							})
-						end
-
 						-- gopls config
 						if server_name == "gopls" then
 							opts.settings = {
@@ -173,17 +116,6 @@ return {
 
 			-- NULL-LS SETUP
 			mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
-
-			-- Google Java Format for Java
-			local google_java_formatter = {
-				method = null_ls.methods.FORMATTING,
-				filetypes = { "java" },
-				generator = null_ls.formatter({
-					command = "google-java-format",
-					args = { "-" },
-					to_stdin = true,
-				}),
-			}
 
 			local ruff = {
 				method = null_ls.methods.DIAGNOSTICS,
@@ -234,7 +166,6 @@ return {
 					builtins.formatting.shfmt,
 					builtins.formatting.yamlfmt,
 					builtins.formatting.terraform_fmt,
-					google_java_formatter, -- <-- use this instead of ECJ
 					ruff,
 				},
 			})
