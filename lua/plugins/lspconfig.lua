@@ -15,6 +15,10 @@ return {
 		},
 
 		config = function()
+			-- Add pipx-installed tools to PATH
+			vim.env.PATH = vim.env.PATH .. ":/home/zenwing/.local/bin"
+
+			-- Require modules
 			local mason = require("mason")
 			local mason_lspconfig = require("mason-lspconfig")
 			local mason_null_ls = require("mason-null-ls")
@@ -23,7 +27,7 @@ return {
 			local null_ls = require("null-ls")
 			local builtins = null_ls.builtins
 
-			-- LSP SERVERS & FORMATTERS
+			-- LSP servers and formatters
 			local servers = {
 				"pyright",
 				"clangd",
@@ -51,10 +55,10 @@ return {
 				"terraform_fmt",
 			}
 
-			-- MASON SETUP
+			-- Mason setup
 			mason.setup()
 
-			-- LSP ATTACH FUNCTION
+			-- LSP attach function
 			local on_attach = function(_, bufnr)
 				local opts = { noremap = true, silent = true, buffer = bufnr }
 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
@@ -63,14 +67,14 @@ return {
 
 			local capabilities = cmp_nvim_lsp.default_capabilities()
 
-			-- SETUP LSP SERVERS
+			-- Setup LSP servers
 			mason_lspconfig.setup({
 				ensure_installed = servers,
 				handlers = {
 					function(server_name)
 						local opts = { on_attach = on_attach, capabilities = capabilities }
 
-						-- clangd special config
+						-- clangd config
 						if server_name == "clangd" then
 							opts.cmd = {
 								"clangd",
@@ -108,13 +112,12 @@ return {
 							}
 						end
 
-						-- Apply LSP setup
 						lspconfig[server_name].setup(opts)
 					end,
 				},
 			})
 
-			-- NULL-LS SETUP
+			-- Null-ls setup
 			mason_null_ls.setup({ ensure_installed = formatters, automatic_installation = true })
 
 			local ruff = {
@@ -157,16 +160,29 @@ return {
 
 			null_ls.setup({
 				sources = {
+					-- Python
 					builtins.formatting.black,
+					ruff,
+
+					-- C/C++
 					builtins.formatting.clang_format,
-					builtins.formatting.prettier,
-					builtins.formatting.stylua,
+
+					-- Go
 					builtins.formatting.gofmt,
 					builtins.formatting.goimports,
+
+					-- Lua
+					builtins.formatting.stylua,
+
+					-- Shell
 					builtins.formatting.shfmt,
+
+					-- Web
+					builtins.formatting.prettier,
+
+					-- YAML / Terraform
 					builtins.formatting.yamlfmt,
 					builtins.formatting.terraform_fmt,
-					ruff,
 				},
 			})
 
@@ -176,7 +192,7 @@ return {
 				vim.cmd("MasonInstall " .. table.concat(formatters, " "))
 			end, {})
 
-			-- DIAGNOSTICS CONFIG
+			-- Diagnostics configuration
 			vim.diagnostic.config({
 				update_in_insert = false,
 				virtual_text = true,
@@ -185,7 +201,7 @@ return {
 				severity_sort = true,
 			})
 
-			-- MANUAL FORMAT KEYMAP (<leader>fm)
+			-- Manual format keymap (<leader>fm)
 			vim.keymap.set("n", "<leader>fm", function()
 				local bufnr = vim.api.nvim_get_current_buf()
 				for _, client in pairs(vim.lsp.get_clients({ bufnr = bufnr })) do
