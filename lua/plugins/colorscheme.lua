@@ -10,8 +10,8 @@ return {
 				dim_nc_background = true,
 				disable_background = true,
 				disable_float_background = false,
-				disable_italics = true,
-				disable_bold = true,
+				disable_italics = false,
+				disable_bold = false,
 			})
 
 			-- Apply theme safely

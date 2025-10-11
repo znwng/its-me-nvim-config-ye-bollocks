@@ -29,10 +29,10 @@ return {
 			require("telescope").setup({
 				defaults = {
 					prompt_prefix = " ", -- Clean prompt
-					selection_caret = " ", -- Arrow for current item
+					selection_caret = "|>", -- Arrow for current item
 					sorting_strategy = "ascending", -- Results at top
-					layout_config = { prompt_position = "top" },
-					winblend = 10, -- Slight transparency
+					layout_config = { prompt_position = "bottom" },
+					winblend = 0, -- No transparency
 					border = true,
 					color_devicons = true, -- Colored file icons
 				},
@@ -42,7 +42,7 @@ return {
 			})
 
 			-- Theme integration (Catppuccin)
-			require("catppuccin").setup({
+			require("rose-pine").setup({
 				integrations = { telescope = true },
 			})
 
