@@ -39,6 +39,7 @@ return {
 					"lua",
 					"markdown",
 					"markdown_inline",
+					"go",
 					"rust",
 					"java",
 					"javascript",
