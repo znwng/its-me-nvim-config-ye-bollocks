@@ -102,6 +102,9 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 	end,
 })
 
+-- Highlight matching brackets by underlining
+vim.api.nvim_set_hl(0, "MatchParen", { underline = true, bold = false, bg = "NONE", fg = "NONE" })
+
 -- Highlight text on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
