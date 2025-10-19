@@ -64,25 +64,25 @@ end
 function _G.git_branch()
 	local gitdir = vim.fn.finddir(".git", vim.fn.expand("%:p:h") .. ";")
 	if gitdir == "" then
-		return "[~]"
+		return "~"
 	end
 	local branch = vim.fn.system("git -C " .. vim.fn.expand("%:p:h") .. " rev-parse --abbrev-ref HEAD 2>/dev/null")
 	branch = vim.fn.trim(branch)
 	if branch == "" then
-		return "[~]"
+		return "~"
 	end
-	return "[" .. branch .. "]"
+	return "" .. branch .. ""
 end
 
 -- Custom statusline
 vim.o.statusline = table.concat({
 	"%{expand('%:p')} ", -- File path
-	"%{v:lua.git_branch()} ", -- Git branch
+    "%#StatusLineBranch#[%{v:lua.git_branch()}] ", -- Branch icon + Git branch
 	"%m %=", -- Modified flag
-	"%#StatusLineError#%{v:lua.diag_count('Error')} ", -- Error count
-	"%#StatusLineWarn#%{v:lua.diag_count('Warn')} ", -- Warning count
-	"%#StatusLineHint#%{v:lua.diag_count('Hint')} ", -- Hint count
-	"%#StatusLineInfo#%{v:lua.diag_count('Info')} ", -- Info count
+	"%#StatusLineError# %{v:lua.diag_count('Error')} ", -- Error count
+	"%#StatusLineWarn# %{v:lua.diag_count('Warn')} ", -- Warning count
+	"%#StatusLineHint# %{v:lua.diag_count('Hint')} ", -- Hint count
+	"%#StatusLineInfo# %{v:lua.diag_count('Info')} ", -- Info count
 	"%#StatusLine#[%{v:lua.human_file_size()}] ", -- File size
 	"%#StatusLine#[%l:%c]", -- Line and column
 })
