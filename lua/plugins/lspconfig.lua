@@ -53,6 +53,7 @@ return {
 				"shfmt",
 				"yamlfmt",
 				"terraform_fmt",
+                "typstfmt",
 			}
 
 			-- Mason setup
@@ -183,6 +184,9 @@ return {
 					-- YAML / Terraform
 					builtins.formatting.yamlfmt,
 					builtins.formatting.terraform_fmt,
+
+                    -- Typst
+                    builtins.formatting.typstfmt,
 				},
 			})
 
