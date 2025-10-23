@@ -29,7 +29,7 @@ return {
 			require("telescope").setup({
 				defaults = {
 					prompt_prefix = " ", -- Clean prompt
-					selection_caret = "|>", -- Arrow for current item
+					selection_caret = " ", -- Arrow for current item
 					sorting_strategy = "ascending", -- Results at top
 					layout_config = { prompt_position = "bottom" },
 					winblend = 0, -- No transparency

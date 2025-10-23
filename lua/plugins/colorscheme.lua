@@ -5,7 +5,7 @@ return {
 		config = function()
 			-- Theme setup
 			require("kanagawa").setup({
-				compile = false,
+				compile = true,
 				undercurl = true,
 				commentStyle = { italic = true },
 				functionStyle = { bold = true },
@@ -27,7 +27,7 @@ return {
 				local colors = require("kanagawa.colors").setup().palette
 				local theme = require("kanagawa.colors").setup().theme
 
-				-- Make only the gutter transparent (line numbers, signs, folds, GitSigns)
+				-- Make only the gutter transparent (line numbers, signs, folds, GitSigns, diagnostic signs)
 				local transparent_gutter = {
 					"SignColumn",
 					"LineNr",
@@ -36,6 +36,10 @@ return {
 					"GitSignsAdd",
 					"GitSignsChange",
 					"GitSignsDelete",
+					"DiagnosticSignError",
+					"DiagnosticSignWarn",
+					"DiagnosticSignInfo",
+					"DiagnosticSignHint",
 				}
 				for _, group in ipairs(transparent_gutter) do
 					local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group })
@@ -61,7 +65,7 @@ return {
 					VertSplit = { bg = theme.ui.bg_m3, fg = theme.ui.nontext },
 					WinSeparator = { bg = theme.ui.bg_m3, fg = theme.ui.nontext },
 
-					-- Diagnostics
+					-- Diagnostics underline and virtual text
 					DiagnosticUnderlineError = { underline = true, sp = colors.peachRed },
 					DiagnosticUnderlineWarn = { underline = true, sp = colors.boatYellow2 },
 					DiagnosticUnderlineInfo = { underline = true, sp = colors.waveAqua1 },
