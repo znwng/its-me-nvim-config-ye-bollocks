@@ -21,7 +21,7 @@ return {
 		-- Needed dependencies
 		dependencies = {
 			"nvim-lua/plenary.nvim", -- Telescope utilities
-			"catppuccin/nvim", -- Theme integration
+			"rebelot/kanagawa.nvim", -- Theme integration
 		},
 
 		config = function()
@@ -41,21 +41,11 @@ return {
 				},
 			})
 
-			-- Theme integration (Catppuccin)
-			require("rose-pine").setup({
-				integrations = { telescope = true },
-			})
-
-			-- Transparent background for Telescope popups
-			local group = vim.api.nvim_create_augroup("TelescopeBackground", { clear = true })
-			vim.api.nvim_create_autocmd("ColorScheme", {
-				group = group,
-				pattern = "catppuccin",
-				callback = function()
-					vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
-					vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "NONE" })
-					vim.api.nvim_set_hl(0, "TelescopeBorder", { fg = "#1f1f1f" })
-				end,
+			-- Kanagawa theme integration
+			require("kanagawa").setup({
+				integrations = {
+					telescope = true, -- enable telescope theming
+				},
 			})
 
 			-- Keymaps for Telescope
