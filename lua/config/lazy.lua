@@ -35,17 +35,63 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Define leader keys before loading plugins
-vim.g.mapleader = " " -- Use Space as leader
-vim.g.maplocalleader = "\\" -- Use Backslash as local leader
+vim.g.mapleader = " " -- Space as leader
+vim.g.maplocalleader = "\\" -- Backslash as local leader
 
 -- Configure lazy.nvim
 require("lazy").setup({
 	spec = {
 		{ import = "plugins" }, -- Load plugins from plugins/ folder
 	},
-	install = { colorscheme = {} }, -- Do not set a default colorscheme here
-	checker = { enabled = true, notify = false }, -- Auto check for plugin updates in background
-	change_detection = { notify = true }, -- Warn if config files change
-	ui = { border = "none", winblend = 0 }, -- Simple UI (no borders, no transparency)
+	install = { colorscheme = {} },
+	checker = { enabled = true, notify = false },
+	change_detection = { notify = true },
+	ui = {
+		border = "rounded", -- Rounded border for Lazy UI
+		winblend = 0, -- Opaque
+	},
+})
+
+-- ================================================================
+-- Post-Lazy UI Enhancements: Borders and Float Colors for All UIs
+-- ================================================================
+
+vim.api.nvim_create_autocmd("User", {
+	pattern = "VeryLazy", -- Trigger after Lazy finishes loading plugins
+	callback = function()
+		-- Gruvbox-style float and border colors
+		local border_color = "#fabd2f" -- bright yellow
+		local bg_color = "" -- dark background
+
+		-- Apply consistent float styling
+		vim.api.nvim_set_hl(0, "FloatBorder", { fg = border_color, bg = bg_color })
+		vim.api.nvim_set_hl(0, "NormalFloat", { bg = bg_color })
+
+		-- Mason border
+		local ok_mason, mason = pcall(require, "mason")
+		if ok_mason then
+			mason.setup({
+				ui = { border = "rounded" },
+			})
+		end
+
+		-- Telescope border
+		local ok_telescope, telescope = pcall(require, "telescope")
+		if ok_telescope then
+			telescope.setup({
+				defaults = {
+					borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+					layout_config = {
+						prompt_position = "top",
+					},
+				},
+			})
+		end
+
+		-- LSP popups (hover, signature help) border
+		vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+		vim.lsp.handlers["textDocument/signatureHelp"] =
+			vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+	end,
 })
 

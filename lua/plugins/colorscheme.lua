@@ -1,95 +1,63 @@
 return {
 	{
-		"rebelot/kanagawa.nvim",
-		name = "kanagawa",
+		"ellisonleao/gruvbox.nvim",
+		priority = 1000,
 		config = function()
-			-- Theme setup
-			require("kanagawa").setup({
-				compile = true,
-				undercurl = true,
-				commentStyle = { italic = true },
-				functionStyle = { bold = true },
-				keywordStyle = { italic = true },
-				statementStyle = { bold = true },
-				typeStyle = { italic = true },
-				transparent = true, -- transparent main background
-				dimInactive = true, -- dim inactive windows
-				terminalColors = true,
-				theme = "wave", -- "wave", "dragon", "lotus"
-				background = { dark = "wave", light = "lotus" },
+			-- official Gruvbox palette (medium contrast)
+			local colors = {
+				bg = "#282828",
+				bg2 = "#3c3836",
+				fg = "#ebdbb2",
+				gray = "#928374",
+				red = "#fb4934",
+				yellow = "#fabd2f",
+				blue = "#83a598",
+				purple = "#d3869b",
+			}
+
+			local custom = {
+				-- Statusline
+				StatusLine = { bg = colors.bg2, fg = colors.fg },
+				StatusLineNC = { bg = colors.bg2, fg = colors.gray },
+				StatusLineError = { bg = colors.bg2, fg = colors.red },
+				StatusLineWarn = { bg = colors.bg2, fg = colors.yellow },
+				StatusLineHint = { bg = colors.bg2, fg = colors.purple },
+				StatusLineInfo = { bg = colors.bg2, fg = colors.blue },
+
+				-- Column bar + window separators
+				ColorColumn = { bg = colors.bg2 },
+				CursorColumn = { bg = colors.bg2 },
+				VertSplit = { bg = colors.bg2, fg = colors.gray },
+				WinSeparator = { bg = colors.bg2, fg = colors.gray },
+
+				-- Diagnostics (straight underline + colored virtual text)
+				DiagnosticUnderlineError = { underline = true, undercurl = false, sp = colors.red },
+				DiagnosticUnderlineWarn = { underline = true, undercurl = false, sp = colors.yellow },
+				DiagnosticUnderlineInfo = { underline = true, undercurl = false, sp = colors.blue },
+				DiagnosticUnderlineHint = { underline = true, undercurl = false, sp = colors.purple },
+
+				DiagnosticVirtualTextError = { fg = colors.red },
+				DiagnosticVirtualTextWarn = { fg = colors.yellow },
+				DiagnosticVirtualTextInfo = { fg = colors.blue },
+				DiagnosticVirtualTextHint = { fg = colors.purple },
+			}
+
+			require("gruvbox").setup({
+				contrast = "soft", -- can be "hard", "soft", or empty
+				terminal_colors = true,
+				bold = true,
+				italic = {
+					strings = true,
+					comments = true,
+					operators = false,
+					folds = true,
+				},
+				transparent_mode = true,
+				overrides = custom,
 			})
 
-			-- Apply theme safely
-			vim.cmd.colorscheme("kanagawa")
-
-			-- Custom highlights
-			local function set_custom_highlights()
-				local colors = require("kanagawa.colors").setup().palette
-				local theme = require("kanagawa.colors").setup().theme
-
-				-- Make only the gutter transparent (line numbers, signs, folds, GitSigns, diagnostic signs)
-				local transparent_gutter = {
-					"SignColumn",
-					"LineNr",
-					"CursorLineNr",
-					"FoldColumn",
-					"GitSignsAdd",
-					"GitSignsChange",
-					"GitSignsDelete",
-					"DiagnosticSignError",
-					"DiagnosticSignWarn",
-					"DiagnosticSignInfo",
-					"DiagnosticSignHint",
-				}
-				for _, group in ipairs(transparent_gutter) do
-					local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group })
-					if ok then
-						vim.api.nvim_set_hl(0, group, vim.tbl_extend("force", hl, { bg = "none", ctermbg = "none" }))
-					else
-						vim.api.nvim_set_hl(0, group, { bg = "none", ctermbg = "none" })
-					end
-				end
-
-				-- Keep statusline styled (not transparent)
-				local custom = {
-					StatusLine = { bg = theme.ui.bg_m3, fg = theme.ui.fg },
-					StatusLineNC = { bg = theme.ui.bg_m3, fg = theme.ui.nontext },
-					StatusLineError = { bg = theme.ui.bg_m3, fg = colors.peachRed },
-					StatusLineWarn = { bg = theme.ui.bg_m3, fg = colors.boatYellow2 },
-					StatusLineHint = { bg = theme.ui.bg_m3, fg = colors.springViolet2 },
-					StatusLineInfo = { bg = theme.ui.bg_m3, fg = colors.waveAqua1 },
-
-					-- Column bar (match StatusLine background)
-					ColorColumn = { bg = theme.ui.bg_m3 },
-					CursorColumn = { bg = theme.ui.bg_m3 },
-					VertSplit = { bg = theme.ui.bg_m3, fg = theme.ui.nontext },
-					WinSeparator = { bg = theme.ui.bg_m3, fg = theme.ui.nontext },
-
-					-- Diagnostics underline and virtual text
-					DiagnosticUnderlineError = { underline = true, sp = colors.peachRed },
-					DiagnosticUnderlineWarn = { underline = true, sp = colors.boatYellow2 },
-					DiagnosticUnderlineInfo = { underline = true, sp = colors.waveAqua1 },
-					DiagnosticUnderlineHint = { underline = true, sp = colors.springViolet2 },
-
-					DiagnosticVirtualTextError = { fg = colors.peachRed },
-					DiagnosticVirtualTextWarn = { fg = colors.boatYellow2 },
-					DiagnosticVirtualTextInfo = { fg = colors.waveAqua1 },
-					DiagnosticVirtualTextHint = { fg = colors.springViolet2 },
-				}
-
-				for group, opts in pairs(custom) do
-					vim.api.nvim_set_hl(0, group, opts)
-				end
-			end
-
-			-- Apply now
-			set_custom_highlights()
-
-			-- Reapply when theme reloads
-			vim.api.nvim_create_autocmd("ColorScheme", {
-				pattern = "kanagawa",
-				callback = set_custom_highlights,
-			})
+			vim.o.background = "dark"
+			vim.cmd("colorscheme gruvbox")
 		end,
 	},
 }

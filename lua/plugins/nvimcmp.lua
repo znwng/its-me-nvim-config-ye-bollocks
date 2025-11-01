@@ -74,6 +74,12 @@ return {
 					{ name = "path" },
 				}),
 
+				-- Window appearance: rounded borders
+				window = {
+					completion = cmp.config.window.bordered(),
+					documentation = cmp.config.window.bordered(),
+				},
+
 				-- Show icons + text, limit width
 				formatting = {
 					format = lspkind.cmp_format({
@@ -89,12 +95,23 @@ return {
 			require("nvim-autopairs").setup({})
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-			-- Styling: transparent menu with purple borders
-			vim.api.nvim_set_hl(0, "CmpBorder", { fg = "#7d5dff", bg = "NONE", blend = 15 })
-			vim.api.nvim_set_hl(0, "CmpDocBorder", { fg = "#7d5dff", bg = "NONE", blend = 15 })
-			vim.api.nvim_set_hl(0, "Pmenu", { bg = "NONE", blend = 15 })
-			vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#313244", blend = 0 })
-		end,
+			-- === Gruvbox color palette ===
+			local colors = {
+				bg = "#282828",
+				fg = "#ebdbb2",
+				border = "#665c54",
+				accent = "#d79921",
+				sel = "#3c3836",
+			}
+
+			-- === Apply Gruvbox highlights ===
+			vim.api.nvim_set_hl(0, "CmpPmenu", { bg = colors.bg, fg = colors.fg })
+			vim.api.nvim_set_hl(0, "CmpPmenuSel", { bg = colors.sel, fg = colors.accent })
+			vim.api.nvim_set_hl(0, "CmpBorder", { fg = colors.border, bg = colors.bg })
+			vim.api.nvim_set_hl(0, "CmpDocBorder", { fg = colors.border, bg = colors.bg })
+			vim.api.nvim_set_hl(0, "Pmenu", { bg = colors.bg })
+			vim.api.nvim_set_hl(0, "PmenuSel", { bg = colors.sel })
+        end,
 	},
 }
 
