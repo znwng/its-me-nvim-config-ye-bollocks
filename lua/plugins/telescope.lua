@@ -14,39 +14,46 @@ Buffer navigation:
 
 return {
 	{
-		-- Telescope: fuzzy finder (files, grep, buffers, etc.)
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.8",
 
-		-- Needed dependencies
 		dependencies = {
-			"nvim-lua/plenary.nvim", -- Telescope utilities
-			"rebelot/kanagawa.nvim", -- Theme integration
+			"nvim-lua/plenary.nvim", -- required
 		},
 
 		config = function()
-			-- Telescope defaults
+			local colors = {
+				bg = "",
+				bg2 = "",
+				fg = "#ebdbb2",
+				accent = "#83a598", -- blue-ish accent
+				border = "#928374", -- gray border
+			}
+
 			require("telescope").setup({
 				defaults = {
-					prompt_prefix = " ", -- Clean prompt
-					selection_caret = " ", -- Arrow for current item
-					sorting_strategy = "ascending", -- Results at top
+					prompt_prefix = " ",
+					selection_caret = " ",
+					sorting_strategy = "ascending",
 					layout_config = { prompt_position = "bottom" },
-					winblend = 0, -- No transparency
+					winblend = 0,
+					color_devicons = true,
 					border = true,
-					color_devicons = true, -- Colored file icons
+					borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
 				},
 				pickers = {
-					find_files = { hidden = true }, -- Show dotfiles
+					find_files = { hidden = true },
 				},
 			})
 
-			-- Kanagawa theme integration
-			require("kanagawa").setup({
-				integrations = {
-					telescope = true, -- enable telescope theming
-				},
-			})
+			-- Gruvbox-style Telescope highlights
+			vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = colors.bg, fg = colors.fg })
+			vim.api.nvim_set_hl(0, "TelescopeBorder", { fg = colors.border, bg = colors.bg })
+			vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = colors.border, bg = colors.bg })
+			vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = colors.bg })
+			vim.api.nvim_set_hl(0, "TelescopePromptPrefix", { fg = colors.accent })
+			vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = colors.bg2 })
+			vim.api.nvim_set_hl(0, "TelescopeMatching", { fg = colors.accent })
 
 			-- Keymaps for Telescope
 			local keymap = vim.keymap.set
