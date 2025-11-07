@@ -29,7 +29,7 @@ require("lazy").setup({
   checker = { enabled = true, notify = false },
   change_detection = { notify = true },
   ui = {
-    border = "rounded",
+    border = "single",
     winblend = 0,
   },
 })
@@ -45,7 +45,7 @@ vim.api.nvim_create_autocmd("User", {
     -- setup mason/telescope if available (pcall)
     pcall(function()
       local mason = require("mason")
-      mason.setup({ ui = { border = "rounded" } })
+      mason.setup({ ui = { border = "single" } })
     end)
   end,
 })
