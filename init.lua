@@ -1,15 +1,3 @@
--- init.lua (cleaned / fixed)
-
--- Open netrw in current directory if no file is passed
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    if vim.fn.argc() == 0 then
-      -- Use netrw's Explore on start when no file args passed
-      vim.cmd("Explore .")
-    end
-  end,
-})
-
 -- General editor settings
 vim.o.mouse = "a"
 vim.opt.termguicolors = true
@@ -44,9 +32,6 @@ if vim.fn.isdirectory(undodir) == 0 then
 end
 vim.opt.undodir = undodir
 
--- -------------------------
--- Helper functions (local)
--- -------------------------
 -- Count diagnostics by severity (safe)
 local function diag_count(sev_name)
   local sev = vim.diagnostic.severity[sev_name:upper()]
@@ -87,9 +72,7 @@ _G._statusline = {
   git_branch = git_branch,
 }
 
--- -------------------------
 -- Custom statusline
--- -------------------------
 vim.o.statusline = table.concat({
   "%{expand('%:p')} ",
   "%#StatusLineBranch#[" .. "%{v:lua._statusline.git_branch()}" .. "] ",
@@ -102,14 +85,10 @@ vim.o.statusline = table.concat({
   "%#StatusLine#[%l:%c]",
 })
 
--- -------------------------
 -- Plugins
--- -------------------------
 require("config.lazy") -- plugin manager bootstrap + loader
 
--- -------------------------
 -- Autocommands
--- -------------------------
 -- Make popups transparent on colorscheme change (safe)
 vim.api.nvim_create_autocmd("ColorScheme", {
   callback = function()
