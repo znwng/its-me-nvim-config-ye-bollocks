@@ -15,7 +15,6 @@ return {
     },
 
     config = function()
-      -- Add pipx-installed tools to PATH
       vim.env.PATH = vim.env.PATH .. ":/home/zenwing/.local/bin"
 
       local mason = require("mason")
@@ -26,7 +25,6 @@ return {
       local null_ls = require("null-ls")
       local builtins = null_ls.builtins
 
-      -- LSP servers
       local servers = {
         "pyright",
         "clangd",
@@ -42,7 +40,6 @@ return {
         "tinymist",
       }
 
-      -- Formatters
       local formatters = {
         "black",
         "clang-format",
@@ -53,13 +50,11 @@ return {
         "shfmt",
         "yamlfmt",
         "terraform_fmt",
-        "typstfmt",
+        "typstyle",
       }
 
-      -- Initialize Mason
       mason.setup()
 
-      -- Common LSP options
       local capabilities = cmp_nvim_lsp.default_capabilities()
 
       local on_attach = function(_, bufnr)
@@ -68,7 +63,6 @@ return {
         vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
       end
 
-      -- Setup LSP servers
       mason_lspconfig.setup({
         ensure_installed = servers,
         handlers = {
@@ -84,11 +78,7 @@ return {
                 "--header-insertion=never",
                 "--completion-style=detailed",
               }
-              opts.root_dir = lspconfig.util.root_pattern(
-                ".clangd",
-                "compile_commands.json",
-                ".git"
-              )
+              opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
             elseif server_name == "gopls" then
               opts.settings = {
                 gopls = {
@@ -115,13 +105,11 @@ return {
         },
       })
 
-      -- Setup Mason for null-ls
       mason_null_ls.setup({
         ensure_installed = formatters,
         automatic_installation = true,
       })
 
-      -- Custom Ruff diagnostic source
       local ruff = {
         method = null_ls.methods.DIAGNOSTICS,
         filetypes = { "python" },
@@ -158,43 +146,29 @@ return {
         }),
       }
 
-      -- Null-ls configuration
       null_ls.setup({
         sources = {
-          -- Python
           builtins.formatting.black,
           ruff,
-
-          -- C/C++
           builtins.formatting.clang_format,
-
-          -- Go
           builtins.formatting.gofmt,
           builtins.formatting.goimports,
-
-          -- Lua
           builtins.formatting.stylua,
-
-          -- Shell
           builtins.formatting.shfmt,
-
-          -- Web
           builtins.formatting.prettier,
-
-          -- YAML / Terraform / Typst
           builtins.formatting.yamlfmt,
           builtins.formatting.terraform_fmt,
-          builtins.formatting.typstfmt,
+          builtins.formatting.typstyle.with({
+            extra_args = { "--indent-width", "4", "--line-width", "80" },
+          }),
         },
       })
 
-      -- Command: MasonInstallAll
       vim.api.nvim_create_user_command("MasonInstallAll", function()
         local all = vim.list_extend(vim.deepcopy(servers), formatters)
         vim.cmd("MasonInstall " .. table.concat(all, " "))
       end, {})
 
-      -- Diagnostics UI config
       vim.diagnostic.config({
         update_in_insert = false,
         virtual_text = true,
@@ -203,7 +177,6 @@ return {
         severity_sort = true,
       })
 
-      -- Format buffer manually (<leader>fm)
       vim.keymap.set("n", "<leader>fm", function()
         local bufnr = vim.api.nvim_get_current_buf()
         vim.lsp.buf.format({ async = false, bufnr = bufnr })
