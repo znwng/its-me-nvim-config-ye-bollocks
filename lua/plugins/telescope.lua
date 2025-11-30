@@ -35,7 +35,7 @@ return {
           prompt_prefix = " ",
           selection_caret = " ",
           sorting_strategy = "ascending",
-          layout_config = { prompt_position = "bottom" },
+          layout_config = { prompt_position = "top" },
           winblend = 0,
           color_devicons = true,
           border = true,
