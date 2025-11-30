@@ -38,6 +38,7 @@ return {
         "ts_ls",
         "lua_ls",
         "tinymist",
+        "cmake",
       }
 
       local formatters = {
