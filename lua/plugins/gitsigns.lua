@@ -41,7 +41,7 @@ return {
 
       require("gitsigns").setup({
         attach_to_untracked = false, -- Skip untracked files
-        current_line_blame = false, -- Show inline blame by default
+        current_line_blame = true, -- Show inline blame by default
         current_line_blame_opts = {
           virt_text = true,
           virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
