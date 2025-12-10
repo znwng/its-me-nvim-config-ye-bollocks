@@ -23,7 +23,7 @@ jobs:
         run: |
           cat <<EOF > payload.json
           {
-            "content": "**GitHub Push Event**\n\nBranch: ${{ github.ref_name }}\nAuthor: ${{ github.actor }}\nRepo: ${{ github.repository }}\nCommit: ${{ steps.commit.outputs.message }}\n\nLoC: +${{ steps.commit.outputs.additions }}  -${{ steps.commit.outputs.deletions }}\nFiles: added=${{ steps.commit.outputs.added }}  removed=${{ steps.commit.outputs.removed }}  modified=${{ steps.commit.outputs.modified }}"
+            "content": "**GitHub Push Event**\n\n**Branch ** ${{ github.ref_name }}\n**Author ** ${{ github.actor }}\n**Repo ** ${{ github.repository }}\n**Commit ** ${{ steps.commit.outputs.message }}\n\n**LoC ** +${{ steps.commit.outputs.additions }}  -${{ steps.commit.outputs.deletions }}\n**Files ** added ${{ steps.commit.outputs.added }}  removed ${{ steps.commit.outputs.removed }}  modified ${{ steps.commit.outputs.modified }}"
           }
           EOF
 
