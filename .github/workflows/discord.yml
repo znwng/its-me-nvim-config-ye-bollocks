@@ -1,16 +1,13 @@
 name: Discord Notify
-
 on:
   push:
     branches:
       - main
-
 jobs:
   notify:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Get commit details
+      - name: Get commit details from GitHub API
         id: commit
         run: |
           api_url="https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}"
@@ -22,19 +19,16 @@ jobs:
           echo "modified=$(echo "$response" | jq '[.files[] | select(.status=="modified")] | length')" >> $GITHUB_OUTPUT
           echo "additions=$(echo "$response" | jq '.stats.additions')" >> $GITHUB_OUTPUT
           echo "deletions=$(echo "$response" | jq '.stats.deletions')" >> $GITHUB_OUTPUT
-
-      - name: Send message to Discord
+      - name: Send Discord notification
         run: |
+          cat <<EOF > payload.json
+          {
+            "content": "**🚀 GitHub Push Event**\n\n🔀 **Branch:** ${{ github.ref_name }}\n👤 **Author:** ${{ github.actor }}\n📦 **Repo:** ${{ github.repository }}\n📝 **Commit:** ${{ steps.commit.outputs.message }}\n\n📊 **LoC:** +${{ steps.commit.outputs.additions }}  -${{ steps.commit.outputs.deletions }}\n📁 **Files:** ➕ ${{ steps.commit.outputs.added }}  ➖ ${{ steps.commit.outputs.removed }}  ✏️ ${{ steps.commit.outputs.modified }}"
+          }
+          EOF
+
           curl -X POST \
-          -H "Content-Type: application/json" \
-          -d '{
-            "content": "**🚀 GitHub Push Event**\n\n\
-🔀 **Branch:** ${{ github.ref_name }}\n\
-👤 **Author:** ${{ github.actor }}\n\
-📦 **Repo:** ${{ github.repository }}\n\
-📝 **Commit:** ${{ steps.commit.outputs.message }}\n\n\
-📊 **LoC:** +${{ steps.commit.outputs.additions }}  -${{ steps.commit.outputs.deletions }}\n\
-📁 **Files:** ➕ ${{ steps.commit.outputs.added }}  ➖ ${{ steps.commit.outputs.removed }}  ✏️ ${{ steps.commit.outputs.modified }}"
-          }' \
-          ${{ secrets.DISCORD_WEBHOOK }}
+            -H "Content-Type: application/json" \
+            --data @payload.json \
+            ${{ secrets.DISCORD_WEBHOOK }}
 
