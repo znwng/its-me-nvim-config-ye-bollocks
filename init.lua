@@ -133,28 +133,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
---  Auto-Save
-local autosave_interval = 5000 -- ms
-local autosave_timer = vim.loop.new_timer()
-
-autosave_timer:start(
-  autosave_interval,
-  autosave_interval,
-  vim.schedule_wrap(function()
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      if
-        vim.api.nvim_buf_is_loaded(buf)
-        and vim.api.nvim_buf_get_option(buf, "modified")
-        and vim.api.nvim_buf_get_option(buf, "modifiable")
-        and vim.api.nvim_buf_get_option(buf, "buftype") == ""
-      then
-        pcall(function()
-          vim.api.nvim_buf_call(buf, function()
-            vim.cmd("silent! write")
-          end)
-        end)
-      end
-    end
-  end)
-)
-
