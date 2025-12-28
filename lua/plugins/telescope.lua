@@ -23,11 +23,11 @@ return {
 
     config = function()
       local colors = {
-        bg = "",
-        bg2 = "",
-        fg = "#ebdbb2",
-        accent = "#83a598", -- blue-ish accent
-        border = "#928374", -- gray border
+        bg = "NONE", -- transparent background
+        bg2 = "#2E2E2E", -- slightly darker selection
+        fg = "#ECEFF4", -- main text
+        accent = "#88C0D0", -- soft cyan accent (Hubbamax-ish)
+        border = "#4C566A", -- subtle gray-blue border
       }
 
       require("telescope").setup({
@@ -46,13 +46,13 @@ return {
         },
       })
 
-      -- Gruvbox-style Telescope highlights
+      -- Telescope highlights
       vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = colors.bg, fg = colors.fg })
       vim.api.nvim_set_hl(0, "TelescopeBorder", { fg = colors.border, bg = colors.bg })
       vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = colors.border, bg = colors.bg })
       vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = colors.bg })
       vim.api.nvim_set_hl(0, "TelescopePromptPrefix", { fg = colors.accent })
-      vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = colors.bg2 })
+      vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = "none" })
       vim.api.nvim_set_hl(0, "TelescopeMatching", { fg = colors.accent })
 
       -- Keymaps for Telescope
