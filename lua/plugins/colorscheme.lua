@@ -24,9 +24,6 @@ return {
       vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#FABD2F", bg = bg, bold = true })
       vim.api.nvim_set_hl(0, "StatusLineInfo", { fg = "#83A598", bg = bg, bold = true })
       vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#D3869B", bg = bg, bold = true })
-
-      -- Italic comments
-      vim.api.nvim_set_hl(0, "@comment", { fg = "#656565", italic = true })
     end,
   },
 }
