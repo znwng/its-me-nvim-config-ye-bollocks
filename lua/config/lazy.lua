@@ -37,9 +37,11 @@ require("lazy").setup({
 vim.api.nvim_create_autocmd("User", {
   pattern = "VeryLazy",
   callback = function()
-    local bg = "NONE"
-    local accent = "#88C0D0" -- soft cyan (Hubbamax accent)
-    local border = "#4C566A" -- subtle gray-blue
+    local cp = require("catppuccin.palettes").get_palette()
+    local bg = "NONE" -- transparent background
+    local accent = cp.sky -- Catppuccin mocha cyan accent
+    local border = cp.surface0
+    local selection = cp.base
 
     -- Transparent floating windows
     pcall(vim.api.nvim_set_hl, 0, "NormalFloat", { bg = bg })
@@ -47,12 +49,12 @@ vim.api.nvim_create_autocmd("User", {
 
     -- Lazy/NvimTree/Telescope UI accents
     pcall(function()
-      vim.api.nvim_set_hl(0, "Pmenu", { bg = bg, fg = "#ECEFF4" })
-      vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#2E2E2E", fg = accent })
-      vim.api.nvim_set_hl(0, "CursorLine", { bg = "#2E2E2E" })
+      vim.api.nvim_set_hl(0, "Pmenu", { bg = bg, fg = cp.text })
+      vim.api.nvim_set_hl(0, "PmenuSel", { bg = selection, fg = accent })
+      vim.api.nvim_set_hl(0, "CursorLine", { bg = selection })
       vim.api.nvim_set_hl(0, "VertSplit", { fg = border, bg = bg })
-      vim.api.nvim_set_hl(0, "StatusLine", { bg = "#282828", fg = "#92969e" })
-      vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "#282828", fg = "#A3BE8C" })
+      vim.api.nvim_set_hl(0, "StatusLine", { bg = cp.base, fg = cp.overlay0 })
+      vim.api.nvim_set_hl(0, "StatusLineNC", { bg = cp.base, fg = cp.surface2 })
     end)
 
     -- Mason UI if available

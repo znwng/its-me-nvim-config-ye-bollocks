@@ -18,16 +18,17 @@ return {
     tag = "0.1.8",
 
     dependencies = {
-      "nvim-lua/plenary.nvim", -- required
+      "nvim-lua/plenary.nvim",
     },
 
     config = function()
+      local cp = require("catppuccin.palettes").get_palette()
       local colors = {
         bg = "NONE", -- transparent background
-        bg2 = "#2E2E2E", -- slightly darker selection
-        fg = "#ECEFF4", -- main text
-        accent = "#88C0D0", -- soft cyan accent (Hubbamax-ish)
-        border = "#4C566A", -- subtle gray-blue border
+        bg2 = cp.base, -- slightly darker selection
+        fg = cp.text, -- main text
+        accent = cp.sky, -- Catppuccin mocha cyan accent
+        border = cp.surface0, -- subtle border
       }
 
       require("telescope").setup({
@@ -46,14 +47,15 @@ return {
         },
       })
 
-      -- Telescope highlights
-      vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = colors.bg, fg = colors.fg })
+      -- Telescope highlights using Catppuccin colors
+      vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none", fg = colors.fg })
       vim.api.nvim_set_hl(0, "TelescopeBorder", { fg = colors.border, bg = colors.bg })
       vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = colors.border, bg = colors.bg })
       vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = colors.bg })
       vim.api.nvim_set_hl(0, "TelescopePromptPrefix", { fg = colors.accent })
       vim.api.nvim_set_hl(0, "TelescopeSelection", { bg = "none" })
-      vim.api.nvim_set_hl(0, "TelescopeMatching", { fg = colors.accent })
+      vim.api.nvim_set_hl(0, "TelescopeMatching", { fg = colors.accent, bg = "none", bold = true })
+      vim.api.nvim_set_hl(0, "TelescopeSelectionCaret", { fg = colors.accent, bg = "none", bold = true }) -- transparent caret
 
       -- Keymaps for Telescope
       local keymap = vim.keymap.set

@@ -1,29 +1,33 @@
 return {
   {
-    "alexpasmantier/hubbamax.nvim",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd("colorscheme hubbamax")
+      require("catppuccin").setup({
+        flavour = "macchiato", -- latte, frappe, macchiato, mocha
+        transparent_background = true,
+        integrations = {
+          -- add integrations if you use them, e.g., treesitter, lualine, telescope
+          lualine = true,
+          treesitter = true,
+          telescope = true,
+        },
+      })
 
-      -- Transparent background for editor
-      vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
-      vim.api.nvim_set_hl(0, "NormalNC", { bg = "NONE" })
-      vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
+      -- Set colorscheme
+      vim.cmd("colorscheme catppuccin")
 
-      -- Statusline background
-      local bg = "#282828"
-      vim.api.nvim_set_hl(0, "StatusLine", { bg = bg, fg = "#92969e" })
-      vim.api.nvim_set_hl(0, "StatusLineNC", { bg = bg, fg = "#A3BE8C" })
-
-      -- ColorColumn
-      vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#2E2E2E" })
-
-      -- Diagnostics colors for statusline
-      vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#FB4934", bg = bg, bold = true })
-      vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#FABD2F", bg = bg, bold = true })
-      vim.api.nvim_set_hl(0, "StatusLineInfo", { fg = "#83A598", bg = bg, bold = true })
-      vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#D3869B", bg = bg, bold = true })
+      -- Optional: customize StatusLine like before
+      local bg = "#1E1E2E" -- mocha background shade
+      vim.api.nvim_set_hl(0, "StatusLine", { bg = bg, fg = "#cdd6f4" })
+      vim.api.nvim_set_hl(0, "StatusLineNC", { bg = bg, fg = "#6c7086" })
+      vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#313244" })
+      vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#FB4934", bg = "none", bold = true })
+      vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#FABD2F", bg = "none", bold = true })
+      vim.api.nvim_set_hl(0, "StatusLineInfo", { fg = "#83A598", bg = "none", bold = true })
+      vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#D3869B", bg = "none", bold = true })
     end,
   },
 }
