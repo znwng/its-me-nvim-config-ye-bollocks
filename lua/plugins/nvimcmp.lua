@@ -69,7 +69,7 @@ return {
 
         window = {
           completion = cmp.config.window.bordered({
-            border = "single", -- not rounded
+            border = "single",
           }),
           documentation = cmp.config.window.bordered({
             border = "single",
@@ -77,8 +77,8 @@ return {
         },
 
         formatting = {
-          fields = { "abbr", "kind" }, -- now: text first, then icon+type
-          format = function(entry, vim_item)
+          fields = { "abbr", "kind" },
+          format = function(_, vim_item)
             local icon = lspkind.symbolic(vim_item.kind, { mode = "symbol" }) or ""
             vim_item.kind = string.format("%s %s", icon, vim_item.kind or "")
             vim_item.menu = ""
@@ -92,22 +92,19 @@ return {
       require("nvim-autopairs").setup({})
       cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-      -- === Gruvbox color palette ===
-      local colors = {
-        bg = "#282828",
-        fg = "#ebdbb2",
-        border = "#665c54",
-        accent = "#d79921",
-        sel = "#3c3836",
-      }
+      -- === Catppuccin Mocha palette ===
+      local cp = require("catppuccin.palettes").get_palette()
+      local bg = "NONE" -- transparent
 
-      -- === Apply Gruvbox highlights ===
-      vim.api.nvim_set_hl(0, "CmpPmenu", { bg = colors.bg, fg = colors.fg })
-      vim.api.nvim_set_hl(0, "CmpPmenuSel", { bg = colors.sel, fg = colors.accent })
-      vim.api.nvim_set_hl(0, "CmpBorder", { fg = colors.border, bg = colors.bg })
-      vim.api.nvim_set_hl(0, "CmpDocBorder", { fg = colors.border, bg = colors.bg })
-      vim.api.nvim_set_hl(0, "Pmenu", { bg = colors.bg })
-      vim.api.nvim_set_hl(0, "PmenuSel", { bg = colors.sel })
+      -- === Apply Catppuccin highlights ===
+      vim.api.nvim_set_hl(0, "CmpPmenu", { bg = bg, fg = cp.text })
+      vim.api.nvim_set_hl(0, "CmpPmenuSel", { bg = cp.base, fg = cp.sky, bold = true })
+      vim.api.nvim_set_hl(0, "CmpBorder", { fg = cp.surface0, bg = bg })
+      vim.api.nvim_set_hl(0, "CmpDocBorder", { fg = cp.surface0, bg = bg })
+
+      -- Fallbacks (in case something uses Pmenu directly)
+      vim.api.nvim_set_hl(0, "Pmenu", { bg = bg, fg = cp.text })
+      vim.api.nvim_set_hl(0, "PmenuSel", { bg = cp.base, fg = cp.sky })
     end,
   },
 }
