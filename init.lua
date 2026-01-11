@@ -107,12 +107,6 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 vim.api.nvim_set_hl(0, "MatchParen", { underline = true, bold = false, bg = "NONE", fg = "NONE" })
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    vim.highlight.on_yank({ timeout = 200 })
-  end,
-})
-
 vim.api.nvim_create_autocmd("BufReadPost", {
   callback = function()
     local mark = vim.api.nvim_buf_get_mark(0, '"')
