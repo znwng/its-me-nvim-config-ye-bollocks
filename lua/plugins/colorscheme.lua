@@ -14,6 +14,8 @@ return {
           telescope = true,
         },
       })
+      -- Set colorscheme
+      vim.cmd("colorscheme catppuccin")
 
       local bg = "#E6E9Ef" -- mocha background shade
       vim.api.nvim_set_hl(0, "StatusLine", { bg = bg, fg = "#cdd6f4" })
@@ -23,9 +25,7 @@ return {
       vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#FABD2F", bg = "none", bold = true })
       vim.api.nvim_set_hl(0, "StatusLineInfo", { fg = "#83A598", bg = "none", bold = true })
       vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#D3869B", bg = "none", bold = true })
-
-      -- Set colorscheme
-      vim.cmd("colorscheme catppuccin")
+      vim.api.nvim_set_hl(0, "Comment", { fg = "#383838", italic = true })
     end,
   },
 }
