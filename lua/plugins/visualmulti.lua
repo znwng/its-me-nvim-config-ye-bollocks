@@ -12,15 +12,15 @@ Esc       → Exit multi-cursor mode
 ]]
 
 return {
-  {
-  -- Plugin: vim-visual-multi — Multi-cursor editing for Neovim
-    "mg979/vim-visual-multi",
+    {
+        -- Plugin: vim-visual-multi — Multi-cursor editing for Neovim
+        "mg979/vim-visual-multi",
 
-    -- Use the stable branch
-    branch = "master",
+        -- Use the stable branch
+        branch = "master",
 
-    -- No additional config required: works out-of-the-box
-    -- Customization is possible via g:VM_* variables (see :help vm-config)
-  },
+        -- No additional config required: works out-of-the-box
+        -- Customization is possible via g:VM_* variables (see :help vm-config)
+    },
 }
 
