@@ -68,7 +68,10 @@ return {
                 ensure_installed = servers,
                 handlers = {
                     function(server_name)
-                        local opts = { on_attach = on_attach, capabilities = capabilities }
+                        local opts = {
+                            on_attach = on_attach,
+                            capabilities = capabilities,
+                        }
 
                         if server_name == "clangd" then
                             opts.cmd = {
@@ -83,7 +86,11 @@ return {
                         elseif server_name == "gopls" then
                             opts.settings = {
                                 gopls = {
-                                    analyses = { unusedparams = true, nilness = true, unusedwrite = true },
+                                    analyses = {
+                                        unusedparams = true,
+                                        nilness = true,
+                                        unusedwrite = true,
+                                    },
                                     staticcheck = true,
                                 },
                             }
@@ -97,6 +104,70 @@ return {
                                         checkThirdParty = false,
                                     },
                                     telemetry = { enable = false },
+                                },
+                            }
+                        elseif server_name == "rust_analyzer" then
+                            opts.settings = {
+                                ["rust-analyzer"] = {
+                                    cargo = {
+                                        allFeatures = true,
+                                        loadOutDirsFromCheck = true,
+                                        buildScripts = {
+                                            enable = true,
+                                        },
+                                    },
+
+                                    procMacro = {
+                                        enable = true,
+                                    },
+
+                                    checkOnSave = {
+                                        command = "clippy",
+                                        extraArgs = { "--no-deps" },
+                                    },
+
+                                    inlayHints = {
+                                        bindingModeHints = { enable = true },
+                                        chainingHints = { enable = true },
+                                        closingBraceHints = {
+                                            enable = true,
+                                            minLines = 25,
+                                        },
+                                        closureReturnTypeHints = { enable = "always" },
+                                        lifetimeElisionHints = {
+                                            enable = "always",
+                                            useParameterNames = true,
+                                        },
+                                        parameterHints = { enable = true },
+                                        reborrowHints = { enable = "always" },
+                                        typeHints = {
+                                            enable = true,
+                                            hideClosureInitialization = false,
+                                            hideNamedConstructor = false,
+                                        },
+                                    },
+
+                                    diagnostics = {
+                                        enable = true,
+                                        experimental = {
+                                            enable = true,
+                                        },
+                                    },
+
+                                    completion = {
+                                        postfix = {
+                                            enable = true,
+                                        },
+                                    },
+
+                                    hover = {
+                                        actions = {
+                                            enable = true,
+                                            references = true,
+                                            run = true,
+                                            debug = true,
+                                        },
+                                    },
                                 },
                             }
                         end
