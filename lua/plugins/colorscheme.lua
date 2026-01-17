@@ -58,6 +58,8 @@ return {
                 -- Color column intentionally solid
                 vim.api.nvim_set_hl(0, "ColorColumn", { bg = status_bg })
 
+                vim.api.nvim_set_hl(0, "StatusLineMode", { bg = "#61ffe8", fg = "#292929", bold = true, italic = true })
+
                 -- Comments
                 vim.api.nvim_set_hl(0, "Comment", { fg = muted, italic = true })
             end

@@ -9,6 +9,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
 vim.opt.guicursor = "a:block"
+vim.opt.showmode = false
 
 --  Indentation / Tabs
 vim.opt.expandtab = false
@@ -81,8 +82,24 @@ _G._statusline = {
     git_branch = git_branch,
 }
 
+_G._statusline.mode = function()
+    local m = vim.api.nvim_get_mode().mode
+    local map = {
+        n = "NORMAL",
+        i = "INSERT",
+        v = "VISUAL",
+        V = "V-LINE",
+        ["\22"] = "V-BLOCK",
+        c = "COMMAND",
+        R = "REPLACE",
+        t = "TERMINAL",
+    }
+    return map[m] or m
+end
+
 vim.o.statusline = table.concat({
-    "%{expand('%:p')} ",
+    "%#StatusLineMode# " .. "%{v:lua._statusline.mode()}" .. " %#StatusLine#",
+    " %{expand('%:p:~')} ",
     "%#StatusLineBranch#[" .. "%{v:lua._statusline.git_branch()}" .. "] ",
     "%m %=",
     "%#StatusLineError#%{v:lua._statusline.diag_count('ERROR')} ",

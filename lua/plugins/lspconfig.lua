@@ -243,7 +243,7 @@ return {
             end, {})
 
             vim.diagnostic.config({
-                update_in_insert = true,
+                update_in_insert = false,
                 virtual_text = true,
                 signs = true,
                 underline = true,
