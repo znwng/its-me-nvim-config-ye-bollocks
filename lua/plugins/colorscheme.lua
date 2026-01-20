@@ -56,7 +56,7 @@ return {
                 vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#c4a7e7", bg = "NONE", bold = true })
 
                 -- Color column intentionally solid
-                vim.api.nvim_set_hl(0, "ColorColumn", { bg = status_bg })
+                vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#383553" })
 
                 vim.api.nvim_set_hl(0, "StatusLineMode", { bg = "#61ffe8", fg = "#292929", bold = true, italic = true })
 

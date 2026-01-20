@@ -1,5 +1,5 @@
 --  General Editor Settings
-vim.opt.mouse = "a"
+vim.opt.mouse = ""
 vim.opt.termguicolors = true
 vim.opt.updatetime = 250
 -- vim.opt.colorcolumn = "80"
@@ -8,7 +8,6 @@ vim.opt.signcolumn = "yes"
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
-vim.opt.guicursor = "a:block"
 vim.opt.showmode = false
 
 --  Indentation / Tabs
