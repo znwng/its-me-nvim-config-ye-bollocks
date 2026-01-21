@@ -15,8 +15,6 @@ return {
         },
 
         config = function()
-            vim.env.PATH = vim.env.PATH .. ":/home/zenwing/.local/bin"
-
             local mason = require("mason")
             local mason_lspconfig = require("mason-lspconfig")
             local mason_null_ls = require("mason-null-ls")
@@ -41,17 +39,17 @@ return {
                 "cmake",
             }
 
-            local formatters = {
+            local formatters_and_linters = {
                 "black",
                 "clang-format",
                 "prettier",
                 "stylua",
-                "gofmt",
                 "goimports",
                 "shfmt",
                 "yamlfmt",
                 "terraform_fmt",
                 "typstyle",
+                "golangci-lint",
             }
 
             mason.setup()
@@ -92,6 +90,27 @@ return {
                                         unusedwrite = true,
                                     },
                                     staticcheck = true,
+
+                                    codelenses = {
+                                        gc_details = true,
+                                        generate = true,
+                                        regenerate_cgo = true,
+                                        run_govulncheck = true,
+                                        test = true,
+                                        tidy = true,
+                                        upgrade_dependency = true,
+                                        vendor = true,
+                                    },
+
+                                    hints = {
+                                        assignVariableTypes = true,
+                                        compositeLiteralFields = true,
+                                        compositeLiteralTypes = true,
+                                        constantValues = true,
+                                        functionTypeParameters = true,
+                                        parameterNames = true,
+                                        rangeVariableTypes = true,
+                                    },
                                 },
                             }
                         elseif server_name == "lua_ls" then
@@ -112,20 +131,13 @@ return {
                                     cargo = {
                                         allFeatures = true,
                                         loadOutDirsFromCheck = true,
-                                        buildScripts = {
-                                            enable = true,
-                                        },
+                                        buildScripts = { enable = true },
                                     },
-
-                                    procMacro = {
-                                        enable = true,
-                                    },
-
+                                    procMacro = { enable = true },
                                     checkOnSave = {
                                         command = "clippy",
                                         extraArgs = { "--no-deps" },
                                     },
-
                                     inlayHints = {
                                         bindingModeHints = { enable = true },
                                         chainingHints = { enable = true },
@@ -146,28 +158,6 @@ return {
                                             hideNamedConstructor = false,
                                         },
                                     },
-
-                                    diagnostics = {
-                                        enable = true,
-                                        experimental = {
-                                            enable = true,
-                                        },
-                                    },
-
-                                    completion = {
-                                        postfix = {
-                                            enable = true,
-                                        },
-                                    },
-
-                                    hover = {
-                                        actions = {
-                                            enable = true,
-                                            references = true,
-                                            run = true,
-                                            debug = true,
-                                        },
-                                    },
                                 },
                             }
                         end
@@ -178,53 +168,14 @@ return {
             })
 
             mason_null_ls.setup({
-                ensure_installed = formatters,
+                ensure_installed = formatters_and_linters,
                 automatic_installation = true,
             })
-
-            local ruff = {
-                method = null_ls.methods.DIAGNOSTICS,
-                filetypes = { "python" },
-                generator = null_ls.generator({
-                    command = "ruff",
-                    args = { "--format", "json", "--stdin-filename", "$FILENAME", "-" },
-                    to_stdin = true,
-                    format = "json_raw",
-                    check_exit_code = function(code)
-                        return code <= 1
-                    end,
-                    on_output = function(params)
-                        local diagnostics = {}
-                        for _, item in ipairs(params.output or {}) do
-                            table.insert(diagnostics, {
-                                row = item.location.row,
-                                col = item.location.column,
-                                end_row = item.location.end_row,
-                                end_col = item.location.end_column,
-                                source = "ruff",
-                                message = item.message,
-                                severity = ({
-                                    E = vim.diagnostic.severity.ERROR,
-                                    F = vim.diagnostic.severity.ERROR,
-                                    W = vim.diagnostic.severity.WARN,
-                                    I = vim.diagnostic.severity.INFO,
-                                    H = vim.diagnostic.severity.HINT,
-                                })[item.code:sub(1, 1)]
-                                    or vim.diagnostic.severity.WARN,
-                                code = item.code,
-                            })
-                        end
-                        return diagnostics
-                    end,
-                }),
-            }
 
             null_ls.setup({
                 sources = {
                     builtins.formatting.black,
-                    ruff,
                     builtins.formatting.clang_format,
-                    builtins.formatting.gofmt,
                     builtins.formatting.goimports,
                     builtins.formatting.stylua,
                     builtins.formatting.shfmt,
@@ -234,20 +185,23 @@ return {
                     builtins.formatting.typstyle.with({
                         extra_args = { "--indent-width", "4", "--line-width", "80" },
                     }),
+
+                    builtins.diagnostics.golangci_lint,
                 },
             })
 
             vim.api.nvim_create_user_command("MasonInstallAll", function()
-                local all = vim.list_extend(vim.deepcopy(servers), formatters)
+                local all = vim.list_extend(vim.deepcopy(servers), formatters_and_linters)
                 vim.cmd("MasonInstall " .. table.concat(all, " "))
             end, {})
 
             vim.diagnostic.config({
                 update_in_insert = false,
-                virtual_text = true,
+                virtual_text = false,
                 signs = true,
                 underline = true,
                 severity_sort = true,
+                float = { border = "rounded" },
             })
 
             vim.keymap.set("n", "<leader>fm", function()
