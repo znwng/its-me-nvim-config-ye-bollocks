@@ -97,15 +97,15 @@ _G._statusline.mode = function()
 end
 
 vim.o.statusline = table.concat({
-    "%#StatusLineMode# " .. "%{v:lua._statusline.mode()}" .. " %#StatusLine#",
+    "%#StatusLineMode# %{v:lua._statusline.mode()} %#StatusLine#",
     " %{expand('%:p:~')} ",
-    "%#StatusLineBranch#[" .. "%{v:lua._statusline.git_branch()}" .. "] ",
+    "%#StatusLineBranch#[%{v:lua._statusline.git_branch()}] ",
     "%m %=",
     "%#StatusLineError#%{v:lua._statusline.diag_count('ERROR')} ",
     "%#StatusLineWarn#%{v:lua._statusline.diag_count('WARN')} ",
     "%#StatusLineHint#%{v:lua._statusline.diag_count('HINT')} ",
     "%#StatusLineInfo#%{v:lua._statusline.diag_count('INFO')} ",
-    "%#StatusLine#[" .. "%{v:lua._statusline.human_file_size()}" .. "] ",
+    "%#StatusLine#[%{v:lua._statusline.human_file_size()}] ",
     "%#StatusLine#[%l:%c]",
 })
 
@@ -115,14 +115,26 @@ require("config.lazy")
 --  Autocommands
 vim.api.nvim_create_autocmd("ColorScheme", {
     callback = function()
-        for _, group in ipairs({ "CmpBorder", "CmpDocBorder", "CmpDoc", "Pmenu", "PmenuSel", "PmenuBorder" }) do
+        for _, group in ipairs({
+            "CmpBorder",
+            "CmpDocBorder",
+            "CmpDoc",
+            "Pmenu",
+            "PmenuSel",
+            "PmenuBorder",
+        }) do
             vim.api.nvim_set_hl(0, group, { bg = "none" })
         end
         vim.api.nvim_set_hl(0, "PmenuSel", { bg = "none", blend = 0 })
     end,
 })
 
-vim.api.nvim_set_hl(0, "MatchParen", { underline = true, bold = false, bg = "NONE", fg = "NONE" })
+vim.api.nvim_set_hl(0, "MatchParen", {
+    underline = true,
+    bold = false,
+    bg = "NONE",
+    fg = "NONE",
+})
 
 vim.api.nvim_create_autocmd("BufReadPost", {
     callback = function()
@@ -134,13 +146,34 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end,
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-    callback = function()
-        local lines = vim.api.nvim_buf_get_lines(0, -2, -1, false)
-        local last = (lines and lines[1]) or ""
-        if last ~= "" then
-            vim.api.nvim_buf_set_lines(0, -1, -1, false, { "" })
+-- ============================================================
+--  Formatting helpers
+-- ============================================================
+
+local function ensure_single_trailing_newline(bufnr)
+    bufnr = bufnr or 0
+
+    local line_count = vim.api.nvim_buf_line_count(bufnr)
+    local last_nonempty = line_count
+
+    while last_nonempty > 0 do
+        local line = vim.api.nvim_buf_get_lines(bufnr, last_nonempty - 1, last_nonempty, false)[1]
+        if line ~= "" then
+            break
         end
-    end,
-})
+        last_nonempty = last_nonempty - 1
+    end
+
+    vim.api.nvim_buf_set_lines(bufnr, last_nonempty, line_count, false, { "" })
+end
+
+-- Wrapper: use this for format-on-save or keymaps
+function _G.format_buffer()
+    vim.lsp.buf.format({
+        async = false,
+        callback = function()
+            ensure_single_trailing_newline(0)
+        end,
+    })
+end
 
