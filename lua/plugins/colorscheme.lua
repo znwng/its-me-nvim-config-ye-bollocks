@@ -38,16 +38,16 @@ return {
                     vim.api.nvim_set_hl(0, group, { bg = "NONE" })
                 end
 
-                -- Statusline (SOLID background)
-                vim.api.nvim_set_hl(0, "StatusLine", {
-                    bg = status_bg,
-                    fg = fg,
-                })
-
-                vim.api.nvim_set_hl(0, "StatusLineNC", {
-                    bg = status_bg,
-                    fg = muted,
-                })
+                -- -- Statusline (SOLID background)
+                -- vim.api.nvim_set_hl(0, "StatusLine", {
+                --     bg = status_bg,
+                --     fg = fg,
+                -- })
+                --
+                -- vim.api.nvim_set_hl(0, "StatusLineNC", {
+                --     bg = status_bg,
+                --     fg = muted,
+                -- })
 
                 -- Diagnostics in statusline
                 vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#eb6f92", bg = "NONE", bold = true })
