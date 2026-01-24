@@ -1,3 +1,6 @@
+vim.g.mapleader = " "
+vim.keymap.set('n', '<leader>r', ':update<CR> :source<CR>')
+
 --  General Editor Settings
 vim.opt.mouse = ""
 vim.opt.termguicolors = true
