@@ -1,11 +1,18 @@
 vim.g.mapleader = " "
-vim.keymap.set('n', '<leader>r', ':update<CR> :source<CR>')
 
---  General Editor Settings
+-- Keymaps
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank selection to clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clipboard" })
+vim.keymap.set("n", "<leader>r", "<cmd>update<CR><cmd>source %<CR>", { desc = "Reload current file" })
+vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "Write file" })
+vim.keymap.set("n", "<leader>q", "<cmd>quit<CR>", { desc = "Quit window" })
+vim.keymap.set("n", "<leader>x", "<cmd>wq<CR>", { desc = "Write and quit" })
+vim.keymap.set("n", "<leader>Y", "<cmd>%y+<CR>", { desc = "Yank entire buffer to clipboard" })
+
+-- General Editor Settings
 vim.opt.mouse = ""
 vim.opt.termguicolors = true
 vim.opt.updatetime = 250
--- vim.opt.colorcolumn = "80"
 vim.opt.breakindent = true
 vim.opt.signcolumn = "yes"
 vim.opt.number = true
@@ -13,20 +20,20 @@ vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
 vim.opt.showmode = false
 
---  Indentation / Tabs
+-- Indentation / Tabs
 vim.opt.expandtab = false
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.smartindent = true
 vim.opt.autoindent = true
 
---  Search Behavior
+-- Search Behavior
 vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.hlsearch = true
 
---  File Handling
+-- File Handling
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
@@ -36,7 +43,7 @@ if vim.fn.isdirectory(undodir) == 0 then
 end
 vim.opt.undodir = undodir
 
---  Helper Functions
+-- Helper Functions
 local function diag_count(sev_name)
     local sev = vim.diagnostic.severity[sev_name:upper()]
     if not sev then
@@ -67,17 +74,29 @@ local function human_file_size()
     return string.format("%.1fGB", size / (1024 * 1024 * 1024))
 end
 
+-- Git branch caching for performance
+local branch_cache = {}
 local function git_branch()
+    local buf = vim.api.nvim_get_current_buf()
+    if branch_cache[buf] then
+        return branch_cache[buf]
+    end
     local dir = vim.fn.expand("%:p:h")
     if dir == "" or vim.fn.isdirectory(dir) == 0 then
         return "~"
     end
     local cmd = "git -C " .. vim.fn.fnameescape(dir) .. " rev-parse --abbrev-ref HEAD 2>/dev/null"
     local branch = vim.fn.trim(vim.fn.system(cmd))
-    return branch ~= "" and branch or "~"
+    branch_cache[buf] = branch ~= "" and branch or "~"
+    return branch_cache[buf]
 end
+vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
+    callback = function()
+        branch_cache[vim.api.nvim_get_current_buf()] = nil
+    end,
+})
 
---  Statusline Helpers
+-- Statusline Helpers
 _G._statusline = {
     diag_count = diag_count,
     human_file_size = human_file_size,
@@ -112,10 +131,10 @@ vim.o.statusline = table.concat({
     "%#StatusLine#[%l:%c]",
 })
 
---  Plugins
+-- Plugins
 require("config.lazy")
 
---  Autocommands
+-- Autocommands
 vim.api.nvim_create_autocmd("ColorScheme", {
     callback = function()
         for _, group in ipairs({
@@ -149,16 +168,11 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end,
 })
 
--- ============================================================
---  Formatting helpers
--- ============================================================
-
+-- Formatting helpers
 local function ensure_single_trailing_newline(bufnr)
     bufnr = bufnr or 0
-
     local line_count = vim.api.nvim_buf_line_count(bufnr)
     local last_nonempty = line_count
-
     while last_nonempty > 0 do
         local line = vim.api.nvim_buf_get_lines(bufnr, last_nonempty - 1, last_nonempty, false)[1]
         if line ~= "" then
@@ -166,17 +180,17 @@ local function ensure_single_trailing_newline(bufnr)
         end
         last_nonempty = last_nonempty - 1
     end
-
     vim.api.nvim_buf_set_lines(bufnr, last_nonempty, line_count, false, { "" })
 end
 
--- Wrapper: use this for format-on-save or keymaps
 function _G.format_buffer()
-    vim.lsp.buf.format({
-        async = false,
-        callback = function()
-            ensure_single_trailing_newline(0)
-        end,
-    })
+    if vim.lsp.buf.server_ready() then
+        vim.lsp.buf.format({
+            async = true,
+            callback = function()
+                ensure_single_trailing_newline(0)
+            end,
+        })
+    end
 end
 
