@@ -22,13 +22,13 @@ return {
         },
 
         config = function()
-            -- === Rose Pine Moon palette ===
+            -- === Vague-style palette ===
             local colors = {
                 bg = "NONE", -- transparent
-                bg2 = "#393552", -- surface
-                fg = "#e0def4", -- text
-                accent = "#9ccfd8", -- foam
-                border = "#6e6a86", -- muted
+                bg2 = "#2a2a2a", -- subtle selection surface
+                fg = "#d0d0d0", -- primary text
+                accent = "#61ffe8", -- active / match highlight
+                border = "#5a5a5a", -- muted borders
             }
 
             require("telescope").setup({
@@ -47,7 +47,7 @@ return {
                 },
             })
 
-            -- Telescope highlights (Rose Pine Moon)
+            -- Telescope highlights (Vague-aligned)
             vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = colors.bg, fg = colors.fg })
             vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = colors.bg, fg = colors.border })
             vim.api.nvim_set_hl(0, "TelescopePromptBorder", { bg = colors.bg, fg = colors.border })
@@ -57,7 +57,7 @@ return {
             vim.api.nvim_set_hl(0, "TelescopeMatching", { fg = colors.accent, bold = true })
             vim.api.nvim_set_hl(0, "TelescopeSelectionCaret", { fg = colors.accent, bold = true })
 
-            -- Keymaps for Telescope
+            -- Keymaps
             local keymap = vim.keymap.set
             local opts = { noremap = true, silent = true }
 

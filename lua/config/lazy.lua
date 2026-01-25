@@ -16,11 +16,8 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
--- Leader keys (set once)
-vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Setup lazy.nvim
 require("lazy").setup({
     spec = { { import = "plugins" } },
     check = { notif = false },
@@ -33,35 +30,37 @@ require("lazy").setup({
     },
 })
 
--- Apply global UI tweaks safely after Lazy loads
+-- Apply global UI tweaks after Lazy loads
 vim.api.nvim_create_autocmd("User", {
     pattern = "VeryLazy",
     callback = function()
-        -- === Rose Pine Moon palette ===
+        -- === Vague-style palette ===
         local bg = "NONE" -- transparent
-        local fg = "#e0def4" -- text
-        local muted = "#6e6a86" -- muted
-        local surface = "#393552" -- surface
-        local accent = "#9ccfd8" -- foam
+        local fg = "#d0d0d0" -- primary text
+        local muted = "#5a5a5a" -- borders / separators
+        local surface = "#2a2a2a" -- subtle background
+        local accent = "#61ffe8" -- focus / selection
 
-        -- Transparent floating windows
+        -- Floating windows
         pcall(vim.api.nvim_set_hl, 0, "NormalFloat", { bg = bg, fg = fg })
         pcall(vim.api.nvim_set_hl, 0, "FloatBorder", { fg = muted, bg = bg })
 
         -- Global UI accents
         pcall(function()
             vim.api.nvim_set_hl(0, "Pmenu", { bg = bg, fg = fg })
-            vim.api.nvim_set_hl(0, "PmenuSel", { bg = surface, fg = accent, bold = true })
+            vim.api.nvim_set_hl(0, "PmenuSel", { bg = surface, fg = fg, bold = true })
             vim.api.nvim_set_hl(0, "CursorLine", { bg = surface })
             vim.api.nvim_set_hl(0, "VertSplit", { fg = muted, bg = bg })
             vim.api.nvim_set_hl(0, "StatusLine", { bg = surface, fg = fg })
             vim.api.nvim_set_hl(0, "StatusLineNC", { bg = surface, fg = muted })
         end)
 
-        -- Mason UI if available
+        -- Mason UI (inherits palette cleanly)
         pcall(function()
             local mason = require("mason")
-            mason.setup({ ui = { border = "rounded" } })
+            mason.setup({
+                ui = { border = "rounded" },
+            })
         end)
     end,
 })

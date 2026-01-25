@@ -29,12 +29,9 @@ return {
             local luasnip = require("luasnip")
             local lspkind = require("lspkind")
 
-            -- Load VSCode-style snippets
             require("luasnip.loaders.from_vscode").lazy_load()
 
-            -- =====================
             -- nvim-cmp setup
-            -- =====================
             cmp.setup({
                 snippet = {
                     expand = function(args)
@@ -74,14 +71,9 @@ return {
                     { name = "path" },
                 },
 
-                -- Explicitly borderless floating windows
                 window = {
-                    completion = {
-                        border = "none",
-                    },
-                    documentation = {
-                        border = "none",
-                    },
+                    completion = { border = "none" },
+                    documentation = { border = "none" },
                 },
 
                 formatting = {
@@ -100,16 +92,14 @@ return {
                 },
             })
 
-            -- =====================
             -- Cmdline completion
-            -- =====================
             cmp.setup.cmdline(":", {
                 mapping = cmp.mapping.preset.cmdline(),
                 sources = {
                     { name = "path" },
                     { name = "cmdline" },
                 },
-                completion = { autocomplete = false }, -- <-- disable auto-popup
+                completion = { autocomplete = false },
             })
 
             cmp.setup.cmdline({ "/", "?" }, {
@@ -119,42 +109,30 @@ return {
                 },
             })
 
-            -- =====================
-            -- Autopairs integration
-            -- =====================
+            -- Autopairs
             local cmp_autopairs = require("nvim-autopairs.completion.cmp")
             require("nvim-autopairs").setup({})
             cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-            -- =====================
-            -- Solid background (borderless)
-            -- =====================
-            local bg = "#1f1d2e"
-            local fg = "#e0def4"
-            local surface = "#393552"
+            -- Vague-style popup colors
+            local bg = "#1e1e1e" -- neutral dark
+            local fg = "#d0d0d0" -- soft text
+            local surface = "#2a2a2a" -- selection
+            local accent = "#61ffe8" -- focus highlight
+
+            local function apply_cmp_ui()
+                vim.api.nvim_set_hl(0, "Pmenu", { bg = bg, fg = fg })
+                vim.api.nvim_set_hl(0, "PmenuSel", { bg = surface, fg = fg, bold = true })
+                vim.api.nvim_set_hl(0, "PmenuThumb", { bg = accent })
+                vim.api.nvim_set_hl(0, "PmenuSbar", { bg = surface })
+                vim.api.nvim_set_hl(0, "NormalFloat", { bg = bg, fg = fg })
+            end
 
             vim.api.nvim_create_autocmd("ColorScheme", {
-                callback = function()
-                    vim.api.nvim_set_hl(0, "Pmenu", {
-                        bg = bg,
-                        fg = fg,
-                    })
-
-                    vim.api.nvim_set_hl(0, "PmenuSel", {
-                        bg = surface,
-                        fg = fg,
-                        bold = true,
-                    })
-
-                    vim.api.nvim_set_hl(0, "NormalFloat", {
-                        bg = bg,
-                        fg = fg,
-                    })
-                end,
+                callback = apply_cmp_ui,
             })
 
-            -- Apply immediately
-            vim.cmd("doautocmd ColorScheme")
+            apply_cmp_ui()
         end,
     },
 }
