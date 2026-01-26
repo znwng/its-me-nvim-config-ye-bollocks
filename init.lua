@@ -14,6 +14,7 @@ vim.keymap.set("n", "<leader>Y", "<cmd>%y+<CR>", { desc = "Yank entire buffer to
 vim.opt.mouse = ""
 vim.opt.termguicolors = true
 vim.opt.updatetime = 250
+vim.opt.colorcolumn="80"
 vim.opt.breakindent = true
 vim.opt.signcolumn = "yes"
 vim.opt.number = true
