@@ -1,20 +1,13 @@
 vim.g.mapleader = " "
 
--- Keymaps
-vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank selection to clipboard" })
-vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "Paste from clipboard" })
+-- Custom Keymaps
 vim.keymap.set("n", "<leader>r", "<cmd>update<CR><cmd>source %<CR>", { desc = "Reload current file" })
-vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "Write file" })
-vim.keymap.set("n", "<leader>q", "<cmd>quit<CR>", { desc = "Quit window" })
-vim.keymap.set("n", "<leader>Q", "<cmd>q!<CR>", { desc = "Quit without saving" })
-vim.keymap.set("n", "<leader>x", "<cmd>wq<CR>", { desc = "Write and quit" })
-vim.keymap.set("n", "<leader>Y", "<cmd>%y+<CR>", { desc = "Yank entire buffer to clipboard" })
 
 -- General Editor Settings
 vim.opt.mouse = ""
 vim.opt.termguicolors = true
 vim.opt.updatetime = 250
-vim.opt.colorcolumn="80"
+vim.opt.colorcolumn = { "80" }
 vim.opt.breakindent = true
 vim.opt.signcolumn = "yes"
 vim.opt.number = true
