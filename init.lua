@@ -2,6 +2,10 @@ vim.g.mapleader = " "
 
 -- Custom Keymaps
 vim.keymap.set("n", "<leader>r", "<cmd>update<CR><cmd>source %<CR>", { desc = "Reload current file" })
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Write" })
+vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
+vim.keymap.set("n", "<leader>x", "<cmd>x<CR>", { desc = "Write and Quit" })
+vim.keymap.set("n", "<leader>Q", "<cmd>Q<CR>", { desc = "!Write and Quit" })
 
 -- General Editor Settings
 vim.opt.mouse = ""
@@ -14,7 +18,6 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
 vim.opt.showmode = false
-vim.opt.clipboard = "unnamedplus"
 
 -- Indentation / Tabs
 vim.opt.expandtab = false
