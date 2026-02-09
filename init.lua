@@ -193,3 +193,14 @@ function _G.format_buffer()
     end
 end
 
+local netrw_buf = nil
+vim.keymap.set("n", "<leader>e", function()
+    if netrw_buf and vim.api.nvim_buf_is_valid(netrw_buf) then
+        vim.api.nvim_buf_delete(netrw_buf, { force = true })
+        netrw_buf = nil
+    else
+        vim.cmd("Ex")
+        netrw_buf = vim.api.nvim_get_current_buf()
+    end
+end, { desc = "Toggle Netrw" })
+
