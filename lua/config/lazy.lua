@@ -24,7 +24,7 @@ require("lazy").setup({
     checker = { enabled = true, notify = false },
     change_detection = { notify = true },
     ui = {
-        border = "rounded",
+        border = "none",
         winblend = 0,
         size = { height = 0.85, width = 0.85 },
     },
@@ -59,7 +59,7 @@ vim.api.nvim_create_autocmd("User", {
         pcall(function()
             local mason = require("mason")
             mason.setup({
-                ui = { border = "rounded" },
+                ui = { border = "none" },
             })
         end)
     end,
