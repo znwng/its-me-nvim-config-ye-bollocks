@@ -16,7 +16,7 @@ vim.opt.breakindent = true
 vim.opt.signcolumn = "yes"
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.scrolloff = 10
+vim.opt.scrolloff = 5
 vim.opt.showmode = false
 
 -- Indentation / Tabs
