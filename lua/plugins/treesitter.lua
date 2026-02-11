@@ -24,14 +24,12 @@ return {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
 
-        -- Textobject support
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
         },
 
         config = function()
             require("nvim-treesitter.configs").setup({
-                -- Install parsers for these languages
                 ensure_installed = {
                     "python",
                     "c",
@@ -47,19 +45,15 @@ return {
                     "typst",
                 },
 
-                sync_install = false, -- Install asynchronously
+                sync_install = false,
 
-                -- Syntax highlighting
-                highlight = { enable = true, disable = {} },
-
-                -- Indentation based on Treesitter
+                highlight = { enable = true },
                 indent = { enable = true },
 
-                -- Textobjects configuration
                 textobjects = {
                     select = {
                         enable = true,
-                        lookahead = true, -- Jump forward automatically
+                        lookahead = true,
                         keymaps = {
                             ["af"] = "@function.outer",
                             ["if"] = "@function.inner",
@@ -67,30 +61,51 @@ return {
                             ["ic"] = "@class.inner",
                         },
                     },
+
                     move = {
                         enable = true,
-                        set_jumps = true, -- Record jumps in jumplist
-                        goto_next_start = { ["]m"] = "@function.outer" },
-                        goto_previous_start = { ["[m"] = "@function.outer" },
+                        set_jumps = true,
+                        goto_next_start = {
+                            ["]m"] = "@function.outer",
+                            ["]c"] = "@class.outer",
+                        },
+                        goto_previous_start = {
+                            ["[m"] = "@function.outer",
+                            ["[c"] = "@class.outer",
+                        },
                     },
                 },
             })
 
-            -- Set global indentation: 4 spaces, expand tabs
-            vim.api.nvim_exec(
-                [[
-                augroup global_indent
-                  autocmd!
-                  autocmd FileType * setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-                augroup END
-            ]],
-                false
-            )
+            -- Modern augroup API (cleaner)
+            local group = vim.api.nvim_create_augroup("global_indent", { clear = true })
+            vim.api.nvim_create_autocmd("FileType", {
+                group = group,
+                pattern = "*",
+                callback = function()
+                    vim.opt_local.tabstop = 4
+                    vim.opt_local.shiftwidth = 4
+                    vim.opt_local.softtabstop = 4
+                    vim.opt_local.expandtab = true
+                end,
+            })
         end,
     },
 
+    -- Sticky Context Header (THIS FIXES YOUR PROBLEM)
     {
-        -- Render Markdown directly in Neovim
+        "nvim-treesitter/nvim-treesitter-context",
+        dependencies = "nvim-treesitter/nvim-treesitter",
+        opts = {
+            enable = true,
+            max_lines = 3, -- show up to 3 context lines
+            trim_scope = "outer",
+            mode = "cursor", -- show context of current cursor location
+        },
+    },
+
+    -- Markdown Renderer
+    {
         "MeanderingProgrammer/render-markdown.nvim",
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
@@ -99,8 +114,8 @@ return {
 
         config = function()
             require("render-markdown").setup({
-                latex = { enabled = false }, -- Disable LaTeX rendering
-                html = { enabled = false }, -- Disable HTML rendering
+                latex = { enabled = false },
+                html = { enabled = false },
             })
         end,
     },
