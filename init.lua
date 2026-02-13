@@ -118,7 +118,7 @@ _G._statusline.mode = function()
 end
 
 vim.o.statusline = table.concat({
-    "%#StatusLineMode# %{v:lua._statusline.mode()} %#StatusLine#",
+    "%#StatusLineMode#[%{v:lua._statusline.mode()}] %#StatusLine#",
     " %{expand('%:p:~')} ",
     "%#StatusLineBranch#[%{v:lua._statusline.git_branch()}] ",
     "%m %=",
