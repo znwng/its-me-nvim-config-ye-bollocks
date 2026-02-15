@@ -110,9 +110,7 @@ return {
             })
 
             -- Autopairs
-            local cmp_autopairs = require("nvim-autopairs.completion.cmp")
             require("nvim-autopairs").setup({})
-            cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
             -- Vague-style popup colors
             local bg = "#1e1e1e" -- neutral dark
