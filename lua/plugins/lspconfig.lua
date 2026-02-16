@@ -46,8 +46,6 @@ return {
                 "stylua",
                 "goimports",
                 "shfmt",
-                "yamlfmt",
-                "terraform_fmt",
                 "typstyle",
                 "golangci-lint",
             }
