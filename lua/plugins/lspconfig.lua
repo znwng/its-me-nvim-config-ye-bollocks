@@ -23,31 +23,29 @@ return {
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
 
+            -- LSP Servers (ONLY requested languages)
             local servers = {
-                "pyright",
-                "clangd",
-                "gopls",
-                "jsonls",
-                "bashls",
-                "dockerls",
-                "yamlls",
-                "terraformls",
-                "rust_analyzer",
-                "ts_ls",
-                "lua_ls",
-                "tinymist",
-                "cmake",
+                "pyright", -- Python
+                "clangd", -- C/C++
+                "gopls", -- Go
+                "jsonls", -- JSON
+                "bashls", -- Bash
+                "dockerls", -- Docker
+                "rust_analyzer", -- Rust
+                "lua_ls", -- Lua
+                "tinymist", -- Typst
+                "cmake", -- CMake
             }
 
+            -- Formatters & Linters (ONLY requested stack)
             local formatters_and_linters = {
-                "black",
-                "clang-format",
-                "prettier",
-                "stylua",
-                "goimports",
-                "shfmt",
-                "typstyle",
-                "golangci-lint",
+                "black", -- Python
+                "clang-format", -- C/C++
+                "goimports", -- Go
+                "stylua", -- Lua
+                "shfmt", -- Bash
+                "typstyle", -- Typst
+                "golangci-lint", -- Go
             }
 
             mason.setup()
@@ -69,6 +67,7 @@ return {
                             capabilities = capabilities,
                         }
 
+                        -- C/C++
                         if server_name == "clangd" then
                             opts.cmd = {
                                 "clangd",
@@ -79,6 +78,8 @@ return {
                                 "--completion-style=detailed",
                             }
                             opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
+
+                            -- Go
                         elseif server_name == "gopls" then
                             opts.settings = {
                                 gopls = {
@@ -88,29 +89,15 @@ return {
                                         unusedwrite = true,
                                     },
                                     staticcheck = true,
-
-                                    codelenses = {
-                                        gc_details = true,
-                                        generate = true,
-                                        regenerate_cgo = true,
-                                        run_govulncheck = true,
-                                        test = true,
-                                        tidy = true,
-                                        upgrade_dependency = true,
-                                        vendor = true,
-                                    },
-
                                     hints = {
                                         assignVariableTypes = true,
                                         compositeLiteralFields = true,
-                                        compositeLiteralTypes = true,
-                                        constantValues = true,
-                                        functionTypeParameters = true,
                                         parameterNames = true,
-                                        rangeVariableTypes = true,
                                     },
                                 },
                             }
+
+                            -- Lua
                         elseif server_name == "lua_ls" then
                             opts.settings = {
                                 Lua = {
@@ -123,38 +110,19 @@ return {
                                     telemetry = { enable = false },
                                 },
                             }
+
+                            -- Rust
                         elseif server_name == "rust_analyzer" then
                             opts.settings = {
                                 ["rust-analyzer"] = {
-                                    cargo = {
-                                        allFeatures = true,
-                                        loadOutDirsFromCheck = true,
-                                        buildScripts = { enable = true },
-                                    },
-                                    procMacro = { enable = true },
+                                    cargo = { allFeatures = true },
                                     checkOnSave = {
                                         command = "clippy",
                                         extraArgs = { "--no-deps" },
                                     },
                                     inlayHints = {
-                                        bindingModeHints = { enable = true },
-                                        chainingHints = { enable = true },
-                                        closingBraceHints = {
-                                            enable = true,
-                                            minLines = 25,
-                                        },
-                                        closureReturnTypeHints = { enable = "always" },
-                                        lifetimeElisionHints = {
-                                            enable = "always",
-                                            useParameterNames = true,
-                                        },
+                                        typeHints = { enable = true },
                                         parameterHints = { enable = true },
-                                        reborrowHints = { enable = "always" },
-                                        typeHints = {
-                                            enable = true,
-                                            hideClosureInitialization = false,
-                                            hideNamedConstructor = false,
-                                        },
                                     },
                                 },
                             }
@@ -177,13 +145,9 @@ return {
                     builtins.formatting.goimports,
                     builtins.formatting.stylua,
                     builtins.formatting.shfmt,
-                    builtins.formatting.prettier,
-                    builtins.formatting.yamlfmt,
-                    builtins.formatting.terraform_fmt,
                     builtins.formatting.typstyle.with({
                         extra_args = { "--indent-width", "4", "--line-width", "80" },
                     }),
-
                     builtins.diagnostics.golangci_lint,
                 },
             })
