@@ -22,6 +22,7 @@ return {
     {
         -- Treesitter: syntax highlighting, indentation, and text objects
         "nvim-treesitter/nvim-treesitter",
+		branch = "master",
         build = ":TSUpdate",
 
         dependencies = {

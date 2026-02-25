@@ -11,24 +11,20 @@ Commands you can use (optional, since it works automatically):
 
 return {
     {
-        -- Highlight colors directly in the code (hex, rgb(), hsl(), names, etc.)
-        "norcalli/nvim-colorizer.lua",
-
-        -- Load right away (not lazy-loaded)
+        "NvChad/nvim-colorizer.lua",
         lazy = false,
-
         config = function()
             require("colorizer").setup({
-                -- Apply to all filetypes
-                ["*"] = {
-                    RGB = true, -- Short hex colors (#RGB)
-                    RRGGBB = true, -- Full hex colors (#RRGGBB)
-                    names = true, -- Named colors (e.g. "Blue", "Red")
-                    RRGGBBAA = true, -- Hex with alpha channel (#RRGGBBAA)
-                    rgb_fn = true, -- rgb() and rgba() functions
-                    hsl_fn = true, -- hsl() and hsla() functions
-                    css = true, -- Enable CSS color features
-                    css_fn = true, -- Enable CSS functions
+                filetypes = { "*" },
+                user_default_options = {
+                    RGB = true,
+                    RRGGBB = true,
+                    names = true,
+                    RRGGBBAA = true,
+                    rgb_fn = true,
+                    hsl_fn = true,
+                    css = true,
+                    css_fn = true,
                 },
             })
         end,
