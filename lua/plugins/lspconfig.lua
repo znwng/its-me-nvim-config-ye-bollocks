@@ -28,7 +28,6 @@ return {
                 "pyright", -- Python
                 "clangd", -- C/C++
                 "gopls", -- Go
-                "jsonls", -- JSON
                 "bashls", -- Bash
                 "dockerls", -- Docker
                 "rust_analyzer", -- Rust
