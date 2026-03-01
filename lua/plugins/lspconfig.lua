@@ -23,28 +23,29 @@ return {
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
 
-            -- LSP Servers (ONLY requested languages)
+            -- LSP Servers
             local servers = {
-                "pyright", -- Python
-                "clangd", -- C/C++
-                "gopls", -- Go
-                "bashls", -- Bash
-                "dockerls", -- Docker
-                "rust_analyzer", -- Rust
-                "lua_ls", -- Lua
-                "tinymist", -- Typst
-                "cmake", -- CMake
+                "pyright",
+                "clangd",
+                "gopls",
+                "bashls",
+                "dockerls",
+                "rust_analyzer",
+                "lua_ls",
+                "tinymist",
+                "cmake",
             }
 
-            -- Formatters & Linters (ONLY requested stack)
+            -- Formatters & Linters
             local formatters_and_linters = {
-                "black", -- Python
-                "clang-format", -- C/C++
-                "goimports", -- Go
-                "stylua", -- Lua
-                "shfmt", -- Bash
-                "typstyle", -- Typst
-                "golangci-lint", -- Go
+                "black",
+                "clang-format",
+                "goimports",
+                "stylua",
+                "shfmt",
+                "typstyle",
+                "golangci-lint",
+                "prettier",
             }
 
             mason.setup()
@@ -66,7 +67,6 @@ return {
                             capabilities = capabilities,
                         }
 
-                        -- C/C++
                         if server_name == "clangd" then
                             opts.cmd = {
                                 "clangd",
@@ -77,8 +77,6 @@ return {
                                 "--completion-style=detailed",
                             }
                             opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
-
-                            -- Go
                         elseif server_name == "gopls" then
                             opts.settings = {
                                 gopls = {
@@ -95,8 +93,6 @@ return {
                                     },
                                 },
                             }
-
-                            -- Lua
                         elseif server_name == "lua_ls" then
                             opts.settings = {
                                 Lua = {
@@ -109,8 +105,6 @@ return {
                                     telemetry = { enable = false },
                                 },
                             }
-
-                            -- Rust
                         elseif server_name == "rust_analyzer" then
                             opts.settings = {
                                 ["rust-analyzer"] = {
@@ -148,6 +142,9 @@ return {
                         extra_args = { "--indent-width", "4", "--line-width", "80" },
                     }),
                     builtins.diagnostics.golangci_lint,
+                    builtins.formatting.prettier.with({
+                        filetypes = { "markdown", "md", "json", "yaml", "html", "css" },
+                    }),
                 },
             })
 
@@ -165,9 +162,12 @@ return {
                 float = { border = "rounded" },
             })
 
+            -- Format buffer + ensure newline at EOF
             vim.keymap.set("n", "<leader>fm", function()
                 local bufnr = vim.api.nvim_get_current_buf()
                 vim.lsp.buf.format({ async = false, bufnr = bufnr })
+
+                -- ensure newline at EOF
                 if vim.fn.getline("$") ~= "" then
                     vim.fn.append("$", "")
                 end
