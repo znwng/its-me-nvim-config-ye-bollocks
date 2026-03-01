@@ -26,7 +26,7 @@ return {
                         css = true,
                     },
                     display = {
-                        mode = "foreground",
+                        mode = "background",
                     },
                 },
             })
