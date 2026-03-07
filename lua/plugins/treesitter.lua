@@ -22,7 +22,7 @@ return {
     {
         -- Treesitter: syntax highlighting, indentation, and text objects
         "nvim-treesitter/nvim-treesitter",
-		branch = "master",
+        branch = "master",
         build = ":TSUpdate",
 
         dependencies = {
@@ -30,6 +30,10 @@ return {
         },
 
         config = function()
+            require("nvim-treesitter.configs").setup({
+                highlight = { enable = true },
+                indent = { enable = true },
+            })
             require("nvim-treesitter.configs").setup({
                 ensure_installed = {
                     "python",
