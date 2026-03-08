@@ -23,29 +23,24 @@ return {
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
 
-            -- LSP Servers
+            -- Only the languages you care about
             local servers = {
-                "pyright",
-                "clangd",
-                "gopls",
-                "bashls",
-                "dockerls",
-                "rust_analyzer",
-                "lua_ls",
-                "tinymist",
-                "cmake",
+                "pyright", -- Python
+                "clangd", -- C / C++
+                "gopls", -- Go
+                "bashls", -- Bash
+                "lua_ls", -- Lua
+                "tinymist", -- Typst
             }
 
-            -- Formatters & Linters
             local formatters_and_linters = {
-                "black",
-                "clang-format",
-                "goimports",
-                "stylua",
-                "shfmt",
-                "typstyle",
-                "golangci-lint",
-                "prettier",
+                "black", -- Python
+                "clang-format", -- C / C++
+                "goimports", -- Go
+                "golangci-lint", -- Go
+                "shfmt", -- Bash
+                "stylua", -- Lua
+                "typstyle", -- Typst
             }
 
             mason.setup()
@@ -62,10 +57,7 @@ return {
                 ensure_installed = servers,
                 handlers = {
                     function(server_name)
-                        local opts = {
-                            on_attach = on_attach,
-                            capabilities = capabilities,
-                        }
+                        local opts = { on_attach = on_attach, capabilities = capabilities }
 
                         if server_name == "clangd" then
                             opts.cmd = {
@@ -106,20 +98,6 @@ return {
                                     telemetry = { enable = false },
                                 },
                             }
-                        elseif server_name == "rust_analyzer" then
-                            opts.settings = {
-                                ["rust-analyzer"] = {
-                                    cargo = { allFeatures = true },
-                                    checkOnSave = {
-                                        command = "clippy",
-                                        extraArgs = { "--no-deps" },
-                                    },
-                                    inlayHints = {
-                                        typeHints = { enable = true },
-                                        parameterHints = { enable = true },
-                                    },
-                                },
-                            }
                         end
 
                         lspconfig[server_name].setup(opts)
@@ -143,9 +121,6 @@ return {
                         extra_args = { "--indent-width", "4", "--line-width", "80" },
                     }),
                     builtins.diagnostics.golangci_lint,
-                    builtins.formatting.prettier.with({
-                        filetypes = { "markdown", "md", "json", "yaml", "html", "css" },
-                    }),
                 },
             })
 
@@ -168,7 +143,7 @@ return {
             -- Format buffer + ensure newline at EOF
             vim.keymap.set("n", "<leader>fm", function()
                 local bufnr = vim.api.nvim_get_current_buf()
-                vim.lsp.buf.format({ async = false, bufnr = bufnr })
+                vim.lsp.buf.format({ async = true, bufnr = bufnr })
 
                 -- ensure newline at EOF
                 if vim.fn.getline("$") ~= "" then
