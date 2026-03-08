@@ -82,6 +82,7 @@ return {
                                 gopls = {
                                     analyses = {
                                         unusedparams = true,
+                                        shadow = true,
                                         nilness = true,
                                         unusedwrite = true,
                                     },
@@ -161,6 +162,8 @@ return {
                 severity_sort = true,
                 float = { border = "rounded" },
             })
+
+            vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
 
             -- Format buffer + ensure newline at EOF
             vim.keymap.set("n", "<leader>fm", function()
