@@ -31,6 +31,7 @@ return {
                 "bashls", -- Bash
                 "lua_ls", -- Lua
                 "tinymist", -- Typst
+                "jdtls",
             }
 
             local formatters_and_linters = {
@@ -98,6 +99,26 @@ return {
                                     telemetry = { enable = false },
                                 },
                             }
+                        elseif server_name == "jdtls" then
+                            opts.cmd = { "jdtls" }
+                            opts.root_dir =
+                                lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle")
+                            opts.settings = {
+                                java = {
+                                    eclipse = { downloadSources = true },
+                                    configuration = {
+                                        updateBuildConfiguration = "interactive",
+                                    },
+                                    maven = { downloadSources = true },
+                                    format = {
+                                        enabled = true,
+                                        settings = {
+                                            url = nil,
+                                            profile = "GoogleStyle",
+                                        },
+                                    },
+                                },
+                            }
                         end
 
                         lspconfig[server_name].setup(opts)
@@ -153,4 +174,3 @@ return {
         end,
     },
 }
-
