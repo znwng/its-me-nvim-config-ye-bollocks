@@ -164,13 +164,19 @@ return {
             -- Format buffer + ensure newline at EOF
             vim.keymap.set("n", "<leader>fm", function()
                 local bufnr = vim.api.nvim_get_current_buf()
-                vim.lsp.buf.format({ async = true, bufnr = bufnr })
+
+                vim.lsp.buf.format({
+                    bufnr = bufnr,
+                    async = false, -- ensure formatting finishes first
+                })
 
                 -- ensure newline at EOF
-                if vim.fn.getline("$") ~= "" then
-                    vim.fn.append("$", "")
+                local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, false)[1]
+                if last_line ~= "" then
+                    vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { "" })
                 end
             end, { noremap = true, silent = true })
         end,
     },
 }
+
