@@ -1,20 +1,5 @@
---[[
-Keybinds:
-<F5>        -> Start / Continue debugging
-<F10>       -> Step over
-<F11>       -> Step into
-<F12>       -> Step out
-<leader>b   -> Toggle breakpoint
-<leader>B   -> Conditional breakpoint
-<leader>dr  -> Open DAP REPL
-<leader>drc -> Close DAP REPL
-<leader>dl  -> Run last debug session
-<leader>du  -> Close DAP UI
-]]
-
 return {
     {
-        -- Core debugger
         "mfussenegger/nvim-dap",
 
         dependencies = {
@@ -27,7 +12,6 @@ return {
             local dap = require("dap")
             local dapui = require("dapui")
 
-            -- UI + virtual text
             dapui.setup({
                 floating = { border = "rounded" },
             })
@@ -44,7 +28,6 @@ return {
                 dapui.close()
             end
 
-            -- Gruvbox highlights
             local function dap_gruvbox()
                 vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = "#fb4934" })
                 vim.api.nvim_set_hl(0, "DapStopped", { fg = "#b8bb26" })
@@ -72,7 +55,6 @@ return {
                 texthl = "DapLogPoint",
             })
 
-            -- Keybindings
             vim.keymap.set("n", "<F5>", dap.continue)
             vim.keymap.set("n", "<F10>", dap.step_over)
             vim.keymap.set("n", "<F11>", dap.step_into)
@@ -83,16 +65,15 @@ return {
                 dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
             end)
 
-            vim.keymap.set("n", "<leader>dr", dap.repl.open) -- Open DAP REPL
+            vim.keymap.set("n", "<leader>dr", dap.repl.open)
             vim.keymap.set("n", "<leader>drc", function()
                 dap.repl.close()
-            end) -- Close DAP REPL
-            vim.keymap.set("n", "<leader>dl", dap.run_last) -- Run last debug session
+            end)
+            vim.keymap.set("n", "<leader>dl", dap.run_last)
             vim.keymap.set("n", "<leader>du", function()
                 dapui.close()
-            end) -- Close DAP UI
+            end)
 
-            -- C / C++ / Rust (codelldb)
             dap.adapters.codelldb = {
                 type = "server",
                 port = "${port}",
@@ -119,7 +100,6 @@ return {
             dap.configurations.cpp = codelldb_config
             dap.configurations.rust = codelldb_config
 
-            -- Python (debugpy)
             dap.adapters.python = {
                 type = "executable",
                 command = "python",
@@ -136,7 +116,6 @@ return {
                 },
             }
 
-            -- Go (delve)
             dap.adapters.go = {
                 type = "executable",
                 command = "dlv",

@@ -1,17 +1,3 @@
---[[
-Telescope.nvim (fuzzy finder)
-
-Keymaps:
-<leader>ff -> Find files (shows hidden files too)
-<leader>fg -> Live grep
-<leader>fb -> Open buffers list
-<leader>fh -> Help tags
-
-Buffer navigation:
-<Tab>     -> Next buffer
-<S-Tab>   -> Previous buffer
-]]
-
 return {
     {
         "nvim-telescope/telescope.nvim",
@@ -22,13 +8,12 @@ return {
         },
 
         config = function()
-            -- === Vague-style palette ===
             local colors = {
-                bg = "NONE", -- transparent
-                bg2 = "#2a2a2a", -- subtle selection surface
-                fg = "#d0d0d0", -- primary text
-                accent = "#61ffe8", -- active / match highlight
-                border = "#5a5a5a", -- muted borders
+                bg = "NONE",
+                bg2 = "#2a2a2a",
+                fg = "#d0d0d0",
+                accent = "#61ffe8",
+                border = "#5a5a5a",
             }
 
             require("telescope").setup({
@@ -50,7 +35,6 @@ return {
                 },
             })
 
-            -- Telescope highlights (Vague-aligned)
             vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = colors.bg, fg = colors.fg })
             vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = colors.bg, fg = colors.border })
             vim.api.nvim_set_hl(0, "TelescopePromptBorder", { bg = colors.bg, fg = colors.border })
@@ -60,7 +44,6 @@ return {
             vim.api.nvim_set_hl(0, "TelescopeMatching", { fg = colors.accent, bold = true })
             vim.api.nvim_set_hl(0, "TelescopeSelectionCaret", { fg = colors.accent, bold = true })
 
-            -- Keymaps
             local keymap = vim.keymap.set
             local opts = { noremap = true, silent = true }
 
@@ -69,7 +52,6 @@ return {
             keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
             keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
 
-            -- Buffer navigation
             keymap("n", "<Tab>", "<cmd>bnext<CR>", opts)
             keymap("n", "<S-Tab>", "<cmd>bprevious<CR>", opts)
         end,

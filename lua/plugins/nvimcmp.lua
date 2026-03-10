@@ -1,13 +1,3 @@
---[[
-nvim-cmp (Autocompletion)
-
-Keybindings:
-<C-Space> -> Open completion menu
-<CR>      -> Confirm selected item
-<Tab>     -> Next item / expand or jump in snippet
-<S-Tab>   -> Previous item / jump back in snippet
-]]
-
 return {
     {
         "hrsh7th/nvim-cmp",
@@ -31,7 +21,6 @@ return {
 
             require("luasnip.loaders.from_vscode").lazy_load()
 
-            -- nvim-cmp setup
             cmp.setup({
                 snippet = {
                     expand = function(args)
@@ -92,7 +81,6 @@ return {
                 },
             })
 
-            -- Cmdline completion
             cmp.setup.cmdline(":", {
                 mapping = cmp.mapping.preset.cmdline(),
                 sources = {
@@ -109,14 +97,12 @@ return {
                 },
             })
 
-            -- Autopairs
             require("nvim-autopairs").setup({})
 
-            -- Vague-style popup colors
-            local bg = "#1e1e1e" -- neutral dark
-            local fg = "#d0d0d0" -- soft text
-            local surface = "#2a2a2a" -- selection
-            local accent = "#61ffe8" -- focus highlight
+            local bg = "#1e1e1e"
+            local fg = "#d0d0d0"
+            local surface = "#2a2a2a"
+            local accent = "#61ffe8"
 
             local function apply_cmp_ui()
                 vim.api.nvim_set_hl(0, "Pmenu", { bg = bg, fg = fg })

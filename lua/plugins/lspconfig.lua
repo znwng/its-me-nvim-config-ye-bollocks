@@ -1,8 +1,3 @@
--- Keybinds:
--- gd         → Go to definition
--- <C-k>      → Show signature help (insert mode)
--- <leader>fm → Format buffer + ensure newline at EOF
-
 return {
     {
         "neovim/nvim-lspconfig",
@@ -23,25 +18,24 @@ return {
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
 
-            -- Only the languages you care about
             local servers = {
-                "pyright", -- Python
-                "clangd", -- C / C++
-                "gopls", -- Go
-                "bashls", -- Bash
-                "lua_ls", -- Lua
-                "tinymist", -- Typst
+                "pyright",
+                "clangd",
+                "gopls",
+                "bashls",
+                "lua_ls",
+                "tinymist",
                 "jdtls",
             }
 
             local formatters_and_linters = {
-                "black", -- Python
-                "clang-format", -- C / C++
-                "goimports", -- Go
-                "golangci-lint", -- Go
-                "shfmt", -- Bash
-                "stylua", -- Lua
-                "typstyle", -- Typst
+                "black",
+                "clang-format",
+                "goimports",
+                "golangci-lint",
+                "shfmt",
+                "stylua",
+                "typstyle",
             }
 
             mason.setup()
@@ -161,16 +155,14 @@ return {
 
             vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
 
-            -- Format buffer + ensure newline at EOF
             vim.keymap.set("n", "<leader>fm", function()
                 local bufnr = vim.api.nvim_get_current_buf()
 
                 vim.lsp.buf.format({
                     bufnr = bufnr,
-                    async = false, -- ensure formatting finishes first
+                    async = false,
                 })
 
-                -- ensure newline at EOF
                 local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, false)[1]
                 if last_line ~= "" then
                     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { "" })

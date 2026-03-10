@@ -1,32 +1,12 @@
---[[
-Treesitter text objects and movement:
-
-Text Objects:
-af -> Select entire function
-if -> Select inside function
-ac -> Select entire class
-ic -> Select inside class
-
-Usage examples:
-vaf  -> Visually select a function
-yif  -> Yank (copy) inside of function
-daf  -> Delete a function
-cic  -> Change inside class
-
-Movement:
-]m   -> Jump to next function
-[m   -> Jump to previous function
-]]
-
 return {
     {
-        -- Treesitter: syntax highlighting, indentation, and text objects
         "nvim-treesitter/nvim-treesitter",
         branch = "master",
         build = ":TSUpdate",
 
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
+            lazy = false,
         },
 
         config = function()
@@ -82,7 +62,6 @@ return {
                 },
             })
 
-            -- Modern augroup API (cleaner)
             local group = vim.api.nvim_create_augroup("global_indent", { clear = true })
             vim.api.nvim_create_autocmd("FileType", {
                 group = group,
@@ -97,19 +76,17 @@ return {
         end,
     },
 
-    -- Sticky Context Header (THIS FIXES YOUR PROBLEM)
     {
         "nvim-treesitter/nvim-treesitter-context",
         dependencies = "nvim-treesitter/nvim-treesitter",
         opts = {
             enable = true,
-            max_lines = 3, -- show up to 3 context lines
+            max_lines = 3,
             trim_scope = "outer",
-            mode = "cursor", -- show context of current cursor location
+            mode = "cursor",
         },
     },
 
-    -- Markdown Renderer
     {
         "MeanderingProgrammer/render-markdown.nvim",
         dependencies = {
