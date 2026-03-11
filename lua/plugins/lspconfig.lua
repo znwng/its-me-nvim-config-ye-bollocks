@@ -22,6 +22,7 @@ return {
                 "pyright",
                 "clangd",
                 "gopls",
+                "rust_analyzer",
                 "bashls",
                 "lua_ls",
                 "tinymist",
