@@ -18,6 +18,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 5
 vim.opt.showmode = false
+vim.opt.guicursor = ""
 
 -- Indentation / Tabs
 vim.opt.expandtab = false
@@ -192,4 +193,22 @@ function _G.format_buffer()
         })
     end
 end
+
+-- Define a custom highlight group for yank
+vim.api.nvim_set_hl(0, "YankHighlight", {
+    fg = nil,
+    bg = "#252525",
+    bold = true,
+    underline = false,
+})
+
+-- Highlight yanked text using the custom group
+vim.api.nvim_create_autocmd("TextYankPost", {
+    callback = function()
+        vim.highlight.on_yank({
+            higroup = "YankHighlight",
+            timeout = 200,
+        })
+    end,
+})
 
