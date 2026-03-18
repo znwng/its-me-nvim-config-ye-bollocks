@@ -32,6 +32,7 @@ return {
             local formatters_and_linters = {
                 "black",
                 "clang-format",
+                "prettier",
                 "goimports",
                 "golangci-lint",
                 "shfmt",
@@ -132,6 +133,11 @@ return {
                     builtins.formatting.clang_format,
                     builtins.formatting.goimports,
                     builtins.formatting.stylua,
+                    builtins.formatting.prettier.with({
+                        filetypes = {
+                            "markdown",
+                        },
+                    }),
                     builtins.formatting.shfmt,
                     builtins.formatting.typstyle.with({
                         extra_args = { "--indent-width", "4", "--line-width", "80" },
