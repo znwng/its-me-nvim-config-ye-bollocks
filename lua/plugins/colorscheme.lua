@@ -41,7 +41,7 @@ return {
             vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#9ccfd8", bg = "#2a2a2b", bold = false, italic = false })
 
             vim.api.nvim_set_hl(0, "IblIndent", {
-                fg = "#111111",
+                fg = "#252525",
                 nocombine = true,
             })
         end
