@@ -25,6 +25,20 @@ return {
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true, sp = "#c4a7e7" })
             vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#9ccfd8", bg = "#2a2a2b", bold = false, italic = false })
             vim.api.nvim_set_hl(0, "colorColumn", { bg = "#2a2b2b" })
+
+            -- Transparent background only for main editor
+            vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
+            vim.api.nvim_set_hl(0, "VertSplit", { bg = "NONE" })
+            vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
+            vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "NONE" })
+            vim.api.nvim_set_hl(0, "TabLine", { bg = "NONE" })
+            vim.api.nvim_set_hl(0, "TabLineFill", { bg = "NONE" })
+            vim.api.nvim_set_hl(0, "TabLineSel", { bg = "NONE" })
+
+            -- Keep floating windows normal
+            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#2a2a2b" }) -- or your theme's default float bg
+            vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#2a2b2b" })
+            vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#9ccfd8", bg = "#2a2a2b", bold = false, italic = false })
         end
 
         apply_ui()
