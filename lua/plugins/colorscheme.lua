@@ -4,12 +4,12 @@ return {
     priority = 1000,
     config = function()
         require("vague").setup({
-            colors = {
-                func = "#bc96b0",
-                keyword = "#787bab",
-                string = "#8a739a",
-                number = "#8f729e",
-            },
+            -- colors = {
+            --     func = "#bc96b0",
+            --     keyword = "#787bab",
+            --     string = "#8a739a",
+            --     number = "#8f729e",
+            -- },
         })
 
         vim.cmd("colorscheme vague")
