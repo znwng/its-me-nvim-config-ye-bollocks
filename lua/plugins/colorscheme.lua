@@ -39,6 +39,11 @@ return {
             vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#2a2a2b" }) -- or your theme's default float bg
             vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#2a2b2b" })
             vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#9ccfd8", bg = "#2a2a2b", bold = false, italic = false })
+
+            vim.api.nvim_set_hl(0, "IblIndent", {
+                fg = "#111111",
+                nocombine = true,
+            })
         end
 
         apply_ui()
