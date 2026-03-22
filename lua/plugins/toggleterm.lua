@@ -8,7 +8,6 @@ return {
                 size = 12,
             })
         end,
-
         vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<CR>"),
     },
 }

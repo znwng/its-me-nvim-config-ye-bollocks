@@ -3,12 +3,10 @@ return {
         "nvim-treesitter/nvim-treesitter",
         branch = "master",
         build = ":TSUpdate",
-
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects",
             lazy = false,
         },
-
         config = function()
             require("nvim-treesitter.configs").setup({
                 highlight = { enable = true },
@@ -27,12 +25,9 @@ return {
                     "java",
                     "typst",
                 },
-
                 sync_install = true,
-
                 highlight = { enable = true },
                 indent = { enable = true },
-
                 textobjects = {
                     select = {
                         enable = true,
@@ -44,7 +39,6 @@ return {
                             ["ic"] = "@class.inner",
                         },
                     },
-
                     move = {
                         enable = true,
                         set_jumps = true,
@@ -59,7 +53,6 @@ return {
                     },
                 },
             })
-
             local group = vim.api.nvim_create_augroup("global_indent", { clear = true })
             vim.api.nvim_create_autocmd("FileType", {
                 group = group,
@@ -73,14 +66,12 @@ return {
             })
         end,
     },
-
     {
         "MeanderingProgrammer/render-markdown.nvim",
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
             "nvim-tree/nvim-web-devicons",
         },
-
         config = function()
             require("render-markdown").setup({
                 latex = { enabled = false },

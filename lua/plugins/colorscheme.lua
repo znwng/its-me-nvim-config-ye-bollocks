@@ -15,7 +15,6 @@ return {
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true, sp = "#5f9ecf" })
             vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#9ccfd8", bg = "#2a2a2b", bold = false, italic = false })
             vim.api.nvim_set_hl(0, "colorColumn", { bg = "#2a2b2b" })
-
             vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
             vim.api.nvim_set_hl(0, "VertSplit", { bg = "NONE" })
             vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
@@ -23,19 +22,15 @@ return {
             vim.api.nvim_set_hl(0, "TabLine", { bg = "NONE" })
             vim.api.nvim_set_hl(0, "TabLineFill", { bg = "NONE" })
             vim.api.nvim_set_hl(0, "TabLineSel", { bg = "NONE" })
-
             vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#2a2a2b" })
             vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#2a2b2b" })
             vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#9ccfd8", bg = "#2a2a2b", bold = false, italic = false })
-
             vim.api.nvim_set_hl(0, "IblIndent", {
                 fg = "#252525",
                 nocombine = true,
             })
         end
-
         apply_ui()
-
         vim.api.nvim_create_autocmd("ColorScheme", {
             callback = apply_ui,
         })

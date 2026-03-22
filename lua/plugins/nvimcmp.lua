@@ -13,25 +13,20 @@ return {
             "onsails/lspkind.nvim",
             "windwp/nvim-autopairs",
         },
-
         config = function()
             local cmp = require("cmp")
             local luasnip = require("luasnip")
             local lspkind = require("lspkind")
-
             require("luasnip.loaders.from_vscode").lazy_load()
-
             cmp.setup({
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
                     end,
                 },
-
                 mapping = cmp.mapping.preset.insert({
                     ["<C-Space>"] = cmp.mapping.complete(),
                     ["<CR>"] = cmp.mapping.confirm({ select = true }),
-
                     ["<Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.select_next_item()
@@ -41,7 +36,6 @@ return {
                             fallback()
                         end
                     end, { "i", "s" }),
-
                     ["<S-Tab>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.select_prev_item()
@@ -52,19 +46,16 @@ return {
                         end
                     end, { "i", "s" }),
                 }),
-
                 sources = {
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
                     { name = "buffer" },
                     { name = "path" },
                 },
-
                 window = {
                     completion = { border = "none" },
                     documentation = { border = "none" },
                 },
-
                 formatting = {
                     fields = { "abbr", "kind", "menu" },
                     format = lspkind.cmp_format({
@@ -80,7 +71,6 @@ return {
                     }),
                 },
             })
-
             cmp.setup.cmdline(":", {
                 mapping = cmp.mapping.preset.cmdline(),
                 sources = {
@@ -89,21 +79,17 @@ return {
                 },
                 completion = { autocomplete = false },
             })
-
             cmp.setup.cmdline({ "/", "?" }, {
                 mapping = cmp.mapping.preset.cmdline(),
                 sources = {
                     { name = "buffer" },
                 },
             })
-
             require("nvim-autopairs").setup({})
-
             local bg = "#1e1e1e"
             local fg = "#d0d0d0"
             local surface = "#2a2a2a"
             local accent = "#61ffe8"
-
             local function apply_cmp_ui()
                 vim.api.nvim_set_hl(0, "Pmenu", { bg = bg, fg = fg })
                 vim.api.nvim_set_hl(0, "PmenuSel", { bg = surface, fg = fg, bold = true })
@@ -111,11 +97,9 @@ return {
                 vim.api.nvim_set_hl(0, "PmenuSbar", { bg = surface })
                 vim.api.nvim_set_hl(0, "NormalFloat", { bg = bg, fg = fg })
             end
-
             vim.api.nvim_create_autocmd("ColorScheme", {
                 callback = apply_cmp_ui,
             })
-
             apply_cmp_ui()
         end,
     },

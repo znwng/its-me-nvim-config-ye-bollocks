@@ -1,10 +1,7 @@
 return {
     {
-
         "numToStr/Comment.nvim",
-
         lazy = false,
-
         opts = {
             toggler = {
                 line = "gcc",
