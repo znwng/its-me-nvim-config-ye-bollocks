@@ -16,6 +16,7 @@ return {
             local cmp_nvim_lsp = require("cmp_nvim_lsp")
             local null_ls = require("null-ls")
             local builtins = null_ls.builtins
+
             local servers = {
                 "pyright",
                 "clangd",
@@ -23,9 +24,14 @@ return {
                 "rust_analyzer",
                 "bashls",
                 "lua_ls",
+                "html",
+                "cssls",
+                "ts_ls",
                 "tinymist",
                 "jdtls",
+                "zls",
             }
+
             local formatters_and_linters = {
                 "black",
                 "clang-format",
@@ -36,6 +42,7 @@ return {
                 "stylua",
                 "typstyle",
             }
+
             mason.setup()
             local capabilities = cmp_nvim_lsp.default_capabilities()
             local on_attach = function(_, bufnr)
@@ -43,11 +50,13 @@ return {
                 vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
                 vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
             end
+
             mason_lspconfig.setup({
                 ensure_installed = servers,
                 handlers = {
                     function(server_name)
                         local opts = { on_attach = on_attach, capabilities = capabilities }
+
                         if server_name == "clangd" then
                             opts.cmd = {
                                 "clangd",
@@ -94,17 +103,17 @@ return {
                             opts.settings = {
                                 java = {
                                     eclipse = { downloadSources = true },
-                                    configuration = {
-                                        updateBuildConfiguration = "interactive",
-                                    },
+                                    configuration = { updateBuildConfiguration = "interactive" },
                                     maven = { downloadSources = true },
-                                    format = {
-                                        enabled = true,
-                                        settings = {
-                                            url = nil,
-                                            profile = "GoogleStyle",
-                                        },
-                                    },
+                                    format = { enabled = true, settings = { profile = "GoogleStyle" } },
+                                },
+                            }
+                        elseif server_name == "zls" then
+                            opts.settings = {
+                                zls = {
+                                    enable_autofix = true,
+                                    enable_snippets = true,
+                                    warn_style = true,
                                 },
                             }
                         end
@@ -112,10 +121,12 @@ return {
                     end,
                 },
             })
+
             mason_null_ls.setup({
                 ensure_installed = formatters_and_linters,
                 automatic_installation = true,
             })
+
             null_ls.setup({
                 sources = {
                     builtins.formatting.black,
@@ -123,21 +134,19 @@ return {
                     builtins.formatting.goimports,
                     builtins.formatting.stylua,
                     builtins.formatting.prettier.with({
-                        filetypes = {
-                            "markdown",
-                        },
+                        filetypes = { "javascript", "typescript", "typescriptreact", "html", "css", "json", "markdown" },
                     }),
                     builtins.formatting.shfmt,
-                    builtins.formatting.typstyle.with({
-                        extra_args = { "--indent-width", "4", "--line-width", "80" },
-                    }),
+                    builtins.formatting.typstyle.with({ extra_args = { "--indent-width", "4", "--line-width", "80" } }),
                     builtins.diagnostics.golangci_lint,
                 },
             })
+
             vim.api.nvim_create_user_command("MasonInstallAll", function()
                 local all = vim.list_extend(vim.deepcopy(servers), formatters_and_linters)
                 vim.cmd("MasonInstall " .. table.concat(all, " "))
             end, {})
+
             vim.diagnostic.config({
                 update_in_insert = false,
                 virtual_text = true,
@@ -146,13 +155,11 @@ return {
                 severity_sort = true,
                 float = { border = "rounded" },
             })
+
             vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
             vim.keymap.set("n", "<leader>fm", function()
                 local bufnr = vim.api.nvim_get_current_buf()
-                vim.lsp.buf.format({
-                    bufnr = bufnr,
-                    async = false,
-                })
+                vim.lsp.buf.format({ bufnr = bufnr, async = false })
                 local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, false)[1]
                 if last_line ~= "" then
                     vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { "" })
