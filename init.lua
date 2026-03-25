@@ -1,12 +1,14 @@
 vim.g.mapleader = " "
 
 -- Custom Keymaps
-vim.keymap.set("n", "<leader>r", "<cmd>update<CR><cmd>source %<CR>", { desc = "Reload current file" })
-vim.keymap.set("n", "<leader>.", ":@:<CR>", { desc = "Run last command" })
-vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Write" })
-vim.keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit" })
-vim.keymap.set("n", "<leader>x", "<cmd>x<CR>", { desc = "Write and Quit" })
-vim.keymap.set("n", "<leader>Q", "<cmd>q!<CR>", { desc = "!Write and Quit" })
+vim.keymap.set("n", "<leader>r", "<cmd>update<CR><cmd>source %<CR>")
+vim.keymap.set("n", "<leader>.", ":@:<CR>")
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>")
+vim.keymap.set("n", "<leader>q", "<cmd>q<CR>")
+vim.keymap.set("n", "<leader>x", "<cmd>x<CR>")
+vim.keymap.set("n", "<leader>Q", "<cmd>q!<CR>")
+vim.keymap.set("n", "<leader>Y", "<cmd>%y+<CR>")
+vim.keymap.set("v", "<leader>y", '"+y')
 
 -- General Editor Settings
 vim.opt.mouse = ""
