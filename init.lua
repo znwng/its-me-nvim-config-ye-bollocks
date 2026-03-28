@@ -8,6 +8,7 @@ vim.keymap.set("n", "<leader>q", "<cmd>q<CR>")
 vim.keymap.set("n", "<leader>x", "<cmd>x<CR>")
 vim.keymap.set("n", "<leader>Q", "<cmd>q!<CR>")
 vim.keymap.set("n", "<leader>Y", "<cmd>%y+<CR>")
+vim.keymap.set("n", "<leader>D", "<cmd>%d<CR>")
 vim.keymap.set("v", "<leader>y", '"+y')
 
 -- General Editor Settings
