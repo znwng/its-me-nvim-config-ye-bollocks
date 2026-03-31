@@ -7,7 +7,7 @@ return -- Using lazy.nvim
         require("black-metal").setup({
             -- [ bathory burzum dark-funeral darkthrone emperor gorgoroth immortal
             --  impaled-nazarene khold marduk mayhem nile taake thyrfing venom windir]
-            theme = "windir",
+            theme = "immortal",
         })
         require("black-metal").load()
 
