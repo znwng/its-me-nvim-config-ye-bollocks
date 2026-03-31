@@ -23,8 +23,6 @@ return {
             vim.api.nvim_set_hl(0, "TabLineFill", { bg = "NONE" })
             vim.api.nvim_set_hl(0, "TabLineSel", { bg = "NONE" })
             vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#2a2a2b" })
-            vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#2a2b2b" })
-            vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#9ccfd8", bg = "#2a2a2b" })
             vim.api.nvim_set_hl(0, "IblIndent", { fg = "#252525", nocombine = true })
         end
         apply_ui()
