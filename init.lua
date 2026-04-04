@@ -101,15 +101,15 @@ _G._statusline.mode = function()
 end
 
 vim.o.statusline = table.concat({
-    "%#StatusLineMode#[%{v:lua._statusline.mode()}] %#StatusLine#",
-    "%{expand('%:p:~')} ",
+    "%#StatusLineMode#[%{v:lua._statusline.mode()}] ",
+    "%#StatusLinePath#%{expand('%:p:~')} ",
     "%#StatusLineBranch#[%{v:lua._statusline.git_branch()}] ",
     "%m %=",
     "%#StatusLineError#%{v:lua._statusline.diag_count('ERROR')} ",
     "%#StatusLineWarn#%{v:lua._statusline.diag_count('WARN')} ",
     "%#StatusLineHint#%{v:lua._statusline.diag_count('HINT')} ",
     "%#StatusLineInfo#%{v:lua._statusline.diag_count('INFO')} ",
-    "%#StatusLine#[%l:%c]",
+    "%#StatusLineCur#[%l:%c]%#StatusLine#",
 })
 
 -- Plugins
