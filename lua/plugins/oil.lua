@@ -9,13 +9,6 @@ return {
                 show_hidden = true,
             },
         },
-        keys = {
-            {
-                "<leader>o",
-                "<cmd>Oil<CR>",
-                desc = "Open file explorer",
-            },
-        },
     },
 }
 

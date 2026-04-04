@@ -10,6 +10,7 @@ vim.keymap.set("n", "<leader>Q", "<cmd>q!<CR>")
 vim.keymap.set("n", "<leader>Y", "<cmd>%y+<CR>")
 vim.keymap.set("n", "<leader>D", "<cmd>%d<CR>")
 vim.keymap.set("v", "<leader>y", '"+y')
+vim.keymap.set("n", "<leader><leader>", "<cmd>Oil<CR>")
 
 -- General Editor Settings
 vim.opt.mouse = ""
