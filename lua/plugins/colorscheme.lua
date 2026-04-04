@@ -1,16 +1,15 @@
 return -- Using lazy.nvim
 {
-    "wtfox/jellybeans.nvim",
+    "metalelf0/black-metal-theme-neovim",
     lazy = false,
     priority = 1000,
     config = function()
-        require("jellybeans").setup({
+        require("black-metal").setup({
             -- [ bathory burzum dark-funeral darkthrone emperor gorgoroth immortal
             --  impaled-nazarene khold marduk mayhem nile taake thyrfing venom windir]
-            -- theme = "immortal",
-            transparent = true,
+            theme = "immortal",
         })
-        require("jellybeans").load()
+        require("black-metal").load()
 
         local function apply_ui()
             vim.api.nvim_set_hl(0, "StatusLinePath", { fg = "#c7c7c7", bg = "#111111" })
