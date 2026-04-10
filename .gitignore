@@ -1,0 +1,11 @@
+*.swp
+*.swo
+*.swn
+.cache/
+undo/
+session/
+shada/
+*.log
+lazy-lock.json
+.DS_Store
+Thumbs.db
