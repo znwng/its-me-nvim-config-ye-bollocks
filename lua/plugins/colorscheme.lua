@@ -15,7 +15,7 @@ return {
         local function apply_ui()
             vim.api.nvim_set_hl(0, "StatusLine", { bg = "#101010" })
             vim.api.nvim_set_hl(0, "StatusLinePath", { fg = "#c7c7c7", bg = "#101010" })
-            vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#70b5ff", bg = "#101010"})
+            vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#6e94b2", bg = "#101010"})
             vim.api.nvim_set_hl(0, "StatusLineBranch", { fg = "#c7c7c7", bg = "#101010"})
             vim.api.nvim_set_hl(0, "StatusLineCur", { fg = "#808080", bg = "#101010" })
             vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#d74545", bg = "#101010"})
