@@ -1,5 +1,5 @@
 return {
-    {
+    --[[ {
         "lukas-reineke/indent-blankline.nvim",
         main = "ibl",
         opts = {
@@ -7,6 +7,6 @@ return {
             indent = { char = "│" },
             scope = { enabled = false },
         },
-    },
+    }, ]]
 }
 
