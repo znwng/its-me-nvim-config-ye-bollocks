@@ -17,7 +17,7 @@ vim.keymap.set("n", "<leader>p", "<cmd>ToggleTerm<CR>")
 vim.opt.mouse = ""
 vim.opt.termguicolors = true
 vim.opt.updatetime = 250
-vim.opt.colorcolumn = { "100" }
+vim.opt.colorcolumn = { "80" }
 vim.opt.breakindent = true
 vim.opt.signcolumn = "yes"
 vim.opt.number = true
