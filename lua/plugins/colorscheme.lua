@@ -7,6 +7,7 @@ return {
 
         require("vague").setup({
             transparent = true,
+            bold = false,
         })
 
         vim.cmd("colorscheme vague")
