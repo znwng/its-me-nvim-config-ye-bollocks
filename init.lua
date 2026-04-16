@@ -101,6 +101,10 @@ _G._statusline.mode = function()
     return map[m] or m
 end
 
+_G._statusline.line_count = function()
+    return vim.api.nvim_buf_line_count(0)
+end
+
 vim.o.statusline = table.concat({
     "%#StatusLineMode#[%{v:lua._statusline.mode()}] ",
     "%#StatusLinePath#%{expand('%:p:~')} ",
@@ -110,6 +114,7 @@ vim.o.statusline = table.concat({
     "%#StatusLineWarn#%{v:lua._statusline.diag_count('WARN')} ",
     "%#StatusLineHint#%{v:lua._statusline.diag_count('HINT')} ",
     "%#StatusLineInfo#%{v:lua._statusline.diag_count('INFO')} ",
+    "%#StatusLineLines#[%{v:lua._statusline.line_count()}] ",
     "%#StatusLineCur#[%l:%c]%#StatusLine#",
 })
 

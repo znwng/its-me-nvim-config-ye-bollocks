@@ -25,6 +25,7 @@ return {
             vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#6e94b2", bg = "#101010" })
             vim.api.nvim_set_hl(0, "StatusLineBranch", { fg = "#c7c7c7", bg = "#101010" })
             vim.api.nvim_set_hl(0, "StatusLineCur", { fg = "#808080", bg = "#101010" })
+            vim.api.nvim_set_hl(0, "StatusLineLines", { fg = "#808080", bg = "#101010" })
             vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#d74545", bg = "#101010" })
             vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#ffaf00", bg = "#101010" })
             vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#a08070", bg = "#101010" })
