@@ -1,22 +1,18 @@
 return {
-    "rose-pine/neovim",
-    name = "rose-pine",
+    "vague-theme/vague.nvim",
+    name = "vague",
     lazy = false,
     priority = 1000,
     config = function()
         vim.opt.termguicolors = true
 
-        require("rose-pine").setup({
-            variant = "moon", -- main change
-            dark_variant = "moon",
-            disable_background = true, -- matches your transparent = true intent
-            disable_float_background = true,
-            styles = {
-                bold = false,
-            },
+        require("vague").setup({
+            transparent = true, -- closest equivalent to your old setup
+            bold = false,
+            italic = false,
         })
 
-        vim.cmd("colorscheme rose-pine")
+        vim.cmd("colorscheme vague")
 
         -- KEEP your original UI exactly unchanged
         local function apply_ui()
