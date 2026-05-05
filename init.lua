@@ -12,6 +12,7 @@ vim.keymap.set("n", "<leader>D", "<cmd>%d<CR>")
 vim.keymap.set("v", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader><leader>", "<cmd>Oil<CR>")
 vim.keymap.set("n", "<leader>p", "<cmd>ToggleTerm<CR>")
+vim.keymap.set("n", "<leader>c", "<cmd>CsvViewToggle<CR>")
 
 -- General Editor Settings
 vim.opt.mouse = ""
