@@ -24,7 +24,7 @@ require("lazy").setup({
     checker = { enabled = true, notify = false },
     change_detection = { notify = true },
     ui = {
-        border = "none",
+        border = "rounded",
         winblend = 0,
         size = { height = 0.85, width = 0.85 },
     },
@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd("User", {
     pattern = "VeryLazy",
     callback = function()
         -- === Vague-style palette ===
-        local bg = "#1e1e1e" -- transparent
+        local bg = "none" -- transparent
         local fg = "#d0d0d0" -- primary text
         local muted = "#5a5a5a" -- borders / separators
         local surface = "#2a2a2a" -- subtle background
@@ -58,7 +58,7 @@ vim.api.nvim_create_autocmd("User", {
         pcall(function()
             local mason = require("mason")
             mason.setup({
-                ui = { border = "none" },
+                ui = { border = "rounded" },
             })
         end)
     end,
