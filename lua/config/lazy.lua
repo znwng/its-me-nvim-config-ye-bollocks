@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd("User", {
     pattern = "VeryLazy",
     callback = function()
         -- === Vague-style palette ===
-        local bg = "none" -- transparent
+        local bg = "#000000" -- transparent
         local fg = "#d0d0d0" -- primary text
         local muted = "#5a5a5a" -- borders / separators
         local surface = "#2a2a2a" -- subtle background
