@@ -91,14 +91,14 @@ _G._statusline = {
 _G._statusline.mode = function()
     local m = vim.api.nvim_get_mode().mode
     local map = {
-        n = "NORMAL",
-        i = "INSERT",
-        v = "VISUAL",
-        V = "V-LINE",
-        ["\22"] = "V-BLOCK",
-        c = "COMMAND",
-        R = "REPLACE",
-        t = "TERMINAL",
+        n = "NR",
+        i = "IN",
+        v = "VS",
+        V = "VL",
+        ["\22"] = "VB",
+        c = "CD",
+        R = "RP",
+        t = "TR",
     }
     return map[m] or m
 end
@@ -108,7 +108,8 @@ _G._statusline.line_count = function()
 end
 
 vim.o.statusline = table.concat({
-    "%#StatusLineMode#", -- [%{v:lua._statusline.mode()}] ",
+    "%#StatusLineMode#",
+    "[%{v:lua._statusline.mode()}] ",
     "%#StatusLinePath#%{expand('%:p:~')} ",
     "%#StatusLineBranch#[%{v:lua._statusline.git_branch()}] ",
     "%m %=",
