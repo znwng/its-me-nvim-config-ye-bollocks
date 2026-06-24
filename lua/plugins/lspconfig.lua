@@ -29,7 +29,6 @@ return {
                 "ts_ls",
                 "tinymist",
                 "jdtls",
-                "zls",
             }
 
             local formatters_and_linters = {
@@ -106,14 +105,6 @@ return {
                                     configuration = { updateBuildConfiguration = "interactive" },
                                     maven = { downloadSources = true },
                                     format = { enabled = true, settings = { profile = "GoogleStyle" } },
-                                },
-                            }
-                        elseif server_name == "zls" then
-                            opts.settings = {
-                                zls = {
-                                    enable_autofix = true,
-                                    enable_snippets = true,
-                                    warn_style = true,
                                 },
                             }
                         end
