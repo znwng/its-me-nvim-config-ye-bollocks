@@ -113,6 +113,24 @@ return {
                 },
             })
 
+            vim.lsp.config("arduino_language_server", {
+                on_attach = on_attach,
+                capabilities = capabilities,
+                cmd = {
+                    "arduino-language-server",
+                    "-cli",
+                    "arduino-cli",
+                    "-cli-config",
+                    vim.fn.expand("~/.arduino15/arduino-cli.yaml"),
+                    "-clangd",
+                    "clangd",
+                    "-fqbn",
+                    "esp32:esp32:esp32",
+                },
+            })
+
+            vim.lsp.enable("arduino_language_server")
+
             mason_null_ls.setup({
                 ensure_installed = formatters_and_linters,
                 automatic_installation = true,
