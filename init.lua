@@ -13,6 +13,10 @@ vim.keymap.set("v", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader><leader>", "<cmd>Oil<CR>")
 vim.keymap.set("n", "<leader>p", "<cmd>ToggleTerm<CR>")
 vim.keymap.set("n", "<leader>c", "<cmd>CsvViewToggle<CR>")
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv")
 
 -- General Editor Settings
 vim.opt.mouse = ""
@@ -155,6 +159,13 @@ vim.api.nvim_create_autocmd("BufReadPost", {
         if mark[1] > 0 and mark[1] <= lcount then
             vim.api.nvim_win_set_cursor(0, mark)
         end
+    end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "make",
+    callback = function()
+        vim.opt_local.expandtab = false
     end,
 })
 
