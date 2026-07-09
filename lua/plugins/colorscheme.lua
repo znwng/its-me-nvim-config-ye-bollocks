@@ -44,9 +44,9 @@ return {
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true })
 
-            vim.api.nvim_set_hl(0, "SignColumn", { bg = "#282933" })
-            vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#282933" })
-            vim.api.nvim_set_hl(0, "LineNr", { bg = "#282933", fg = "#adadad" })
+            -- vim.api.nvim_set_hl(0, "SignColumn", { bg = "#282933" })
+            -- vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#282933" })
+            -- vim.api.nvim_set_hl(0, "LineNr", { bg = "#282933", fg = "#adadad" })
 
             vim.api.nvim_set_hl(0, "Cursor", { fg = "#000000", bg = "#ffffff" })
         end

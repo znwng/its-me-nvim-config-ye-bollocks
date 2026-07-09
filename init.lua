@@ -13,10 +13,10 @@ vim.keymap.set("v", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader><leader>", "<cmd>Oil<CR>")
 vim.keymap.set("n", "<leader>p", "<cmd>ToggleTerm<CR>")
 vim.keymap.set("n", "<leader>c", "<cmd>CsvViewToggle<CR>")
-vim.keymap.set("n", "<A-j>", ":m .+1<CR>==")
-vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
-vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv")
+vim.keymap.set("n", "<CA-j>", ":m .+1<CR>==")
+vim.keymap.set("n", "<CA-k>", ":m .-2<CR>==")
+vim.keymap.set("v", "<CA-j>", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "<CA-k>", ":m '<-2<CR>gv=gv")
 
 -- General Editor Settings
 vim.opt.mouse = ""
