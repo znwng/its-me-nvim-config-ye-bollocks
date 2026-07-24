@@ -23,30 +23,31 @@ return {
         -- KEEP your original UI exactly unchanged
         local function apply_ui()
             local ebg = "#121212"
+            local sbg = "#282933"
 
-            vim.api.nvim_set_hl(0, "Normal", { bg = ebg })
-            vim.api.nvim_set_hl(0, "NormalNC", { bg = ebg })
+            vim.api.nvim_set_hl(0, "Normal", { fg = "#c0caf5", bg = ebg })
+            vim.api.nvim_set_hl(0, "NormalNC", { fg = "#a9b1d6", bg = ebg })
 
-            vim.api.nvim_set_hl(0, "StatusLine", { bg = "#282933" })
+            vim.api.nvim_set_hl(0, "StatusLine", { bg = sbg })
 
-            vim.api.nvim_set_hl(0, "StatusLinePath", { fg = "#abb2bf", bg = "#282933" })
-            vim.api.nvim_set_hl(0, "StatusLineBranch", { fg = "#4a5a73", bg = "#282933" })
-            vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#eebc40", bg = "#282933" })
+            vim.api.nvim_set_hl(0, "StatusLinePath", { fg = "#c0caf5", bg = sbg })
+            vim.api.nvim_set_hl(0, "StatusLineBranch", { fg = "#7aa2f7", bg = sbg })
+            vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#e0af68", bg = sbg })
 
-            vim.api.nvim_set_hl(0, "StatusLineCur", { fg = "#abb2bf", bg = "#282933" })
-            vim.api.nvim_set_hl(0, "StatusLineLines", { fg = "#abb2bf", bg = "#282933" })
+            vim.api.nvim_set_hl(0, "StatusLineCur", { fg = "#c0caf5", bg = sbg })
+            vim.api.nvim_set_hl(0, "StatusLineLines", { fg = "#a9b1d6", bg = sbg })
 
-            vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#ff6480", bg = "#282933" })
-            vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#eebc40", bg = "#282933" })
-            vim.api.nvim_set_hl(0, "StatusLineInfo", { fg = "#3FC56B", bg = "#282933" })
-            vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#10B1FE", bg = "#282933" })
+            vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#f7768e", bg = sbg })
+            vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#e0af68", bg = sbg })
+            vim.api.nvim_set_hl(0, "StatusLineInfo", { fg = "#7dcfff", bg = sbg })
+            vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#73daca", bg = sbg })
 
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true })
 
-            vim.api.nvim_set_hl(0, "Cursor", { fg = "#000000", bg = "#ffffff" })
+            vim.api.nvim_set_hl(0, "Cursor", { fg = "#1a1b26", bg = "#c0caf5" })
         end
 
         apply_ui()
