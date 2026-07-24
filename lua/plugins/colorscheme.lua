@@ -1,25 +1,27 @@
 return {
-    "uloco/bluloco.nvim",
+    "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
-    dependencies = { "rktjmp/lush.nvim" },
 
     config = function()
         vim.opt.termguicolors = true
 
-        -- Optional configuration
-        require("bluloco").setup({
-            style = "dark", -- "dark" | "light"
+        require("tokyonight").setup({
+            style = "night", -- storm | moon | night | day
             transparent = true,
-            italics = false,
-            terminal = vim.fn.has("gui_running") == 1,
+            terminal_colors = true,
+            styles = {
+                comments = { italic = false },
+                keywords = { italic = false },
+                sidebars = "transparent",
+                floats = "transparent",
+            },
         })
 
-        vim.cmd("colorscheme bluloco")
+        vim.cmd("colorscheme tokyonight")
 
         -- KEEP your original UI exactly unchanged
         local function apply_ui()
-            -- local bg = "#282828"
             local ebg = "#121212"
 
             vim.api.nvim_set_hl(0, "Normal", { bg = ebg })
@@ -43,10 +45,6 @@ return {
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true })
-
-            -- vim.api.nvim_set_hl(0, "SignColumn", { bg = "#282933" })
-            -- vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#282933" })
-            -- vim.api.nvim_set_hl(0, "LineNr", { bg = "#282933", fg = "#adadad" })
 
             vim.api.nvim_set_hl(0, "Cursor", { fg = "#000000", bg = "#ffffff" })
         end
