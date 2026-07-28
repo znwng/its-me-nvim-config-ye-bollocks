@@ -8,7 +8,7 @@ return {
 
         require("tokyonight").setup({
             style = "night", -- storm | moon | night | day
-            transparent = true,
+            transparent = false,
             terminal_colors = true,
             styles = {
                 comments = { italic = false },
@@ -23,10 +23,11 @@ return {
         -- KEEP your original UI exactly unchanged
         local function apply_ui()
             local ebg = "#121212"
-            local sbg = "#282933"
+            -- local sbg = "#282933"
+            local sbg = "#322f3b"
 
-            vim.api.nvim_set_hl(0, "Normal", { fg = "#c0caf5", bg = ebg })
-            vim.api.nvim_set_hl(0, "NormalNC", { fg = "#a9b1d6", bg = ebg })
+            -- vim.api.nvim_set_hl(0, "Normal", { fg = "#c0caf5", bg = ebg })
+            -- vim.api.nvim_set_hl(0, "NormalNC", { fg = "#a9b1d6", bg = ebg })
 
             vim.api.nvim_set_hl(0, "StatusLine", { bg = sbg })
 
@@ -36,6 +37,8 @@ return {
 
             vim.api.nvim_set_hl(0, "StatusLineCur", { fg = "#c0caf5", bg = sbg })
             vim.api.nvim_set_hl(0, "StatusLineLines", { fg = "#a9b1d6", bg = sbg })
+
+            vim.api.nvim_set_hl(0, "LineNr", { fg = "#c0caf5", italic = true })
 
             vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#f7768e", bg = sbg })
             vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#e0af68", bg = sbg })
@@ -48,6 +51,7 @@ return {
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true })
 
             vim.api.nvim_set_hl(0, "Cursor", { fg = "#1a1b26", bg = "#c0caf5" })
+            -- vim.api.nvim_set_hl(0, "ColorColumn", { bg = sbg })
         end
 
         apply_ui()

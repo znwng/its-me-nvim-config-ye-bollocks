@@ -204,6 +204,11 @@ vim.api.nvim_set_hl(0, "YankHighlight", {
 })
 
 -- Highlight yanked text using the custom group
+vim.api.nvim_set_hl(0, "YankHighlight", {
+    fg = "#1a1b26",
+    bg = "#7aa2f7",
+})
+
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
         vim.highlight.on_yank({
