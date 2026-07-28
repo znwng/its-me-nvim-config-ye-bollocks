@@ -29,6 +29,7 @@ return {
                 "ts_ls",
                 "tinymist",
                 "jdtls",
+                "ols",
             }
 
             local formatters_and_linters = {
@@ -106,6 +107,16 @@ return {
                                     maven = { downloadSources = true },
                                     format = { enabled = true, settings = { profile = "GoogleStyle" } },
                                 },
+                            }
+                        elseif server_name == "ols" then
+                            opts.filetypes = { "odin" }
+                            opts.root_dir = lspconfig.util.root_pattern("ols.json", ".git")
+
+                            opts.settings = {
+                                enable_semantic_tokens = true,
+                                enable_document_symbols = true,
+                                enable_hover = true,
+                                enable_snippets = true,
                             }
                         end
                         lspconfig[server_name].setup(opts)

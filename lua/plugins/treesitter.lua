@@ -21,6 +21,7 @@ return {
                     "markdown_inline",
                     "go",
                     "rust",
+                    "odin",
                     "java",
                     "typst",
                 },
