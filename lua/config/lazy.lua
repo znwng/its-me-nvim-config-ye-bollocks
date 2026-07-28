@@ -24,7 +24,7 @@ require("lazy").setup({
     checker = { enabled = true, notify = false },
     change_detection = { notify = true },
     ui = {
-        border = "rounded",
+        border = "none",
         winblend = 0,
         size = { height = 0.85, width = 0.85 },
     },
@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd("User", {
 
         -- Floating windows
         pcall(vim.api.nvim_set_hl, 0, "NormalFloat", { bg = bg, fg = fg })
-        pcall(vim.api.nvim_set_hl, 0, "FloatBorder", { fg = muted, bg = bg })
+        pcall(vim.api.nvim_set_hl, 0, "FloatBorder", { fg = fg , bg = bg })
 
         -- Global UI accents
         pcall(function()
@@ -58,7 +58,7 @@ vim.api.nvim_create_autocmd("User", {
         pcall(function()
             local mason = require("mason")
             mason.setup({
-                ui = { border = "rounded" },
+                ui = { border = "none" },
             })
         end)
     end,
