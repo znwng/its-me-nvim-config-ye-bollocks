@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd("User", {
 
         -- Floating windows
         pcall(vim.api.nvim_set_hl, 0, "NormalFloat", { bg = bg, fg = fg })
-        pcall(vim.api.nvim_set_hl, 0, "FloatBorder", { fg = fg , bg = bg })
+        pcall(vim.api.nvim_set_hl, 0, "FloatBorder", { fg = fg, bg = bg })
 
         -- Global UI accents
         pcall(function()
@@ -63,4 +63,3 @@ vim.api.nvim_create_autocmd("User", {
         end)
     end,
 })
-

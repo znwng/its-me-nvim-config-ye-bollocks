@@ -144,14 +144,11 @@ return {
 
             vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
             vim.keymap.set("n", "<leader>fm", function()
-                local bufnr = vim.api.nvim_get_current_buf()
-                vim.lsp.buf.format({ bufnr = bufnr, async = false })
-                local last_line = vim.api.nvim_buf_get_lines(bufnr, -2, -1, false)[1]
-                if last_line ~= "" then
-                    vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { "" })
-                end
+                vim.lsp.buf.format({
+                    bufnr = vim.api.nvim_get_current_buf(),
+                    async = false,
+                })
             end, { noremap = true, silent = true })
         end,
     },
 }
-

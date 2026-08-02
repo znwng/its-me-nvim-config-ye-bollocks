@@ -170,27 +170,10 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Formatting helpers
-local function ensure_single_trailing_newline(bufnr)
-    bufnr = bufnr or 0
-    local line_count = vim.api.nvim_buf_line_count(bufnr)
-    local last_nonempty = line_count
-    while last_nonempty > 0 do
-        local line = vim.api.nvim_buf_get_lines(bufnr, last_nonempty - 1, last_nonempty, false)[1]
-        if line ~= "" then
-            break
-        end
-        last_nonempty = last_nonempty - 1
-    end
-    vim.api.nvim_buf_set_lines(bufnr, last_nonempty, line_count, false, { "" })
-end
-
 function _G.format_buffer()
     if vim.lsp.buf.server_ready() then
         vim.lsp.buf.format({
             async = true,
-            callback = function()
-                ensure_single_trailing_newline(0)
-            end,
         })
     end
 end
@@ -217,28 +200,3 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         })
     end,
 })
-
--- ColorScheme
-vim.cmd("colorscheme default")
-
-local groups = {
-    "Normal",
-    "NormalNC",
-    "SignColumn",
-    "EndOfBuffer",
-    "LineNr",
-    "CursorLineNr",
-    "FoldColumn",
-    "StatusLine",
-    "StatusLineNC",
-    "TabLineFill",
-    "VertSplit",
-    "WinSeparator",
-    "NormalFloat",
-    "FloatBorder",
-}
-
-for _, group in ipairs(groups) do
-    vim.api.nvim_set_hl(0, group, { bg = "NONE" })
-end
-
