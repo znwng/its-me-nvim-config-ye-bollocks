@@ -24,23 +24,15 @@ return {
                 "rust_analyzer",
                 "bashls",
                 "lua_ls",
-                "html",
-                "cssls",
-                "ts_ls",
-                "tinymist",
-                "jdtls",
-                "ols",
             }
 
             local formatters_and_linters = {
                 "black",
                 "clang-format",
-                "prettier",
                 "goimports",
                 "golangci-lint",
                 "shfmt",
                 "stylua",
-                "typstyle",
             }
 
             mason.setup()
@@ -96,28 +88,6 @@ return {
                                     telemetry = { enable = false },
                                 },
                             }
-                        elseif server_name == "jdtls" then
-                            opts.cmd = { "jdtls" }
-                            opts.root_dir =
-                                lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle")
-                            opts.settings = {
-                                java = {
-                                    eclipse = { downloadSources = true },
-                                    configuration = { updateBuildConfiguration = "interactive" },
-                                    maven = { downloadSources = true },
-                                    format = { enabled = true, settings = { profile = "GoogleStyle" } },
-                                },
-                            }
-                        elseif server_name == "ols" then
-                            opts.filetypes = { "odin" }
-                            opts.root_dir = lspconfig.util.root_pattern("ols.json", ".git")
-
-                            opts.settings = {
-                                enable_semantic_tokens = true,
-                                enable_document_symbols = true,
-                                enable_hover = true,
-                                enable_snippets = true,
-                            }
                         end
                         lspconfig[server_name].setup(opts)
                     end,
@@ -153,11 +123,7 @@ return {
                     builtins.formatting.clang_format,
                     builtins.formatting.goimports,
                     builtins.formatting.stylua,
-                    builtins.formatting.prettier.with({
-                        filetypes = { "javascript", "typescript", "typescriptreact", "html", "css", "json", "markdown" },
-                    }),
                     builtins.formatting.shfmt,
-                    builtins.formatting.typstyle.with({ extra_args = { "--indent-width", "4", "--line-width", "80" } }),
                     builtins.diagnostics.golangci_lint,
                 },
             })

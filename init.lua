@@ -218,3 +218,27 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 
+-- ColorScheme
+vim.cmd("colorscheme default")
+
+local groups = {
+    "Normal",
+    "NormalNC",
+    "SignColumn",
+    "EndOfBuffer",
+    "LineNr",
+    "CursorLineNr",
+    "FoldColumn",
+    "StatusLine",
+    "StatusLineNC",
+    "TabLineFill",
+    "VertSplit",
+    "WinSeparator",
+    "NormalFloat",
+    "FloatBorder",
+}
+
+for _, group in ipairs(groups) do
+    vim.api.nvim_set_hl(0, group, { bg = "NONE" })
+end
+
