@@ -22,7 +22,7 @@ return {
 
         -- KEEP your original UI exactly unchanged
         local function apply_ui()
-            local ebg = "#121212"
+            -- local ebg = "#121212"
             -- local sbg = "#282933"
             local sbg = "#322f3b"
 
@@ -42,7 +42,6 @@ return {
 
             vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#f7768e", bg = sbg })
             vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#e0af68", bg = sbg })
-            vim.api.nvim_set_hl(0, "StatusLineInfo", { fg = "#7dcfff", bg = sbg })
             vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#73daca", bg = sbg })
 
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = true })

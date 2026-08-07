@@ -117,10 +117,9 @@ vim.o.statusline = table.concat({
     "%#StatusLinePath#%{expand('%:p:~')} ",
     "%#StatusLineBranch#[%{v:lua._statusline.git_branch()}] ",
     "%m %=",
-    "%#StatusLineError#%{v:lua._statusline.diag_count('ERROR')} ",
-    "%#StatusLineWarn#%{v:lua._statusline.diag_count('WARN')} ",
-    "%#StatusLineHint#%{v:lua._statusline.diag_count('HINT')} ",
-    "%#StatusLineInfo#%{v:lua._statusline.diag_count('INFO')} ",
+    "%#StatusLineError#E%{v:lua._statusline.diag_count('ERROR')} ",
+    "%#StatusLineWarn#W%{v:lua._statusline.diag_count('WARN')} ",
+    "%#StatusLineHint#H%{v:lua._statusline.diag_count('HINT')} ",
     "%#StatusLineLines#[%{v:lua._statusline.line_count()}] ",
     "%#StatusLineCur#[%l:%c]%#StatusLine#",
 })
