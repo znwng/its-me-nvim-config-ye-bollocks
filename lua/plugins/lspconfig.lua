@@ -143,12 +143,33 @@ return {
             })
 
             vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
+
             vim.keymap.set("n", "<leader>fm", function()
                 vim.lsp.buf.format({
                     bufnr = vim.api.nvim_get_current_buf(),
                     async = false,
                 })
             end, { noremap = true, silent = true })
+
+            vim.keymap.set("n", "<leader>a", function()
+                vim.diagnostic.setloclist()
+                vim.cmd("lopen")
+            end, { noremap = true, silent = true })
+
+            vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {
+                noremap = false,
+                silent = false,
+            })
+
+            vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {
+                noremap = false,
+                silent = false,
+            })
+
+            vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, {
+                noremap = true,
+                silent = true,
+            })
         end,
     },
 }
