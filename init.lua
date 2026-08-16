@@ -17,9 +17,17 @@ vim.keymap.set("n", "<CA-j>", ":m .+1<CR>==")
 vim.keymap.set("n", "<CA-k>", ":m .-2<CR>==")
 vim.keymap.set("v", "<CA-j>", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "<CA-k>", ":m '<-2<CR>gv=gv")
+vim.keymap.set("n", "<leader>m", function()
+    if vim.o.mouse ~= "" then
+        vim.o.mouse = ""
+        vim.notify("Mouse support: OFF", vim.log.levels.INFO)
+    else
+        vim.opt.mouse = "a"
+        vim.notify("Mouse support: ON", vim.log.levels.INFO)
+    end
+end, { desc = "Toggle mouse support" })
 
 -- General Editor Settings
-vim.opt.mouse = ""
 vim.opt.termguicolors = true
 vim.opt.updatetime = 250
 vim.opt.colorcolumn = { "120" }
