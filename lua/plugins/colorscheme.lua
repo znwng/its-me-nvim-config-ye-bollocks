@@ -24,7 +24,7 @@ return {
         local function apply_ui()
             -- local ebg = "#121212"
             -- local sbg = "#282933"
-            local sbg = "#322f3b"
+            local sbg = "#130091"
 
             -- vim.api.nvim_set_hl(0, "Normal", { fg = "#c0caf5", bg = ebg })
             -- vim.api.nvim_set_hl(0, "NormalNC", { fg = "#a9b1d6", bg = ebg })
@@ -50,7 +50,7 @@ return {
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true })
 
             vim.api.nvim_set_hl(0, "Cursor", { fg = "#1a1b26", bg = "#c0caf5" })
-            -- vim.api.nvim_set_hl(0, "ColorColumn", { bg = sbg })
+            vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#040040" })
         end
 
         apply_ui()
