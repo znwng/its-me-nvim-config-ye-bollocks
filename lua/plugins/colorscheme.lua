@@ -1,56 +1,41 @@
 return {
-    "folke/tokyonight.nvim",
+    "vague2k/vague.nvim",
     lazy = false,
     priority = 1000,
 
     config = function()
         vim.opt.termguicolors = true
 
-        require("tokyonight").setup({
-            style = "night", -- storm | moon | night | day
-            transparent = true,
-            terminal_colors = true,
-            styles = {
-                comments = { italic = false },
-                keywords = { italic = false },
-                sidebars = "transparent",
-                floats = "transparent",
-            },
+        require("vague").setup({
+            transparent = false,
         })
 
-        vim.cmd("colorscheme tokyonight")
+        vim.cmd("colorscheme vague")
 
-        -- KEEP your original UI exactly unchanged
+        local function color(group, field)
+            local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+            return hl[field]
+        end
+
         local function apply_ui()
-            -- local ebg = "#121212"
-            -- local sbg = "#282933"
-            local sbg = "#130091"
-
-            -- vim.api.nvim_set_hl(0, "Normal", { fg = "#c0caf5", bg = ebg })
-            -- vim.api.nvim_set_hl(0, "NormalNC", { fg = "#a9b1d6", bg = ebg })
-
-            vim.api.nvim_set_hl(0, "StatusLine", { bg = sbg })
-
-            vim.api.nvim_set_hl(0, "StatusLinePath", { fg = "#c0caf5", bg = sbg })
-            vim.api.nvim_set_hl(0, "StatusLineBranch", { fg = "#7aa2f7", bg = sbg })
-            vim.api.nvim_set_hl(0, "StatusLineMode", { fg = "#e0af68", bg = sbg })
-
-            vim.api.nvim_set_hl(0, "StatusLineCur", { fg = "#c0caf5", bg = sbg })
-            vim.api.nvim_set_hl(0, "StatusLineLines", { fg = "#a9b1d6", bg = sbg })
-
-            vim.api.nvim_set_hl(0, "LineNr", { fg = "#4f4a78" })
-
-            vim.api.nvim_set_hl(0, "StatusLineError", { fg = "#f7768e", bg = sbg })
-            vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = "#e0af68", bg = sbg })
-            vim.api.nvim_set_hl(0, "StatusLineHint", { fg = "#73daca", bg = sbg })
+            vim.api.nvim_set_hl(0, "StatusLinePath", { fg = color("Normal", "fg") })
+            vim.api.nvim_set_hl(0, "StatusLineBranch", { fg = color("Identifier", "fg") })
+            vim.api.nvim_set_hl(0, "StatusLineMode", { fg = color("Number", "fg") })
+            vim.api.nvim_set_hl(0, "StatusLineCur", { fg = color("CursorLineNr", "fg") })
+            vim.api.nvim_set_hl(0, "StatusLineLines", { fg = color("Comment", "fg") })
+            vim.api.nvim_set_hl(0, "StatusLineError", { fg = color("DiagnosticError", "fg") })
+            vim.api.nvim_set_hl(0, "StatusLineWarn", { fg = color("DiagnosticWarn", "fg") })
+            vim.api.nvim_set_hl(0, "StatusLineHint", { fg = color("DiagnosticHint", "fg") })
 
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { underline = true })
             vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { underline = true })
 
-            vim.api.nvim_set_hl(0, "Cursor", { fg = "#1a1b26", bg = "#c0caf5" })
-            vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#040040" })
+            vim.api.nvim_set_hl(0, "Cursor", {
+                fg = color("Normal", "bg"),
+                bg = color("CursorLineNr", "fg"),
+            })
         end
 
         apply_ui()
