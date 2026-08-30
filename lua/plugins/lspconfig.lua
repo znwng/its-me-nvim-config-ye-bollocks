@@ -23,7 +23,13 @@ return {
                 "gopls",
                 "rust_analyzer",
                 "bashls",
+                "ols",
                 "lua_ls",
+                "docker_compose_language_server",
+                "docker_language_server",
+                "dockerfile_language_server",
+                "matlab_ls",
+                "tinymist",
             }
 
             local formatters_and_linters = {
@@ -32,6 +38,7 @@ return {
                 "goimports",
                 "golangci-lint",
                 "shfmt",
+                "odinfmt",
                 "stylua",
             }
 
@@ -68,7 +75,6 @@ return {
                                 "--header-insertion=never",
                                 "--completion-style=detailed",
                             }
-
                             opts.root_dir = lspconfig.util.root_pattern(".clangd", "compile_commands.json", ".git")
                         elseif server_name == "gopls" then
                             opts.settings = {
@@ -86,6 +92,10 @@ return {
                                         parameterNames = true,
                                     },
                                 },
+                            }
+                        elseif server_name == "ols" then
+                            opts.settings = {
+                                enable_format = true,
                             }
                         elseif server_name == "lua_ls" then
                             opts.settings = {
@@ -159,6 +169,15 @@ return {
                 },
             })
 
+            local odinfmt = null_ls.builtins.formatting.stylua.with({
+                name = "odinfmt",
+                command = "odinfmt",
+                filetypes = { "odin" },
+                args = {
+                    "-stdin",
+                },
+            })
+
             mason_null_ls.setup({
                 ensure_installed = formatters_and_linters,
                 automatic_installation = true,
@@ -173,6 +192,7 @@ return {
                     builtins.formatting.shfmt,
                     builtins.diagnostics.golangci_lint,
                     typstyle,
+                    odinfmt,
                 },
             })
 
