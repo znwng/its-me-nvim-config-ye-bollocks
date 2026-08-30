@@ -5,8 +5,8 @@ return {
         opts = {
             enabled = true,
             indent = {
-                char = "┆",
-                -- char = "│",
+                -- char = "┆",
+                char = "│",
                 -- char = "╎",
             },
             scope = {

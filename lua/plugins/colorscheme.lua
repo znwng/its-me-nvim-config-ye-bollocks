@@ -59,6 +59,23 @@ return {
             return hl[field]
         end
 
+        -- Disable italics everywhere
+        local function disable_italics()
+            for _, group in ipairs(vim.fn.getcompletion("", "highlight")) do
+                local ok, hl = pcall(vim.api.nvim_get_hl, 0, {
+                    name = group,
+                    link = false,
+                })
+
+                if ok and hl.italic then
+                    hl.italic = false
+                    vim.api.nvim_set_hl(0, group, hl)
+                end
+            end
+        end
+
+        disable_italics()
+
         local function apply_ui()
             vim.api.nvim_set_hl(0, "StatusLinePath", {
                 fg = color("Normal", "fg"),
