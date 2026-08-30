@@ -25,9 +25,9 @@ return {
                 "bashls",
                 "ols",
                 "lua_ls",
-                "docker_compose_language_server",
+                "docker_compose_language_service",
                 "docker_language_server",
-                "dockerfile_language_server",
+                "dockerls",
                 "matlab_ls",
                 "tinymist",
             }
