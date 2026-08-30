@@ -24,7 +24,7 @@ return {
             },
 
             code_style = {
-                comments = "italic",
+                comments = "none",
                 conditionals = "none",
                 functions = "none",
                 keywords = "none",
