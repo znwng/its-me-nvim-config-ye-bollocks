@@ -39,7 +39,7 @@ end, { desc = "Toggle mouse support" })
 -- General Editor Settings
 vim.opt.termguicolors = true
 vim.opt.updatetime = 250
-vim.opt.colorcolumn = { "120" }
+-- vim.opt.colorcolumn = { "120" }
 vim.opt.breakindent = true
 vim.opt.signcolumn = "yes"
 vim.opt.number = true
